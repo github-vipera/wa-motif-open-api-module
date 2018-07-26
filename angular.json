@@ -173,46 +173,6 @@
         }
       }
     },
-    "web-console-ui-kit": {
-      "root": "projects/web-console-ui-kit",
-      "sourceRoot": "projects/web-console-ui-kit/src",
-      "projectType": "library",
-      "prefix": "vp",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/web-console-ui-kit/tsconfig.lib.json",
-            "project": "projects/web-console-ui-kit/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/web-console-ui-kit/ng-package.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/web-console-ui-kit/src/test.ts",
-            "tsConfig": "projects/web-console-ui-kit/tsconfig.spec.json",
-            "karmaConfig": "projects/web-console-ui-kit/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/web-console-ui-kit/tsconfig.lib.json",
-              "projects/web-console-ui-kit/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "uikit-kitchensink-module": {
       "root": "projects/uikit-kitchensink-module",
       "sourceRoot": "projects/uikit-kitchensink-module/src",

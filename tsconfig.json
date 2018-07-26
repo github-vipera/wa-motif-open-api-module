@@ -29,12 +29,6 @@
       "wa-motif-open-api-module/*": [
         "dist/wa-motif-open-api-module/*"
       ],
-      "web-console-ui-kit": [
-        "dist/web-console-ui-kit"
-      ],
-      "web-console-ui-kit/*": [
-        "dist/web-console-ui-kit/*"
-      ],
       "uikit-kitchensink-module": [
         "dist/uikit-kitchensink-module"
       ],
