@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "compodoc" : "compodoc -p ./projects/wa-motif-open-api-module/tsconfig.lib.json -w -s -r 8090"
   },
   "private": true,
   "dependencies": {
