@@ -1,14 +1,14 @@
 
 //containers
-export * from './containers/index';
+export * from './containers';
 
 //commons
-export * from './commons/index';
+export * from './commons';
 
 
 //data
 export * from './data/Counter/WCDataCounterComponent';
-export * from './data/NxGauge/index';
+export * from './data/NxGauge';
 export * from './data/Gauge/wc-gauge.component';
 
 //grid

@@ -1,2 +1,2 @@
 
-export * from './Platform/index'
+export * from './PlatformService/index'
