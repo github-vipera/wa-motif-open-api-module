@@ -7,7 +7,7 @@ import { GridsterModule } from 'web-console-ui-kit';
 import { WebConsoleUIKitChartsModule } from 'web-console-ui-kit';
 import { DashboardTestComponent } from '../components/dashboard/dashboard-test.component'
 import { UsersListComponent } from '../components/users-list/users-list.component'
-import { WABasicModule } from 'wa-motif-open-api-module'
+import { WAMotifOpenApiModule } from 'wa-motif-open-api-module'
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { WABasicModule } from 'wa-motif-open-api-module'
     GridsterModule, 
     CommonModule, 
     WebConsoleUIKitChartsModule, 
-    WABasicModule,
+    WAMotifOpenApiModule,
     FormsModule
   ],
   entryComponents:[DashboardTestComponent, UsersListComponent],

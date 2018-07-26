@@ -8,4 +8,4 @@ import { WebConsoleCoreModule } from 'web-console-core'
   entryComponents:[],
   declarations: []
 })
-export class WABasicModule { }
+export class WAMotifOpenApiModule { }
