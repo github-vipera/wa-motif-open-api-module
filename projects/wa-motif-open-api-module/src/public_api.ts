@@ -3,5 +3,4 @@
  */
 
 export * from './lib/services/index';
-export * from './lib/modules/users-list/users-list.component';
-export * from './lib/wa-basic-module.module';
+export * from './lib/wa-motif-open-api-module';

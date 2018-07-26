@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PluginView } from 'web-console-core'
-import { UsersService, User } from '../../services/PlatformService/UsersService';
-import { DomainsService, Domain } from '../../services/PlatformService/DomainsService';
-
+import { UsersService, User } from 'wa-motif-open-api-module';
+import { DomainsService, Domain } from 'wa-motif-open-api-module';
 import { WCGridConfiguration, WCGridColumnType, WCToasterService } from 'web-console-ui-kit'
 import { SortDescriptor, orderBy, GroupDescriptor, process, DataResult } from '@progress/kendo-data-query';
 
