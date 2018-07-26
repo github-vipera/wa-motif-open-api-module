@@ -29,11 +29,11 @@
       "wa-motif-open-api-module/*": [
         "dist/wa-motif-open-api-module/*"
       ],
-      "uikit-kitchensink-module": [
-        "dist/uikit-kitchensink-module"
+      "wa-motif-open-api-kitchensink-module": [
+        "dist/wa-motif-open-api-kitchensink-module"
       ],
-      "uikit-kitchensink-module/*": [
-        "dist/uikit-kitchensink-module/*"
+      "wa-motif-open-api-kitchensink-module/*": [
+        "dist/wa-motif-open-api-kitchensink-module/*"
       ]
     }
   }

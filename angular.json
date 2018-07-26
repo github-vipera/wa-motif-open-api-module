@@ -173,38 +173,38 @@
         }
       }
     },
-    "uikit-kitchensink-module": {
-      "root": "projects/uikit-kitchensink-module",
-      "sourceRoot": "projects/uikit-kitchensink-module/src",
+    "wa-motif-open-api-kitchensink-module": {
+      "root": "projects/wa-motif-open-api-kitchensink-module",
+      "sourceRoot": "projects/wa-motif-open-api-kitchensink-module/src",
       "projectType": "library",
       "prefix": "vp",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/uikit-kitchensink-module/tsconfig.lib.json",
-            "project": "projects/uikit-kitchensink-module/ng-package.json"
+            "tsConfig": "projects/wa-motif-open-api-kitchensink-module/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api-kitchensink-module/ng-package.json"
           },
           "configurations": {
             "production": {
-              "project": "projects/uikit-kitchensink-module/ng-package.prod.json"
+              "project": "projects/wa-motif-open-api-kitchensink-module/ng-package.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/uikit-kitchensink-module/src/test.ts",
-            "tsConfig": "projects/uikit-kitchensink-module/tsconfig.spec.json",
-            "karmaConfig": "projects/uikit-kitchensink-module/karma.conf.js"
+            "main": "projects/wa-motif-open-api-kitchensink-module/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api-kitchensink-module/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api-kitchensink-module/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/uikit-kitchensink-module/tsconfig.lib.json",
-              "projects/uikit-kitchensink-module/tsconfig.spec.json"
+              "projects/wa-motif-open-api-kitchensink-module/tsconfig.lib.json",
+              "projects/wa-motif-open-api-kitchensink-module/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
