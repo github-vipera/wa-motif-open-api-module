@@ -34,6 +34,12 @@
       ],
       "wa-motif-open-api-kitchensink-module/*": [
         "dist/wa-motif-open-api-kitchensink-module/*"
+      ],
+      "@wa-motif-open-api/platform-service": [
+        "dist/wa-motif-open-api/platform-service"
+      ],
+      "@wa-motif-open-api/platform-service/*": [
+        "dist/wa-motif-open-api/platform-service/*"
       ]
     }
   }
