@@ -101,7 +101,8 @@ export class UsersService {
         }
 
         return this.httpClient.post(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users`,
-            {
+                body,
+                {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -154,7 +155,8 @@ export class UsersService {
         }
 
         return this.httpClient.post(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/credentials`,
-            {
+            body,
+                {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -391,7 +393,8 @@ export class UsersService {
         }
 
         return this.httpClient.put(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}`,
-            {
+            body,
+                {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -444,7 +447,8 @@ export class UsersService {
         }
 
         return this.httpClient.put(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/credentials`,
-            {
+            body,
+                {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
