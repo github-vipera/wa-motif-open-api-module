@@ -39,7 +39,7 @@ export class PlatformServiceModule {
     constructor( @Optional() @SkipSelf() parentModule: PlatformServiceModule,
                  @Optional() http: HttpClient) {
         if (parentModule) {
-            throw new Error('ApiModule is already loaded. Import in your base AppModule only.');
+            throw new Error('PlatformServiceModule is already loaded. Import in your base AppModule only.');
         }
         if (!http) {
             throw new Error('You need to import the HttpClientModule in your AppModule! \n' +
