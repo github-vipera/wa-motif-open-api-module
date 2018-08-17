@@ -46,6 +46,12 @@
       ],
       "@wa-motif-open-api/security-service/*": [
         "dist/wa-motif-open-api/security-service/*"
+      ],
+      "@wa-motif-open-api/app-content-service": [
+        "dist/wa-motif-open-api/app-content-service"
+      ],
+      "@wa-motif-open-api/app-content-service/*": [
+        "dist/wa-motif-open-api/app-content-service/*"
       ]
     }
   }
