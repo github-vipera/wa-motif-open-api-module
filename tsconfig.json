@@ -52,6 +52,12 @@
       ],
       "@wa-motif-open-api/app-content-service/*": [
         "dist/wa-motif-open-api/app-content-service/*"
+      ],
+      "@wa-motif-open-api/configuration-service": [
+        "dist/wa-motif-open-api/configuration-service"
+      ],
+      "@wa-motif-open-api/configuration-service/*": [
+        "dist/wa-motif-open-api/configuration-service/*"
       ]
     }
   }
