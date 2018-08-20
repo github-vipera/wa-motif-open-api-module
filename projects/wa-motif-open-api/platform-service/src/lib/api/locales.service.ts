@@ -22,7 +22,7 @@ import { Locale } from '../model/locale';
 import { LocaleUpdate } from '../model/localeUpdate';
 import { LocalesList } from '../model/localesList';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH }                                 from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 
 
@@ -33,7 +33,7 @@ export class LocalesService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }

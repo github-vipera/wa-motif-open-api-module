@@ -23,9 +23,8 @@ import { DomainsList } from '../model/domainsList';
 import { DomainCreate } from '../model/domainCreate';
 import { DomainUpdate } from '../model/domainUpdate';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
-
+import { WC_API_BASE_PATH }                                 from 'web-console-core'
 
 @Injectable()
 export class DomainsService {
@@ -34,7 +33,7 @@ export class DomainsService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
