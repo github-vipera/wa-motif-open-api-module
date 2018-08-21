@@ -26,7 +26,8 @@ import { UsersService } from './api/users.service';
     DomainsService,
     LocalesService,
     SystemService,
-    UsersService ]
+    UsersService
+ ]
 })
 export class PlatformServiceModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
