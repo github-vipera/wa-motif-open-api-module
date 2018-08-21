@@ -16,6 +16,4 @@ export * from './system.service';
 import { SystemService } from './system.service';
 export * from './users.service';
 import { UsersService } from './users.service';
-export * from './motif-paged-query-interceptor';
-import { MotifPagedQueryInterceptor } from './motif-paged-query-interceptor';
-export const APIS = [AdminsService, AppinstancesService, ApplicationsService, ChannelsService, ClientsService, DomainsService, LocalesService, SystemService, UsersService, MotifPagedQueryInterceptor];
+export const APIS = [AdminsService, AppinstancesService, ApplicationsService, ChannelsService, ClientsService, DomainsService, LocalesService, SystemService, UsersService ];

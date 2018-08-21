@@ -27,8 +27,7 @@ import { UsersList } from '../model/usersList';
 
 import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
-import { MOTIF_PAGED_QUERY_PARAM } from './motif-paged-query-interceptor'
-import { MotifPagedQuery } from 'web-console-core'
+import { MotifPagedQuery, MotifQueryResults, MOTIF_PAGED_QUERY_PARAM } from 'web-console-core'
 
 @Injectable()
 export class UsersService {
@@ -315,10 +314,11 @@ export class UsersService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getUsersList(domain: string, observe?: 'response', reportProgress?: false, pagedQuery?:MotifPagedQuery): Observable<HttpResponse<any>>;
     public getUsersList(domain: string, observe?: 'body', reportProgress?: boolean, pagedQuery?:MotifPagedQuery): Observable<UsersList>;
     public getUsersList(domain: string, observe?: 'response', reportProgress?: boolean, pagedQuery?:MotifPagedQuery): Observable<HttpResponse<UsersList>>;
     public getUsersList(domain: string, observe?: 'events', reportProgress?: boolean, pagedQuery?:MotifPagedQuery): Observable<HttpEvent<UsersList>>;
-    public getUsersList(domain: string, observe: any = 'body', reportProgress: boolean = false, pagedQuery:MotifPagedQuery = null ): Observable<any> {
+    public getUsersList(domain: string, observe: any = 'body', reportProgress: boolean = false, pagedQuery:MotifPagedQuery): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getUsersList.');
         }
@@ -341,6 +341,7 @@ export class UsersService {
         if (pagedQuery){
             params = new HttpParams()
                 .set(MOTIF_PAGED_QUERY_PARAM, JSON.stringify(pagedQuery))
+                observe = 'response';
         }
 
         // to determine the Content-Type header
