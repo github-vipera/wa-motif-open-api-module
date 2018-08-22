@@ -36,6 +36,42 @@ ng generate library @wa-motif-open-api/my-new-service
 where "my-new-service" is the name of the new service that you are going to create.
 After this you can see a new project folder called `my-new-service` under the `/projects` folder.
 
+### Generate Typescript API and Models
+
+To generate the source code to use in the new service, we will use the SWAGGER Codegen tool. 
+In this project you can find the `swagger_generator` folder with the necessary tool **swagger-codegen-cli.jar**.
+
+To generate the new sources of the desired service you must first get the YAML file defining the REST API.
+So you have to run the following command at the terminal:
+
+```bash
+java -jar ./swagger_generator/swagger-codegen-cli.jar generate -i ./path_to_file/MyNewService.yaml -l typescript-angular -o ./swagger_generator/output/sources  
+```
+
+The tool will generate all the sources in the folder `./swagger_generator/output/sources`.
+**Note**: before launching the above command, you must ensure that the folder `./swagger_generator/output/sources` is empty or nonexistent.
+
+A set of source files like these will be generated:
+
+`api.module.ts`
+
+`configuration.ts`
+
+`encoder.ts`
+
+`index.ts`
+
+`variables.ts`
+
+`api/...`
+
+`model/...`
+
+Now you have to copy all these files into the `src/lib` folder of the new library project you created earlier.
+Now change the contents of the src / public_api.ts file of your library project in this way:
+
+ `export * from './lib/index';`
+
 
 
 
