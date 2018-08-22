@@ -271,9 +271,9 @@ As you can see in the `beforeEach` call, the Web Console components needed to ru
 
 The service that you intend to test can be instantiated directly in your test case.
 
+For a complete reference on Angular tests we refer you to the official guide you can find here: [Angular Testing](https://angular.io/guide/testing).
 
-
-## How to create documentation 
+## How to document your API Project 
 
 TODO!!
 
