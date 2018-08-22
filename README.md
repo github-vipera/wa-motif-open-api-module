@@ -118,8 +118,20 @@ If there are some in your API that can be paged, you must manually add support f
 To do this you must change the signature of the method that calls them and add a piece of code as in the following example:
 
 ```typescript
+import { MotifPagedQuery, MotifQueryResults, MOTIF_PAGED_QUERY_PARAM } from 'web-console-core' 
+```
+
+*the import directive*
+
+
+
+```typescript
     public getUsersList(domain: string, observe: any = 'body', reportProgress: boolean = false, pagedQuery:MotifPagedQuery): Observable<any> 
 ```
+
+*the new signature with a new param for `MoifPagedQuery`*
+
+
 
 and add the code into the method body:
 
