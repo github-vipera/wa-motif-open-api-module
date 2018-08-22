@@ -275,7 +275,37 @@ For a complete reference on Angular tests we refer you to the official guide you
 
 ## How to document your API Project 
 
-TODO!!
+To create the automatic documentation of your API project you can use the [Compodoc tool](https://compodoc.app).
+
+Documentation is created using a script node that you must configure within the package.json file of your API library:
+
+`"compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"`
+
+For example:
+
+```json
+{
+  "name": "@wa-motif-open-api/platform-service",
+  "version": "0.0.3",
+  "scripts": {
+    "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
+  },
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
+    "web-console-core": "^0.0.13"
+  },
+  "dependencies": {}
+}
+```
+
+*library project package.json*
+
+After you have correctly configured the script inside package.json you can go to the root of your API library project and run in the terminal:
+
+`npm run compodoc`
+
+At the end of the process, a folder called Documentation will be created in the same folder, containing the entire Compodoc site regarding your project
 
 
 
