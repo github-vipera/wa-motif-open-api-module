@@ -36,6 +36,8 @@ ng generate library @wa-motif-open-api/my-new-service
 where "my-new-service" is the name of the new service that you are going to create.
 After this you can see a new project folder called `my-new-service` under the `/projects` folder.
 
+Now you will have to remove all the files contained in the `src/lib` folder of your created library project.
+
 ### Generate Typescript API and Models
 
 To generate the source code to use in the new service, we will use the SWAGGER Codegen tool. 
