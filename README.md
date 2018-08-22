@@ -13,6 +13,18 @@ All libraries are generated through the **Angular CLI**, the **SWAGGER Codegen**
 
 In this section we will explain the steps to create a new API library for a given MOTIF service.
 
+### Prerequisite
+
+In order to create a new library you need to install the Angular CLI:
+
+```bash
+npm install -g @angular/cli
+```
+
+if you want to know more about Angular CLI you can find here: https://cli.angular.io/
+
+We also advise you to read the following tutorial: https://blog.angularindepth.com/creating-a-library-in-angular-6-87799552e7e5
+
 ### Create the Library Project
 
 The first thing to do is to create a new library project. To do this, just go to the root of this project and enter the Angular CLI command in a terminal session:
