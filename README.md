@@ -9,7 +9,7 @@ All libraries are generated through the **Angular CLI**, the **SWAGGER Codegen**
 
 
 
-## How to create a new API library
+## How to create a new API library project
 
 In this section we will explain the steps to create a new API library for a given MOTIF service.
 
@@ -158,7 +158,7 @@ return this.httpClient.get(`${this.basePath}/platform/domains/${encodeURICompone
 
 
 
-## How To Test your API Project
+## How To Test your API library project
 
 Like all the other Angular standard tests, the tests of your new services will be based on [Jasmine test Framework](https://jasmine.github.io/).
 
@@ -273,7 +273,7 @@ The service that you intend to test can be instantiated directly in your test ca
 
 For a complete reference on Angular tests we refer you to the official guide you can find here: [Angular Testing](https://angular.io/guide/testing).
 
-## How to document your API Project 
+## How to document your API library project 
 
 To create the automatic documentation of your API project you can use the [Compodoc tool](https://compodoc.app).
 
