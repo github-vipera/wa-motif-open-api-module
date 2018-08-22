@@ -158,6 +158,125 @@ return this.httpClient.get(`${this.basePath}/platform/domains/${encodeURICompone
 
 
 
+## How To Test your API Project
+
+Like all the other Angular standard tests, the tests of your new services will be based on [Jasmine test Framework](https://jasmine.github.io/).
+
+Because all APIs need authentication before being invoked, you may find this helper class that can be invoked in your tests useful for logging in automatically:
+
+```typescript
+import { Injectable }                      		from '@angular/core';
+import { HttpClient }                           from '@angular/common/http';
+import { MotifConnectorService, AuthService } 	from 'web-console-core'
+import { Observable} 							from "rxjs";
+
+
+@Injectable()
+export class MotifCommunicatoriTestHelper {
+
+    public motifConnector:MotifConnectorService;
+    public authService:AuthService;
+
+    constructor(private http:HttpClient){
+        this.motifConnector = new MotifConnectorService(http);
+        this.authService = new AuthService(http, 'http://your_motif_test_environment:8080', null, null);
+    }
+
+    public login(userName:string, password:string):Observable<any>{
+        return this.authService.login({userName:userName, password:password});
+    }
+    
+}
+```
+
+To create the tests of your services you will need to create a typescrypt spec.ts file for each of them.
+
+You will need to initialize the Web Console system so that you can perform some basic operations (such as authentication):
+
+```typescript
+describe('UsersService', () => {
+    let motifCommunicatoriTestHelper:MotifCommunicatoriTestHelper;
+    
+    beforeEach(() => {
+        TestBed.configureTestingModule({ 
+            providers: [ 
+                { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
+                { provide :WebConsoleConfig, useValue: new WebConsoleConfig('','') }
+            ],
+            imports: [ HttpClientModule ]
+        });
+    });
+
+    afterEach(() => {
+    });
+
+    
+    it(`should issue a users list request`,
+        // 1. declare as async test since the HttpClient works with Observables
+        async(
+            inject([HttpClient], (http: HttpClient) => {
+                // 1. inject HttpClient into the test
+                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+
+                // 2. perform the authentication
+                this.motifCommunicatoriTestHelper.login("admin","admin").subscribe(value=>{
+                    
+                    // 3. send the request to test
+                    let userService = new UsersService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                    userService.getUsersList('Default').subscribe(value=>{
+                        expect(value.length).toBe(16);
+                    },error=>{
+                        console.log("getUsersList Error", error);
+                    })
+                    
+                }, error=>{
+                    console.log("Authentication error", error);
+                })
+                
+            })  
+
+        )
+    );
+
+    it(`should issue a user info`,
+        // 1. declare as async test since the HttpClient works with Observables
+        async(
+            inject([HttpClient], (http: HttpClient) => {
+                // 1. inject HttpClient into the test
+                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+
+                // 2. perform the authentication
+                this.motifCommunicatoriTestHelper.login("admin","admin").subscribe(value=>{
+                    
+                    // 3. send the request to test
+                    let userService = new UsersService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                    userService.getUser('Default','admin').subscribe(value=>{
+                        expect(value.userId).toEqual('admin')
+                    },error=>{
+                        console.log("getUsersList Error", error);
+                    })
+                }, error=>{
+                    console.log("Authentication error", error);
+                })
+                
+            })  
+        )
+    );
+
+});
+
+```
+
+As you can see in the `beforeEach` call, the Web Console components needed to run this test are added.
+
+The service that you intend to test can be instantiated directly in your test case.
+
+
+
+## How to create documentation 
+
+TODO!!
+
 
 
 ## How to run
