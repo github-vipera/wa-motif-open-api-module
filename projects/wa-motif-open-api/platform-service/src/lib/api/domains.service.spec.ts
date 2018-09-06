@@ -8,7 +8,7 @@ import { TEST_BASE_PATH } from '../test.variables'
 
 describe('DomainsService', () => {
 
-    let service : UsersService;
+    let service : DomainsService;
     let motifCommunicatoriTestHelper:MotifCommunicatoriTestHelper;
     
     beforeEach(() => {

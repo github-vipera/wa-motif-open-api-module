@@ -109,8 +109,13 @@ describe('OAuth2Service', () => {
                 this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
 
                     // 3. send the request to test
+                    let oauthReq:OAuthRequest = {
+                        clientId : '123456789',
+                        token : this.motifCommunicatoriTestHelper.authService.getRefreshToken(),
+                        tokenType : 'REFRESH_TOKEN'
+                    }
                     let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.validate(this.motifCommunicatoriTestHelper.authService.getRefreshToken()).subscribe(value => {
+                    myService.validate(oauthReq).subscribe(value => {
                     }, error => {
                         console.log("validateRefreshToken Error", error);
                     })
@@ -135,8 +140,13 @@ describe('OAuth2Service', () => {
                 this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
 
                     // 3. send the request to test
+                    let oauthReq:OAuthRequest = {
+                        clientId : '123456789',
+                        token : this.motifCommunicatoriTestHelper.authService.getAccessToken(),
+                        tokenType : 'ACCESS_TOKEN'
+                    }
                     let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.validate(this.motifCommunicatoriTestHelper.authService.getAccessToken()).subscribe(value => {
+                    myService.validate(oauthReq).subscribe(value => {
                     }, error => {
                         console.log("validateAccessToken Error", error);
                     })
@@ -192,8 +202,13 @@ describe('OAuth2Service', () => {
                 this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
 
                     // 3. send the request to test
+                    let oauthReq:OAuthRequest = {
+                        clientId : '123456789',
+                        token : this.motifCommunicatoriTestHelper.authService.getRefreshToken(),
+                        tokenType : 'REFRESH_TOKEN'
+                    }
                     let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.revoke(this.motifCommunicatoriTestHelper.authService.getRefreshToken()).subscribe(value => {
+                    myService.revoke(oauthReq).subscribe(value => {
                     }, error => {
                         console.log("revokeRefreshToken Error", error);
                     })
@@ -218,8 +233,13 @@ describe('OAuth2Service', () => {
                 this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
 
                     // 3. send the request to test
+                    let oauthReq:OAuthRequest = {
+                        clientId : '123456789',
+                        token : this.motifCommunicatoriTestHelper.authService.getAccessToken(),
+                        tokenType : 'ACCESS_TOKEN'
+                    }
                     let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.revoke(this.motifCommunicatoriTestHelper.authService.getAccessToken()).subscribe(value => {
+                    myService.revoke(oauthReq).subscribe(value => {
                     }, error => {
                         console.log("revokeAccessToken Error", error);
                     })
