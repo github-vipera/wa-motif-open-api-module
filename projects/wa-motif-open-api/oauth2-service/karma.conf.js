@@ -17,7 +17,7 @@ module.exports = function (config) {
     },
     proxies: {
       "/rest/v2": {
-        "target": "http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2",
+        "target": "http:/ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2",
         "secure": false,
         'changeOrigin': true
       },
@@ -36,9 +36,9 @@ module.exports = function (config) {
       fixWebpackSourcePaths: true
     },
     reporters: ['progress', 'kjhtml'],
-    port: 9877,
+    port: 9876,
     colors: true,
-    logLevel: config.LOG_TRACE,
+    logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
     singleRun: false

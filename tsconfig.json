@@ -58,6 +58,12 @@
       ],
       "@wa-motif-open-api/configuration-service/*": [
         "dist/wa-motif-open-api/configuration-service/*"
+      ],
+      "@wa-motif-open-api/oauth2-service": [
+        "dist/wa-motif-open-api/oauth2-service"
+      ],
+      "@wa-motif-open-api/oauth2-service/*": [
+        "dist/wa-motif-open-api/oauth2-service/*"
       ]
     }
   }
