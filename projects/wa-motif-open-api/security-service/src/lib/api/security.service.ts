@@ -20,7 +20,7 @@ import { Observable }                                        from 'rxjs/Observab
 
 import { Session } from '../model/session';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 
 
@@ -102,13 +102,47 @@ export class SecurityService {
     /**
      * Retrieve open sessions
      * Retrieve open sessions
+     * @param session Session
+     * @param channel Channel
+     * @param domain Domain
+     * @param application Application
+     * @param clientIp Client IP
+     * @param user User
+     * @param page Page (omit to retrieve all records at once)
+     * @param pageSize Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSessions(observe?: 'body', reportProgress?: boolean): Observable<Array<Session>>;
-    public getSessions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Session>>>;
-    public getSessions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Session>>>;
-    public getSessions(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSessions(session?: string, channel?: string, domain?: string, application?: string, clientIp?: string, user?: string, page?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Session>>;
+    public getSessions(session?: string, channel?: string, domain?: string, application?: string, clientIp?: string, user?: string, page?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Session>>>;
+    public getSessions(session?: string, channel?: string, domain?: string, application?: string, clientIp?: string, user?: string, page?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Session>>>;
+    public getSessions(session?: string, channel?: string, domain?: string, application?: string, clientIp?: string, user?: string, page?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (session !== undefined && session !== null) {
+            queryParameters = queryParameters.set('session', <any>session);
+        }
+        if (channel !== undefined && channel !== null) {
+            queryParameters = queryParameters.set('channel', <any>channel);
+        }
+        if (domain !== undefined && domain !== null) {
+            queryParameters = queryParameters.set('domain', <any>domain);
+        }
+        if (application !== undefined && application !== null) {
+            queryParameters = queryParameters.set('application', <any>application);
+        }
+        if (clientIp !== undefined && clientIp !== null) {
+            queryParameters = queryParameters.set('clientIp', <any>clientIp);
+        }
+        if (user !== undefined && user !== null) {
+            queryParameters = queryParameters.set('user', <any>user);
+        }
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+            queryParameters = queryParameters.set('page_size', <any>pageSize);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -130,6 +164,7 @@ export class SecurityService {
 
         return this.httpClient.get(`${this.basePath}/security/sessions`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

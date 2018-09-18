@@ -90,6 +90,54 @@ components:
       schema:
         type: string
         example: 3h3hgf234gf23hg4f23h4hg23f4h23gf4h2
+    sessionQueryParam:
+      name: session
+      required: false
+      in: query
+      description: Session
+      schema:
+        type: string
+        example: 3h3hgf234gf23hg4f23h4hg23f4h23gf4h2
+    channelQueryParam:
+      name: channel
+      required: false
+      in: query
+      description: Channel
+      schema:
+        type: string
+        example: REST
+    domainQueryParam:
+      name: domain
+      required: false
+      in: query
+      description: Domain
+      schema:
+        type: string
+        example: Default
+    applicationQueryParam:
+      name: application
+      required: false
+      in: query
+      description: Application
+      schema:
+        type: string
+        example: Vipera
+    clientIpQueryParam:
+      name: clientIp
+      required: false
+      in: query
+      description: Client IP
+      schema:
+        type: string
+        example: 10.0.0.1
+    userQueryParam:
+      name: user
+      required: false
+      in: query
+      description: User
+      schema:
+        type: string
+        example: joe
         
 paths:
   /security/sessions:
@@ -104,9 +152,27 @@ paths:
           - 'all:all'
         - vipera_basic: []
         - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/sessionQueryParam'
+        - $ref: '#/components/parameters/channelQueryParam'
+        - $ref: '#/components/parameters/domainQueryParam'
+        - $ref: '#/components/parameters/applicationQueryParam'
+        - $ref: '#/components/parameters/clientIpQueryParam'
+        - $ref: '#/components/parameters/userQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
       responses:
         '200':
           description: OK
+          headers:
+            x-page:
+              $ref: './Z_Globals.yaml#/components/headers/x-page'
+            x-page-size:
+              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
+            x-total-pages:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
+            x-total-records:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
           content:
             application/json:
               schema:

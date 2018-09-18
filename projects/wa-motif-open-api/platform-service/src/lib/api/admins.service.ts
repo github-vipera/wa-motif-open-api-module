@@ -100,7 +100,6 @@ export class AdminsService {
         }
 
         return this.httpClient.post(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/admins`,
-        body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

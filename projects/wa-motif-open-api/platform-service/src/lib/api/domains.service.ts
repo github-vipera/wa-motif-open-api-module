@@ -65,10 +65,10 @@ export class DomainsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createDomain(body?: DomainCreate, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public createDomain(body?: DomainCreate, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public createDomain(body?: DomainCreate, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public createDomain(body?: DomainCreate, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createDomain(body?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public createDomain(body?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public createDomain(body?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public createDomain(body?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -237,10 +237,10 @@ export class DomainsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateDomain(domain: string, body?: DomainUpdate, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateDomain(domain: string, body?: DomainUpdate, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateDomain(domain: string, body?: DomainUpdate, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateDomain(domain: string, body?: DomainUpdate, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateDomain(domain: string, body?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateDomain(domain: string, body?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateDomain(domain: string, body?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateDomain(domain: string, body?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling updateDomain.');
         }

@@ -172,7 +172,7 @@ describe('OAuth2Service', () => {
 
                     // 3. send the request to test
                     let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.getRefreshTokenList(1, 2, '-create_time').subscribe(value => {
+                    myService.getRefreshTokenList('Default', 1, 2, '-create_time').subscribe(value => {
                         expect(value.length).toBe(2);
                         value.forEach(function (rt: RefreshToken) {
                             expect(rt.tokenType).toBe('REFRESH_TOKEN');

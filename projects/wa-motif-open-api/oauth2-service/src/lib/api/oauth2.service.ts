@@ -26,7 +26,6 @@ import { WC_API_BASE_PATH } from 'web-console-core'
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
-import { MotifPagedQuery, MotifQueryResults, MOTIF_PAGED_QUERY_PARAM } from 'web-console-core'
 
 @Injectable()
 export class Oauth2Service {
@@ -104,18 +103,22 @@ export class Oauth2Service {
     }
 
     /**
-     * Get OAuth2 Refresh Tokens
-     * Get OAuth2 Refresh Tokens
+     * Get OAuth2 Refresh Tokens of a specific domain
+     * Get OAuth2 Refresh Tokens of a specific domain
+     * @param domain Domain Name
      * @param page Page (omit to retrieve all records at once)
      * @param pageSize Page size
      * @param sort Sorting fields
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRefreshTokenList(page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<RefreshTokenList>;
-    public getRefreshTokenList(page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RefreshTokenList>>;
-    public getRefreshTokenList(page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RefreshTokenList>>;
-    public getRefreshTokenList(page?: number, pageSize?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRefreshTokenList(domain: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<RefreshTokenList>;
+    public getRefreshTokenList(domain: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RefreshTokenList>>;
+    public getRefreshTokenList(domain: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RefreshTokenList>>;
+    public getRefreshTokenList(domain: string, page?: number, pageSize?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling getRefreshTokenList.');
+        }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (page !== undefined && page !== null) {
@@ -146,7 +149,7 @@ export class Oauth2Service {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get(`${this.basePath}/oauth2/refreshTokens`,
+        return this.httpClient.get(`${this.basePath}/oauth2/domains/${encodeURIComponent(String(domain))}/refreshTokens`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

@@ -12,5 +12,5 @@
 
 export interface UserKey { 
     domain: string;
-    userId?: string;
+    userId: string;
 }

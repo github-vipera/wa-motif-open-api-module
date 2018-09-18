@@ -26,11 +26,29 @@ components:
       type: apiKey
       in: cookie
       name: JSESSIONID  # cookie name
+  headers:
+    x-page:
+      description: Current page
+      schema:
+        type: integer
+    x-page-size:
+      description: Page size
+      schema:
+        type: integer
+    x-total-pages:
+      description: Total pages
+      schema:
+        type: integer
+    x-total-records:
+      description: Total records
+      schema:
+        type: integer
   schemas:
     UserKey:
       type: object
       required:
         - domain
+        - userId
       properties:
         domain:
           type: string
@@ -293,20 +311,47 @@ components:
       required: true
       schema:
         type: string
-    startQueryParam:
-      name: start
+    pageQueryParam:
+      name: page
       in: query
+      description: Page (omit to retrieve all records at once)
       required: false
       schema:
         type: integer
-        example: '10'
-    limitQueryParam:
-      name: limit
+        example: 1
+    pageSizeQueryParam:
+      name: page_size
       in: query
+      description: Page size
       required: false
       schema:
         type: integer
-        example: '10'
+        example: 30
+    sortQueryParam:
+      name: sort
+      in: query
+      description: Sorting fields
+      required: false
+      schema:
+        type: string
+        example: '-created'
+    userIdQueryParam:
+      name: userId
+      description: UserId
+      in: query
+      required: false
+      schema:
+        type: string
+        example: 'jo%'
+    userIdIntQueryParam:
+      name: userIdInt
+      description: Internal UserId
+      in: query
+      required: false
+      schema:
+        type: string
+        example: 'jo%'
+
   responses:
     GeneralViperaOkResponse:
       description: General Vipera OK Response

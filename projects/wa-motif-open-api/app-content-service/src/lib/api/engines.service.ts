@@ -25,6 +25,8 @@ import { Engine } from '../model/engine';
 import { EngineEntity } from '../model/engineEntity';
 import { EngineEntityList } from '../model/engineEntityList';
 
+import { WC_API_BASE_PATH } from 'web-console-core'
+
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
@@ -36,7 +38,7 @@ export class EnginesService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -105,7 +107,6 @@ export class EnginesService {
         }
 
         return this.httpClient.post(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines/${encodeURIComponent(String(engine))}/check`,
-        body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -159,7 +160,6 @@ export class EnginesService {
         }
 
         return this.httpClient.post(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines/${encodeURIComponent(String(engine))}`,
-        body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

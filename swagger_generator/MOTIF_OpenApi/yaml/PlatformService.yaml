@@ -359,6 +359,14 @@ components:
       required: true
       schema:
         type: string
+    userStateQueryParam:
+      name: state
+      in: query
+      required: false
+      schema:
+        type: string
+        example: ACTIVE
+    
 paths:
   /platform/locales:
     post:
@@ -1154,9 +1162,24 @@ paths:
         - vipera_cookie: []
       parameters:
         - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdIntQueryParam'
+        - $ref: '#/components/parameters/userStateQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/sortQueryParam'
       responses:
         '200':
           description: OK
+          headers:
+            x-page:
+              $ref: './Z_Globals.yaml#/components/headers/x-page'
+            x-page-size:
+              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
+            x-total-pages:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
+            x-total-records:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
           content:
             application/json:
               schema:

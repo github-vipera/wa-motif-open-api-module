@@ -21,7 +21,7 @@ import { Observable }                                        from 'rxjs/Observab
 import { Tag } from '../model/tag';
 import { TagList } from '../model/tagList';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 
 
@@ -32,7 +32,7 @@ export class ConfigurationsService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -130,7 +130,7 @@ export class ConfigurationsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get(`${this.basePath}/cfg/configurations/download/xml`,
+        return this.httpClient.get(`${this.basePath}/cfg/configurations/xml`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -174,7 +174,7 @@ export class ConfigurationsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get(`${this.basePath}/cfg/configurations/tags/${encodeURIComponent(String(tag))}/download/xml`,
+        return this.httpClient.get(`${this.basePath}/cfg/configurations/tags/${encodeURIComponent(String(tag))}/xml`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -440,7 +440,7 @@ export class ConfigurationsService {
             'multipart/form-data'
         ];
 
-        return this.httpClient.post(`${this.basePath}/cfg/configurations/upload/xml`,
+        return this.httpClient.put(`${this.basePath}/cfg/configurations/xml`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

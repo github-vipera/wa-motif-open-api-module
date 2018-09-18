@@ -147,8 +147,8 @@ components:
         type: string
         example: 'MySetting'
 paths:
-  /cfg/configurations/upload/xml:
-    post:
+  /cfg/configurations/xml:
+    put:
       operationId: uploadXml
       tags:
         - configurations
@@ -169,8 +169,6 @@ paths:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
-  
-  /cfg/configurations/download/xml:
     get:
       operationId: downloadXml
       tags:
@@ -193,7 +191,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   
-  /cfg/configurations/tags/{tag}/download/xml:
+  /cfg/configurations/tags/{tag}/xml:
     get:
       operationId: downloadXmlTaggedSettings
       tags:

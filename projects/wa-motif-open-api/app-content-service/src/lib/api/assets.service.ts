@@ -20,6 +20,8 @@ import { Observable }                                        from 'rxjs/Observab
 
 import { AssetBundle } from '../model/assetBundle';
 
+import { WC_API_BASE_PATH } from 'web-console-core'
+
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
@@ -31,7 +33,7 @@ export class AssetsService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -149,7 +151,7 @@ export class AssetsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/assets/${encodeURIComponent(String(asset))}/versions/${encodeURIComponent(String(version))}/download`,
+        return this.httpClient.get(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/assets/${encodeURIComponent(String(asset))}/versions/${encodeURIComponent(String(version))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -251,7 +253,7 @@ export class AssetsService {
             'multipart/form-data'
         ];
 
-        return this.httpClient.put(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/assets/upload`,
+        return this.httpClient.put(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/assets`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

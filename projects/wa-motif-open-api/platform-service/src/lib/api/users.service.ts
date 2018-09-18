@@ -101,8 +101,7 @@ export class UsersService {
         }
 
         return this.httpClient.post(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users`,
-                body,
-                {
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -155,8 +154,7 @@ export class UsersService {
         }
 
         return this.httpClient.post(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/credentials`,
-            body,
-                {
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -220,11 +218,10 @@ export class UsersService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUser(domain: string, userId: string, observe?: 'body', reportProgress?: boolean, pagedQuery?:boolean): Observable<User>;
-    public getUser(domain: string, userId: string, observe?: 'response', reportProgress?: boolean, pagedQuery?:boolean): Observable<HttpResponse<User>>;
-    public getUser(domain: string, userId: string, observe?: 'events', reportProgress?: boolean, pagedQuery?:boolean): Observable<HttpEvent<User>>;
-    public getUser(domain: string, userId: string, observe?: 'events', reportProgress?: boolean, pagedQuery?:boolean): Observable<HttpEvent<User>>;
-    public getUser(domain: string, userId: string, observe: any = 'body', reportProgress: boolean = false, pagedQuery:boolean=false ): Observable<any> {
+    public getUser(domain: string, userId: string, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public getUser(domain: string, userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public getUser(domain: string, userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public getUser(domain: string, userId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getUser.');
         }
@@ -311,16 +308,41 @@ export class UsersService {
      * Retrieves users list
      * Retrieves users list
      * @param domain Domain Name
+     * @param userId UserId
+     * @param userIdInt Internal UserId
+     * @param state 
+     * @param page Page (omit to retrieve all records at once)
+     * @param pageSize Page size
+     * @param sort Sorting fields
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsersList(domain: string, observe?: 'response', reportProgress?: false, pagedQuery?:MotifPagedQuery): Observable<HttpResponse<any>>;
-    public getUsersList(domain: string, observe?: 'body', reportProgress?: boolean, pagedQuery?:MotifPagedQuery): Observable<UsersList>;
-    public getUsersList(domain: string, observe?: 'response', reportProgress?: boolean, pagedQuery?:MotifPagedQuery): Observable<HttpResponse<UsersList>>;
-    public getUsersList(domain: string, observe?: 'events', reportProgress?: boolean, pagedQuery?:MotifPagedQuery): Observable<HttpEvent<UsersList>>;
-    public getUsersList(domain: string, observe: any = 'body', reportProgress: boolean = false, pagedQuery:MotifPagedQuery): Observable<any> {
+    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<UsersList>;
+    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersList>>;
+    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersList>>;
+    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getUsersList.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (userId !== undefined && userId !== null) {
+            queryParameters = queryParameters.set('userId', <any>userId);
+        }
+        if (userIdInt !== undefined && userIdInt !== null) {
+            queryParameters = queryParameters.set('userIdInt', <any>userIdInt);
+        }
+        if (state !== undefined && state !== null) {
+            queryParameters = queryParameters.set('state', <any>state);
+        }
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+            queryParameters = queryParameters.set('page_size', <any>pageSize);
+        }
+        if (sort !== undefined && sort !== null) {
+            queryParameters = queryParameters.set('sort', <any>sort);
         }
 
         let headers = this.defaultHeaders;
@@ -337,24 +359,17 @@ export class UsersService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        let params = null;
-        if (pagedQuery){
-            params = new HttpParams()
-                .set(MOTIF_PAGED_QUERY_PARAM, JSON.stringify(pagedQuery))
-                observe = 'response';
-        }
-
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
 
         return this.httpClient.get(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
-                reportProgress: reportProgress,
-                params: params
+                reportProgress: reportProgress
             }
         );
     }
@@ -403,8 +418,7 @@ export class UsersService {
         }
 
         return this.httpClient.put(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}`,
-            body,
-                {
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -457,8 +471,7 @@ export class UsersService {
         }
 
         return this.httpClient.put(`${this.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/credentials`,
-            body,
-                {
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -505,7 +505,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
           
-  /appcont/domains/{domain}/assets/upload:
+  /appcont/domains/{domain}/assets:
     put:
       operationId: uploadAsset
       tags:
@@ -527,33 +527,6 @@ paths:
       responses:
         '200':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
-        default:
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
- 
-  /appcont/domains/{domain}/assets/{asset}/versions/{version}/download:
-    get:
-      operationId: downloadAsset
-      tags:
-        - assets
-      description: Downloads an asset bundle from the DB
-      summary: Downloads an asset bundle from the DB
-      security:
-        - vipera_oauth2:
-          - 'all:all'
-        - vipera_basic: []
-        - vipera_cookie: []
-      parameters:
-        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
-        - $ref: '#/components/parameters/assetPathParam'
-        - $ref: '#/components/parameters/versionPathParam'
-      responses:
-        '200':
-          description: Te asset in a zip format
-          content:
-            application/zip:
-              schema:
-                type: string
-                format: binary
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
  
@@ -581,6 +554,31 @@ paths:
       responses:
         '200':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: downloadAsset
+      tags:
+        - assets
+      description: Downloads an asset bundle from the DB
+      summary: Downloads an asset bundle from the DB
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: '#/components/parameters/assetPathParam'
+        - $ref: '#/components/parameters/versionPathParam'
+      responses:
+        '200':
+          description: Te asset in a zip format
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     delete:
