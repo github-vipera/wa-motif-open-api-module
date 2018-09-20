@@ -64,6 +64,12 @@
       ],
       "@wa-motif-open-api/oauth2-service/*": [
         "dist/wa-motif-open-api/oauth2-service/*"
+      ],
+      "@wa-motif-open-api/auth-access-control-service": [
+        "dist/wa-motif-open-api/auth-access-control-service"
+      ],
+      "@wa-motif-open-api/auth-access-control-service/*": [
+        "dist/wa-motif-open-api/auth-access-control-service/*"
       ]
     }
   }

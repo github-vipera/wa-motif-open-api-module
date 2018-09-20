@@ -1,0 +1,974 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Auth Access Control Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+tags:
+  - name: roles
+    description: Role related
+  - name: groups
+    description: Group related
+  - name: permissions
+    description: Permission related
+  - name: users
+    description: User related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:           
+    RoleUpdate:
+      type: object
+      required:
+        - description
+      properties:
+        description:
+          type: string
+          example: Role description 
+
+    RoleCreate:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/RoleUpdate'
+      - type: object
+        required:
+          - name
+        properties:
+          name:
+            type: string
+            example: TestRole
+
+    Role:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/RoleCreate' 
+    
+    Roles:
+      type: array
+      items:
+        type: string
+        example: SU
+
+    GroupUpdate:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/GroupCreate' 
+      - type: object
+        properties:
+          newName:
+            type: string
+            example: NewGroupName
+    
+    GroupCreate:
+      type: object
+      required:
+          - name
+      properties:
+          name:
+            type: string
+            example: TestGroup
+          description:
+            type: string
+            example: Group description 
+      
+    Group:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          domain:
+            type: string
+            example: Default
+      - $ref: '#/components/schemas/GroupCreate'
+        
+    Groups:
+      type: array
+      items:
+        type: string
+              
+    Permission:
+      type: object
+      required:
+        - component
+        - action
+        - target
+      properties:
+        component:
+          type: string
+          description: Component name
+          example: 'com.vipera.osgi.core.registry' 
+        action:
+          type: string
+          description: Action (core values are VIEW, EXECUTE, MODIFY, * but can be customized)
+          example: EXECUTE
+          #enum:
+          #- VIEW
+          #- EXECUTE
+          #- MODIFY
+          #- '*'
+        target:
+          description: 'Method name or *(wildcard)'
+          type: string
+          example: installPlugin   
+    
+    Permissions:
+      type: array
+      items:
+        type: string
+        example: 'component:target:action'
+                              
+  parameters:
+    roleNamePathParam:
+      name: role
+      required: true
+      in: path
+      description: Role Name
+      schema:
+        type: string
+        example: 'MyRoleName'   
+    groupNamePathParam:
+      name: group
+      required: true
+      in: path
+      description: Group Name
+      schema:
+        type: string
+        example: 'MyGroupName'       
+    componentPathParam:
+      name: component
+      required: true
+      in: path
+      description: Component Name
+      schema:
+        type: string
+        example: 'com.vipera.osgi.core.registry'         
+    actionPathParam:
+      name: action
+      required: true
+      in: path
+      description: 'Action (can be VIEW, EXECUTE, MODIFY or *)'
+      schema:
+        type: string
+        example: 'EXECUTE'   
+    targetPathParam:
+      name: target
+      required: true
+      in: path
+      description: 'Method name or *(wildcard)'
+      schema:
+        type: string
+        example: 'installPlugin'         
+paths:
+  /acs/roles:
+    get:
+      operationId: getRoles
+      tags:
+        - roles
+      description: Retrieves all roles
+      summary: Retrieves all roles
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: [] 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    post:
+      operationId: createRole
+      tags:
+        - roles
+      description: Creates a Role
+      summary: Creates a Role
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /acs/roles/{role}:
+    get:
+      operationId: getRole
+      tags:
+        - roles
+      description: Retrieves a Role
+      summary: Retrieves a Role
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: '#/components/parameters/roleNamePathParam' 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteRole
+      tags:
+        - roles
+      description: Deletes a Role
+      summary: Deletes a Role
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+         - $ref: '#/components/parameters/roleNamePathParam' 
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+    put:
+      operationId: updateRole
+      tags:
+        - roles
+      description: Updates a role description
+      summary: Updates a role description
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/roleNamePathParam' 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleUpdate'
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    
+  /acs/domains/{domain}/users/{userId}/roles/assign:
+    post:
+      operationId: assignUserIdRoles
+      tags:
+        - users
+      description: Assigns the Roles to an user
+      summary: Assigns the Roles  to an user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Roles'     
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+ 
+  /acs/domains/{domain}/users/{userId}/roles/remove:
+    post:
+      operationId: removeUserIdRoles
+      tags:
+        - users
+      description: Removes the Roles from the user
+      summary: Removes the Roles from the user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Roles'     
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+ 
+  /acs/domains/groups:
+    get:
+      operationId: getGroups
+      tags:
+        - groups
+      description: Retrieves all groups
+      summary: Retrieves all groups
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: [] 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+ 
+  /acs/domains/{domain}/groups:
+    post:
+      operationId: createGroup
+      tags:
+        - groups
+      description: Creates a Group
+      summary: Creates a Group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+          - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'       
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getDomainGroups
+      tags:
+        - groups
+      description: Retrieves the groups with the given domain
+      summary: Retrieves the groups with the given domain
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'             
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /acs/domains/{domain}/groups/{group}:
+    get:
+      operationId: getGroup
+      tags:
+        - groups
+      description: Retrieves a Group
+      summary: Retrieves a Group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'             
+        - $ref: '#/components/parameters/groupNamePathParam' 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteGroup
+      tags:
+        - groups
+      description: Deletes a Group
+      summary: Deletes a Group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+         - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'       
+         - $ref: '#/components/parameters/groupNamePathParam' 
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateGroup
+      tags:
+        - groups
+      description: Updates a group
+      summary: Updates a group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'     
+        - $ref: '#/components/parameters/groupNamePathParam' 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupUpdate'
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /acs/domains/{domain}/groups/{group}/roles:
+    get:
+      operationId: getGroupRoles
+      tags:
+        - groups
+      description: Retrieves the Roles given a group
+      summary: Retrieves the Roles  given an group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: '#/components/parameters/groupNamePathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /acs/domains/{domain}/groups/{group}/roles/assign:
+    post:
+      operationId: assignGroupRoles
+      tags:
+        - groups
+      description: Assigns the Roles to a group
+      summary: Assigns the Roles to a group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: '#/components/parameters/groupNamePathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Roles'  
+      responses:
+        '200':
+         $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /acs/domains/{domain}/groups/{group}/roles/remove:
+    post:
+      operationId: removeGroupRoles
+      tags:
+        - groups
+      description: Removes the Roles from a group
+      summary: Removes the Roles from a group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: '#/components/parameters/groupNamePathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Roles'  
+      responses:
+        '200':
+         $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    
+  /acs/domains/{domain}/users/{userId}/groups:
+    get:
+      operationId: getUserGroups
+      tags:
+        - users
+      description: Retrieves the groups with the given user
+      summary: Retrieves the groups with the given user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'             
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'       
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /acs/domains/{domain}/users/{userId}/groups/assign:
+    post:
+      operationId: assignUserGroups
+      tags:
+        - users
+      description: Assigns the groups to the user
+      summary: Assigns the groups to the user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'             
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'       
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Groups' 
+      responses:
+        '200':
+           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /acs/domains/{domain}/users/{userId}/groups/remove:
+    post:
+      operationId: removeUserGroups
+      tags:
+        - users
+      description: Removes the groups from the user
+      summary: Removes the groups from the user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'             
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'       
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Groups' 
+      responses:
+        '200':
+           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  
+  /acs/roles/{role}/groups:
+    get:
+      operationId: getRoleGroups
+      tags:
+        - roles
+      description: Retrieves the groups with the role
+      summary: Retrieves the groups with the role
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: '#/components/parameters/roleNamePathParam' 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    
+  /acs/domains/{domain}/groups/{group}/users:
+    get:
+      operationId: getGroupUsers
+      tags:
+        - groups
+      description: Retrieves the Users given a group
+      summary: Retrieves the Users  given an group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: '#/components/parameters/groupNamePathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdIntQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/sortQueryParam'
+      responses:
+        '200':
+          description: OK
+          headers:
+            x-page:
+              $ref: './Z_Globals.yaml#/components/headers/x-page'
+            x-page-size:
+              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
+            x-total-pages:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
+            x-total-records:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/User'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+ 
+  /acs/roles/{role}/users:
+    get:
+      operationId: getRoleUsers
+      tags:
+        - roles
+      description: Retrieves the users with the role
+      summary: Retrieves the users with the role
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: '#/components/parameters/roleNamePathParam' 
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdIntQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/sortQueryParam'
+      responses:
+        '200':
+          description: OK
+          headers:
+            x-page:
+              $ref: './Z_Globals.yaml#/components/headers/x-page'
+            x-page-size:
+              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
+            x-total-pages:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
+            x-total-records:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/User'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /acs/domains/{domain}/users/{userId}/roles:
+    get:
+      operationId: getUserRoles
+      tags:
+        - users
+      description: Retrieves the roles given a user
+      summary: Retrieves the roles given a user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'             
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'       
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    
+  /acs/permission/{component}/{action}/{target}:
+    get:
+      operationId: getPermission
+      tags:
+        - permissions
+      description: Retrieves a Permission
+      summary: Retrieves a Permission
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: '#/components/parameters/componentPathParam'             
+        - $ref: '#/components/parameters/actionPathParam' 
+        - $ref: '#/components/parameters/targetPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permission'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deletePermission
+      tags:
+        - permissions
+      description: Deletes a Permission
+      summary: Deletes a Permission
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: '#/components/parameters/componentPathParam'             
+        - $ref: '#/components/parameters/actionPathParam' 
+        - $ref: '#/components/parameters/targetPathParam'
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    post:
+      operationId: createPermission
+      tags:
+        - permissions
+      description: Creates a Permission
+      summary: Creates a Permission
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/componentPathParam'             
+        - $ref: '#/components/parameters/actionPathParam' 
+        - $ref: '#/components/parameters/targetPathParam'    
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permission'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /acs/roles/{role}/permissions:
+    get:
+      operationId: getRolePermissions
+      tags:
+        - roles
+      description: Retrieves the permissions with the role
+      summary: Retrieves the permissions with the role
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: '#/components/parameters/roleNamePathParam' 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Permission'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+   
+  /acs/permissions:
+    get:
+      operationId: getPermissions
+      tags:
+        - permissions
+      description: Retrieves all permissions
+      summary: Retrieves all permissions
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: [] 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Permission'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /acs/domains/{domain}/users/{userId}/permissions:
+    get:
+      operationId: getUserPermissions
+      tags:
+        - users
+      description: Retrieves the permissions with the given user
+      summary: Retrieves the permissions with the given user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters: 
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'             
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'       
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Permission'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /acs/role/{role}/permissions/assign:
+    post:
+      operationId: assignRolePermissions
+      tags:
+        - roles
+      description: Assigns the permissions to the role
+      summary: Assigns the permissions to the role
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permissions'
+      parameters: 
+        - $ref: '#/components/parameters/roleNamePathParam' 
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+   
+  /acs/role/{role}/permissions/remove:
+    post:
+      operationId: removeRolePermissions
+      tags:
+        - roles
+      description: Removes the permissions from the role
+      summary: Removes the permissions from the role
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permissions'
+      parameters: 
+        - $ref: '#/components/parameters/roleNamePathParam' 
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+       
