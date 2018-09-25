@@ -62,35 +62,34 @@ components:
 
     GroupUpdate:
       type: object
-      allOf:
-      - $ref: '#/components/schemas/GroupCreate' 
-      - type: object
-        properties:
-          newName:
-            type: string
-            example: NewGroupName
+      required:
+        - description
+      properties:
+        description:
+          type: string
+          example: NewDescription
     
     GroupCreate:
       type: object
-      required:
+      allOf:
+      - $ref: '#/components/schemas/GroupUpdate'
+      - type: object
+        required:
           - name
-      properties:
+        properties:
           name:
             type: string
             example: TestGroup
-          description:
-            type: string
-            example: Group description 
       
     Group:
       type: object
       allOf:
+      - $ref: '#/components/schemas/GroupCreate'
       - type: object
         properties:
           domain:
             type: string
             example: Default
-      - $ref: '#/components/schemas/GroupCreate'
         
     Groups:
       type: array
