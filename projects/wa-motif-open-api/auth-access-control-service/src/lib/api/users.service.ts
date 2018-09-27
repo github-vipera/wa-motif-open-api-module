@@ -18,11 +18,13 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
+import { Action } from '../model/action';
+import { EntitlementResult } from '../model/entitlementResult';
+import { ErrorVipera } from '../model/errorVipera';
 import { Group } from '../model/group';
 import { Permission } from '../model/permission';
 import { Role } from '../model/role';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
@@ -34,7 +36,7 @@ export class UsersService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -102,7 +104,7 @@ export class UsersService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups/assign`,
+        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -155,7 +157,54 @@ export class UsersService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/roles/assign`,
+        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/roles`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Retrieves the actions with the given user
+     * Retrieves the actions with the given user
+     * @param domain Domain Name
+     * @param userId User Id
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUserActions(domain: string, userId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Action>>;
+    public getUserActions(domain: string, userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Action>>>;
+    public getUserActions(domain: string, userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Action>>>;
+    public getUserActions(domain: string, userId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling getUserActions.');
+        }
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling getUserActions.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/actions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -307,6 +356,116 @@ export class UsersService {
     }
 
     /**
+     * Check if user is entitled to execute the action
+     * Check if user is entitled to execute the action
+     * @param domain Domain Name
+     * @param userId User Id
+     * @param action Action Name
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public isUserActionEntitled(domain: string, userId: string, action: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
+    public isUserActionEntitled(domain: string, userId: string, action: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
+    public isUserActionEntitled(domain: string, userId: string, action: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
+    public isUserActionEntitled(domain: string, userId: string, action: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling isUserActionEntitled.');
+        }
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling isUserActionEntitled.');
+        }
+        if (action === null || action === undefined) {
+            throw new Error('Required parameter action was null or undefined when calling isUserActionEntitled.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/actions/${encodeURIComponent(String(action))}/entitled`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Check if permission is assigned to the user
+     * Check if permission is assigned to the user
+     * @param domain Domain Name
+     * @param userId User Id
+     * @param component Component Name
+     * @param action Action (can be VIEW, EXECUTE, MODIFY or *)
+     * @param target Method name or *(wildcard)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public isUserPermissionEntitled(domain: string, userId: string, component: string, action: string, target: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
+    public isUserPermissionEntitled(domain: string, userId: string, component: string, action: string, target: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
+    public isUserPermissionEntitled(domain: string, userId: string, component: string, action: string, target: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
+    public isUserPermissionEntitled(domain: string, userId: string, component: string, action: string, target: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling isUserPermissionEntitled.');
+        }
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling isUserPermissionEntitled.');
+        }
+        if (component === null || component === undefined) {
+            throw new Error('Required parameter component was null or undefined when calling isUserPermissionEntitled.');
+        }
+        if (action === null || action === undefined) {
+            throw new Error('Required parameter action was null or undefined when calling isUserPermissionEntitled.');
+        }
+        if (target === null || target === undefined) {
+            throw new Error('Required parameter target was null or undefined when calling isUserPermissionEntitled.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/permissions/${encodeURIComponent(String(component))}/${encodeURIComponent(String(action))}/${encodeURIComponent(String(target))}/entitled`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Removes the groups from the user
      * Removes the groups from the user
      * @param domain Domain Name
@@ -349,7 +508,7 @@ export class UsersService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups/remove`,
+        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -402,7 +561,7 @@ export class UsersService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/roles/remove`,
+        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/roles`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -411,4 +570,4 @@ export class UsersService {
             }
         );
     }
-}
+

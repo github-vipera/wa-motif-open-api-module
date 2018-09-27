@@ -18,13 +18,13 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
+import { ErrorVipera } from '../model/errorVipera';
 import { Group } from '../model/group';
 import { GroupCreate } from '../model/groupCreate';
 import { GroupUpdate } from '../model/groupUpdate';
 import { Role } from '../model/role';
 import { User } from '../model/user';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
@@ -36,7 +36,7 @@ export class GroupsService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -104,8 +104,7 @@ export class GroupsService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}/roles/assign`,
-            body,
+        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}/roles`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -155,7 +154,6 @@ export class GroupsService {
         }
 
         return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups`,
-            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -501,8 +499,7 @@ export class GroupsService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}/roles/remove`,
-            body,
+        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}/roles`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -556,7 +553,6 @@ export class GroupsService {
         }
 
         return this.httpClient.put(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}`,
-            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -565,4 +561,4 @@ export class GroupsService {
             }
         );
     }
-}
+

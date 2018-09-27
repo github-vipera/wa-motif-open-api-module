@@ -18,6 +18,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
+import { Action } from '../model/action';
+import { EntitlementResult } from '../model/entitlementResult';
+import { ErrorVipera } from '../model/errorVipera';
 import { Group } from '../model/group';
 import { Permission } from '../model/permission';
 import { Role } from '../model/role';
@@ -25,7 +28,6 @@ import { RoleCreate } from '../model/roleCreate';
 import { RoleUpdate } from '../model/roleUpdate';
 import { User } from '../model/user';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
@@ -37,7 +39,7 @@ export class RolesService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -63,19 +65,19 @@ export class RolesService {
 
 
     /**
-     * Assigns the permissions to the role
-     * Assigns the permissions to the role
+     * Assigns the actions to the role
+     * Assigns the actions to the role
      * @param role Role Name
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public assignRolePermissions(role: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public assignRolePermissions(role: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public assignRolePermissions(role: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public assignRolePermissions(role: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public assignRoleActions(role: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public assignRoleActions(role: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public assignRoleActions(role: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public assignRoleActions(role: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (role === null || role === undefined) {
-            throw new Error('Required parameter role was null or undefined when calling assignRolePermissions.');
+            throw new Error('Required parameter role was null or undefined when calling assignRoleActions.');
         }
 
         let headers = this.defaultHeaders;
@@ -101,7 +103,7 @@ export class RolesService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/acs/role/${encodeURIComponent(String(role))}/permissions/assign`,
+        return this.httpClient.post(`${this.basePath}/acs/roles/${encodeURIComponent(String(role))}/permissions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -233,6 +235,49 @@ export class RolesService {
         ];
 
         return this.httpClient.get(`${this.basePath}/acs/roles/${encodeURIComponent(String(role))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Retrieves the actions with the role
+     * Retrieves the actions with the role
+     * @param role Role Name
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getRoleActions(role: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Action>>;
+    public getRoleActions(role: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Action>>>;
+    public getRoleActions(role: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Action>>>;
+    public getRoleActions(role: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (role === null || role === undefined) {
+            throw new Error('Required parameter role was null or undefined when calling getRoleActions.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get(`${this.basePath}/acs/roles/${encodeURIComponent(String(role))}/actions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -434,19 +479,121 @@ export class RolesService {
     }
 
     /**
-     * Removes the permissions from the role
-     * Removes the permissions from the role
+     * Check if role is entitled to execute the action
+     * Check if role is entitled to execute the action
+     * @param role Role Name
+     * @param action Action Name
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public isRoleActionEntitled(role: string, action: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
+    public isRoleActionEntitled(role: string, action: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
+    public isRoleActionEntitled(role: string, action: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
+    public isRoleActionEntitled(role: string, action: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (role === null || role === undefined) {
+            throw new Error('Required parameter role was null or undefined when calling isRoleActionEntitled.');
+        }
+        if (action === null || action === undefined) {
+            throw new Error('Required parameter action was null or undefined when calling isRoleActionEntitled.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get(`${this.basePath}/acs/roles/${encodeURIComponent(String(role))}/actions/${encodeURIComponent(String(action))}/entitled`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Check if permission is assigned to the role
+     * Check if permission is assigned to the role
+     * @param role Role Name
+     * @param component Component Name
+     * @param action Action (can be VIEW, EXECUTE, MODIFY or *)
+     * @param target Method name or *(wildcard)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public isRolePermissionEntitled(role: string, component: string, action: string, target: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
+    public isRolePermissionEntitled(role: string, component: string, action: string, target: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
+    public isRolePermissionEntitled(role: string, component: string, action: string, target: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
+    public isRolePermissionEntitled(role: string, component: string, action: string, target: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (role === null || role === undefined) {
+            throw new Error('Required parameter role was null or undefined when calling isRolePermissionEntitled.');
+        }
+        if (component === null || component === undefined) {
+            throw new Error('Required parameter component was null or undefined when calling isRolePermissionEntitled.');
+        }
+        if (action === null || action === undefined) {
+            throw new Error('Required parameter action was null or undefined when calling isRolePermissionEntitled.');
+        }
+        if (target === null || target === undefined) {
+            throw new Error('Required parameter target was null or undefined when calling isRolePermissionEntitled.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get(`${this.basePath}/acs/roles/${encodeURIComponent(String(role))}/permissions/${encodeURIComponent(String(component))}/${encodeURIComponent(String(action))}/${encodeURIComponent(String(target))}/entitled`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Removes the actions from the role
+     * Removes the actions from the role
      * @param role Role Name
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public removeRolePermissions(role: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public removeRolePermissions(role: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public removeRolePermissions(role: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public removeRolePermissions(role: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public removeRoleActions(role: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeRoleActions(role: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeRoleActions(role: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeRoleActions(role: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (role === null || role === undefined) {
-            throw new Error('Required parameter role was null or undefined when calling removeRolePermissions.');
+            throw new Error('Required parameter role was null or undefined when calling removeRoleActions.');
         }
 
         let headers = this.defaultHeaders;
@@ -472,7 +619,7 @@ export class RolesService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/acs/role/${encodeURIComponent(String(role))}/permissions/remove`,
+        return this.httpClient.delete(`${this.basePath}/acs/roles/${encodeURIComponent(String(role))}/permissions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -530,4 +677,4 @@ export class RolesService {
             }
         );
     }
-}
+
