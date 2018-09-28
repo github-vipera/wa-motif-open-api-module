@@ -2,6 +2,7 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { RolesService } from './roles.service'
 import { Role } from '../model/role'
 import { RoleCreate } from '../model/roleCreate'
+import { ActionAssign } from '../model/actionAssign'
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
 import { MotifCommunicatoriTestHelper } from './motif-communicator-test-helper'
@@ -9,6 +10,7 @@ import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { Permission } from '../model/permission'
 import { TEST_BASE_PATH } from '../test.variables'
 import * as _ from 'lodash';
+import { Action } from '../model/action';
 
 describe('RolesService', () => {
 
@@ -33,7 +35,7 @@ describe('RolesService', () => {
     afterEach(() => {
     });
 
-    it(`should delete the test role`,
+    it(`should clean stuff`,
     // 1. declare as async test since the HttpClient works with Observables
     async(
         inject([HttpClient], (http: HttpClient) => {
@@ -47,7 +49,6 @@ describe('RolesService', () => {
                 let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
                 myService.deleteRole('TESTROLE').subscribe(value => {
                 }, error => {
-                    console.log("deleteRole Error", error);
                 })
 
             }, error => {
@@ -160,7 +161,7 @@ describe('RolesService', () => {
         )
     );
 
-    it(`should add permissions to the test role`,
+    it(`should add action to the test role`,
     // 1. declare as async test since the HttpClient works with Observables
     async(
         inject([HttpClient], (http: HttpClient) => {
@@ -173,25 +174,58 @@ describe('RolesService', () => {
                 // 3. send the request to test
                 let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
 
-                let permissions:Array<string> = new Array<string>();
-                permissions.push('com.vipera.osgi.foundation.webcontent:*:*');
-                permissions.push('com.vipera.osgi.foundation.datarecords:*:*');
+                let a:ActionAssign = {
+                    name: 'testaction'
+                }
 
-                myService.assignRolePermissions('TESTROLE', permissions).subscribe(value => {
+                myService.assignActionToRole('TESTACTION', a).subscribe(value => {
                 }, error => {
-                    fail('assignRolePermissions failed: ' + error);
-                    console.log("assignRolePermissions Error", error);
+                    fail('assignActionToRole failed: ' + error);
+                    console.log("assignActionToRole Error", error);
                 })
 
             }, error => {
-                fail('assignRolePermissions login failed');
-                console.log("assignRolePermissions error", error);
+                fail('assignActionToRole login failed');
+                console.log("assignActionToRole error", error);
             })
 
         })
 
     )
     );
+
+    it(`should retrieve role actions`,
+    // 1. declare as async test since the HttpClient works with Observables
+    async(
+        inject([HttpClient], (http: HttpClient) => {
+            // 1. inject HttpClient into the test
+            this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+
+            // 2. perform the authentication
+            this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
+
+                // 3. send the request to test
+                let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                myService.getRoleActions('TESTACTION').subscribe(value => {
+                    expect(value.length).toBeGreaterThan(0);
+                    let a: Action = _.find(value, function (o: Action) {
+                        return o.name === 'TESTACTION';
+                    });
+                    expect(a).toBeDefined;
+                }, error => {
+                    fail('getRoleActions failed');
+                    console.log("getRoleActions Error", error);
+                })
+
+            }, error => {
+                fail('getRoleActions login failed');
+                console.log("getRoleActions error", error);
+            })
+
+        })
+
+    )
+);
 
     it(`should retrieve role permissions`,
         // 1. declare as async test since the HttpClient works with Observables
@@ -228,7 +262,7 @@ describe('RolesService', () => {
         )
     );
 
-    it(`should remove role permissions`,
+    it(`should remove role action`,
     // 1. declare as async test since the HttpClient works with Observables
     async(
         inject([HttpClient], (http: HttpClient) => {
@@ -241,19 +275,15 @@ describe('RolesService', () => {
                 // 3. send the request to test
                 let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
 
-                let permissions:Array<string> = new Array<string>();
-                permissions.push('com.vipera.osgi.foundation.webcontent:*:*');
-                permissions.push('com.vipera.osgi.foundation.datarecords:*:*');
-
-                myService.removeRolePermissions('TESTROLE', permissions).subscribe(value => {
+                myService.removeActionFromRole('TESTROLE', 'TESTACTION').subscribe(value => {
                 }, error => {
-                    fail('removeRolePermissions failed');
-                    console.log("removeRolePermissions Error", error);
+                    fail('removeActionFromRole failed');
+                    console.log("removeActionFromRole Error", error);
                 })
 
             }, error => {
-                fail('removeRolePermissions login failed');
-                console.log("removeRolePermissions error", error);
+                fail('removeActionFromRole login failed');
+                console.log("removeActionFromRole error", error);
             })
 
         })

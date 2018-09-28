@@ -60,19 +60,19 @@ export class ActionsService {
 
 
     /**
-     * Assigns the permissions to the action
-     * Assigns the permissions to the action
+     * Assigns permission to the action
+     * Assigns permission to the action
      * @param action Action Name
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public assignActionPermissions(action: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public assignActionPermissions(action: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public assignActionPermissions(action: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public assignActionPermissions(action: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public assignPermissionToAction(action: string, body?: Permission, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public assignPermissionToAction(action: string, body?: Permission, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public assignPermissionToAction(action: string, body?: Permission, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public assignPermissionToAction(action: string, body?: Permission, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (action === null || action === undefined) {
-            throw new Error('Required parameter action was null or undefined when calling assignActionPermissions.');
+            throw new Error('Required parameter action was null or undefined when calling assignPermissionToAction.');
         }
 
         let headers = this.defaultHeaders;
@@ -99,7 +99,6 @@ export class ActionsService {
         }
 
         return this.httpClient.post(`${this.basePath}/acs/actions/${encodeURIComponent(String(action))}/permissions`,
-            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -145,7 +144,6 @@ export class ActionsService {
         }
 
         return this.httpClient.post(`${this.basePath}/acs/actions`,
-            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -324,19 +322,30 @@ export class ActionsService {
     }
 
     /**
-     * Removes the permissions from the action
-     * Removes the permissions from the action
+     * Removes permission from the action
+     * Removes permission from the action
      * @param action Action Name
-     * @param body 
+     * @param permissionComponent Component Name
+     * @param permissionAction Action (can be VIEW, EXECUTE, MODIFY or *)
+     * @param permissionTarget Method name or *(wildcard)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public removeActionPermissions(action: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public removeActionPermissions(action: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public removeActionPermissions(action: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public removeActionPermissions(action: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public removePermissionFromAction(action: string, permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removePermissionFromAction(action: string, permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removePermissionFromAction(action: string, permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removePermissionFromAction(action: string, permissionComponent: string, permissionAction: string, permissionTarget: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (action === null || action === undefined) {
-            throw new Error('Required parameter action was null or undefined when calling removeActionPermissions.');
+            throw new Error('Required parameter action was null or undefined when calling removePermissionFromAction.');
+        }
+        if (permissionComponent === null || permissionComponent === undefined) {
+            throw new Error('Required parameter permissionComponent was null or undefined when calling removePermissionFromAction.');
+        }
+        if (permissionAction === null || permissionAction === undefined) {
+            throw new Error('Required parameter permissionAction was null or undefined when calling removePermissionFromAction.');
+        }
+        if (permissionTarget === null || permissionTarget === undefined) {
+            throw new Error('Required parameter permissionTarget was null or undefined when calling removePermissionFromAction.');
         }
 
         let headers = this.defaultHeaders;
@@ -355,14 +364,9 @@ export class ActionsService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
-        return this.httpClient.delete(`${this.basePath}/acs/actions/${encodeURIComponent(String(action))}/permissions`,
+        return this.httpClient.delete(`${this.basePath}/acs/actions/${encodeURIComponent(String(action))}/permissions/${encodeURIComponent(String(permissionComponent))}/${encodeURIComponent(String(permissionAction))}/${encodeURIComponent(String(permissionTarget))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -412,7 +416,6 @@ export class ActionsService {
         }
 
         return this.httpClient.put(`${this.basePath}/acs/actions/${encodeURIComponent(String(action))}`,
-            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

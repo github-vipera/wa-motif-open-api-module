@@ -49,6 +49,7 @@ describe('PermissionsService', () => {
                 })
 
             }, error => {
+                fail('deletePermission login failed');
                 console.log("deletePermission error", error);
             })
 
@@ -69,15 +70,24 @@ describe('PermissionsService', () => {
 
                     // 3. send the request to test
                     let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.createPermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
+
+                    let p:Permission = {
+                        component: 'testcomponent',
+                        action: 'VIEW',
+                        target: 'testtarget'
+                    }
+
+                    myService.createPermission(p).subscribe(value => {
                         expect(value.component).toBe('testcomponent');
                         expect(value.action).toBe('VIEW');
                         expect(value.target).toBe('testtarget');
                     }, error => {
+                        fail('createPermission failed');
                         console.log("createPermission Error", error);
                     })
 
                 }, error => {
+                    fail('createPermission login failed');
                     console.log("createPermission error", error);
                 })
 
@@ -103,10 +113,12 @@ describe('PermissionsService', () => {
                         expect(value.action).toBe('VIEW');
                         expect(value.target).toBe('testtarget');
                     }, error => {
+                        fail('getPermission failed');
                         console.log("getPermission Error", error);
                     })
 
                 }, error => {
+                    fail('getPermission login failed');
                     console.log("getPermission error", error);
                 })
 
@@ -136,10 +148,12 @@ describe('PermissionsService', () => {
                         });
                         expect(p).toBeDefined;
                     }, error => {
+                        fail('getPermissions failed');
                         console.log("getPermissions Error", error);
                     })
 
                 }, error => {
+                    fail('getPermissions login failed');
                     console.log("getPermissions error", error);
                 })
 
@@ -162,10 +176,12 @@ describe('PermissionsService', () => {
                     let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
                     myService.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
                     }, error => {
+                        fail('deletePermission failed');
                         console.log("deletePermission Error", error);
                     })
 
                 }, error => {
+                    fail('deletePermission login failed');
                     console.log("deletePermission error", error);
                 })
 

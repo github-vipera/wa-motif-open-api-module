@@ -20,13 +20,13 @@ import { Observable }                                        from 'rxjs/Observab
 
 import { Action } from '../model/action';
 import { EntitlementResult } from '../model/entitlementResult';
-import { ErrorVipera } from '../model/errorVipera';
 import { Group } from '../model/group';
 import { Permission } from '../model/permission';
 import { Role } from '../model/role';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
+import { RoleAssign } from '../model/roleAssign';
 
 
 @Injectable()
@@ -36,7 +36,7 @@ export class UsersService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -62,76 +62,23 @@ export class UsersService {
 
 
     /**
-     * Assigns the groups to the user
-     * Assigns the groups to the user
+     * Assigns role to an user
+     * Assigns role to an user
      * @param domain Domain Name
      * @param userId User Id
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public assignUserGroups(domain: string, userId: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public assignUserGroups(domain: string, userId: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public assignUserGroups(domain: string, userId: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public assignUserGroups(domain: string, userId: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public assignRoleToUser(domain: string, userId: string, body?: RoleAssign, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public assignRoleToUser(domain: string, userId: string, body?: RoleAssign, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public assignRoleToUser(domain: string, userId: string, body?: RoleAssign, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public assignRoleToUser(domain: string, userId: string, body?: RoleAssign, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling assignUserGroups.');
+            throw new Error('Required parameter domain was null or undefined when calling assignRoleToUser.');
         }
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling assignUserGroups.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (vipera_basic) required
-        // authentication (vipera_cookie) required
-        // authentication (vipera_oauth2) required
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Assigns the Roles  to an user
-     * Assigns the Roles to an user
-     * @param domain Domain Name
-     * @param userId User Id
-     * @param body 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public assignUserIdRoles(domain: string, userId: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public assignUserIdRoles(domain: string, userId: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public assignUserIdRoles(domain: string, userId: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public assignUserIdRoles(domain: string, userId: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling assignUserIdRoles.');
-        }
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling assignUserIdRoles.');
+            throw new Error('Required parameter userId was null or undefined when calling assignRoleToUser.');
         }
 
         let headers = this.defaultHeaders;
@@ -158,6 +105,7 @@ export class UsersService {
         }
 
         return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/roles`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -411,30 +359,30 @@ export class UsersService {
      * Check if permission is assigned to the user
      * @param domain Domain Name
      * @param userId User Id
-     * @param component Component Name
-     * @param action Action (can be VIEW, EXECUTE, MODIFY or *)
-     * @param target Method name or *(wildcard)
+     * @param permissionComponent Component Name
+     * @param permissionAction Action (can be VIEW, EXECUTE, MODIFY or *)
+     * @param permissionTarget Method name or *(wildcard)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isUserPermissionEntitled(domain: string, userId: string, component: string, action: string, target: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
-    public isUserPermissionEntitled(domain: string, userId: string, component: string, action: string, target: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
-    public isUserPermissionEntitled(domain: string, userId: string, component: string, action: string, target: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
-    public isUserPermissionEntitled(domain: string, userId: string, component: string, action: string, target: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public isUserPermissionEntitled(domain: string, userId: string, permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
+    public isUserPermissionEntitled(domain: string, userId: string, permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
+    public isUserPermissionEntitled(domain: string, userId: string, permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
+    public isUserPermissionEntitled(domain: string, userId: string, permissionComponent: string, permissionAction: string, permissionTarget: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling isUserPermissionEntitled.');
         }
         if (userId === null || userId === undefined) {
             throw new Error('Required parameter userId was null or undefined when calling isUserPermissionEntitled.');
         }
-        if (component === null || component === undefined) {
-            throw new Error('Required parameter component was null or undefined when calling isUserPermissionEntitled.');
+        if (permissionComponent === null || permissionComponent === undefined) {
+            throw new Error('Required parameter permissionComponent was null or undefined when calling isUserPermissionEntitled.');
         }
-        if (action === null || action === undefined) {
-            throw new Error('Required parameter action was null or undefined when calling isUserPermissionEntitled.');
+        if (permissionAction === null || permissionAction === undefined) {
+            throw new Error('Required parameter permissionAction was null or undefined when calling isUserPermissionEntitled.');
         }
-        if (target === null || target === undefined) {
-            throw new Error('Required parameter target was null or undefined when calling isUserPermissionEntitled.');
+        if (permissionTarget === null || permissionTarget === undefined) {
+            throw new Error('Required parameter permissionTarget was null or undefined when calling isUserPermissionEntitled.');
         }
 
         let headers = this.defaultHeaders;
@@ -455,7 +403,7 @@ export class UsersService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/permissions/${encodeURIComponent(String(component))}/${encodeURIComponent(String(action))}/${encodeURIComponent(String(target))}/entitled`,
+        return this.httpClient.get(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/permissions/${encodeURIComponent(String(permissionComponent))}/${encodeURIComponent(String(permissionAction))}/${encodeURIComponent(String(permissionTarget))}/entitled`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -466,23 +414,26 @@ export class UsersService {
     }
 
     /**
-     * Removes the groups from the user
-     * Removes the groups from the user
+     * Removes group from user
+     * Removes group from user
      * @param domain Domain Name
      * @param userId User Id
-     * @param body 
+     * @param group Group Name
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public removeUserGroups(domain: string, userId: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public removeUserGroups(domain: string, userId: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public removeUserGroups(domain: string, userId: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public removeUserGroups(domain: string, userId: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public removeGroupFromUser(domain: string, userId: string, group: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeGroupFromUser(domain: string, userId: string, group: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeGroupFromUser(domain: string, userId: string, group: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeGroupFromUser(domain: string, userId: string, group: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling removeUserGroups.');
+            throw new Error('Required parameter domain was null or undefined when calling removeGroupFromUser.');
         }
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling removeUserGroups.');
+            throw new Error('Required parameter userId was null or undefined when calling removeGroupFromUser.');
+        }
+        if (group === null || group === undefined) {
+            throw new Error('Required parameter group was null or undefined when calling removeGroupFromUser.');
         }
 
         let headers = this.defaultHeaders;
@@ -501,14 +452,9 @@ export class UsersService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
-        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups`,
+        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups/${encodeURIComponent(String(group))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -519,23 +465,26 @@ export class UsersService {
     }
 
     /**
-     * Removes the Roles from the user
-     * Removes the Roles from the user
+     * Removes a role from an user
+     * Removes a role from an user
      * @param domain Domain Name
      * @param userId User Id
-     * @param body 
+     * @param role Role Name
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public removeUserIdRoles(domain: string, userId: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public removeUserIdRoles(domain: string, userId: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public removeUserIdRoles(domain: string, userId: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public removeUserIdRoles(domain: string, userId: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public removeRoleFromUser(domain: string, userId: string, role: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeRoleFromUser(domain: string, userId: string, role: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeRoleFromUser(domain: string, userId: string, role: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeRoleFromUser(domain: string, userId: string, role: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling removeUserIdRoles.');
+            throw new Error('Required parameter domain was null or undefined when calling removeRoleFromUser.');
         }
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling removeUserIdRoles.');
+            throw new Error('Required parameter userId was null or undefined when calling removeRoleFromUser.');
+        }
+        if (role === null || role === undefined) {
+            throw new Error('Required parameter role was null or undefined when calling removeRoleFromUser.');
         }
 
         let headers = this.defaultHeaders;
@@ -554,14 +503,9 @@ export class UsersService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
-        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/roles`,
+        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/roles/${encodeURIComponent(String(role))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -570,4 +514,4 @@ export class UsersService {
             }
         );
     }
-
+}

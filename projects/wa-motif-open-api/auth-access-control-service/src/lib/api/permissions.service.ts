@@ -18,10 +18,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
-import { ErrorVipera } from '../model/errorVipera';
 import { Permission } from '../model/permission';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 
 
@@ -32,7 +31,7 @@ export class PermissionsService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -60,25 +59,14 @@ export class PermissionsService {
     /**
      * Creates a Permission
      * Creates a Permission
-     * @param component Component Name
-     * @param action Action (can be VIEW, EXECUTE, MODIFY or *)
-     * @param target Method name or *(wildcard)
+     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createPermission(component: string, action: string, target: string, observe?: 'body', reportProgress?: boolean): Observable<Permission>;
-    public createPermission(component: string, action: string, target: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Permission>>;
-    public createPermission(component: string, action: string, target: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Permission>>;
-    public createPermission(component: string, action: string, target: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (component === null || component === undefined) {
-            throw new Error('Required parameter component was null or undefined when calling createPermission.');
-        }
-        if (action === null || action === undefined) {
-            throw new Error('Required parameter action was null or undefined when calling createPermission.');
-        }
-        if (target === null || target === undefined) {
-            throw new Error('Required parameter target was null or undefined when calling createPermission.');
-        }
+    public createPermission(body?: Permission, observe?: 'body', reportProgress?: boolean): Observable<Permission>;
+    public createPermission(body?: Permission, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Permission>>;
+    public createPermission(body?: Permission, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Permission>>;
+    public createPermission(body?: Permission, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -96,9 +84,15 @@ export class PermissionsService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
+            'application/json'
         ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
 
-        return this.httpClient.post(`${this.basePath}/acs/permissions/${encodeURIComponent(String(component))}/${encodeURIComponent(String(action))}/${encodeURIComponent(String(target))}`,
+        return this.httpClient.post(`${this.basePath}/acs/permissions`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -111,24 +105,24 @@ export class PermissionsService {
     /**
      * Deletes a Permission
      * Deletes a Permission
-     * @param component Component Name
-     * @param action Action (can be VIEW, EXECUTE, MODIFY or *)
-     * @param target Method name or *(wildcard)
+     * @param permissionComponent Component Name
+     * @param permissionAction Action (can be VIEW, EXECUTE, MODIFY or *)
+     * @param permissionTarget Method name or *(wildcard)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deletePermission(component: string, action: string, target: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deletePermission(component: string, action: string, target: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deletePermission(component: string, action: string, target: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deletePermission(component: string, action: string, target: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (component === null || component === undefined) {
-            throw new Error('Required parameter component was null or undefined when calling deletePermission.');
+    public deletePermission(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deletePermission(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deletePermission(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deletePermission(permissionComponent: string, permissionAction: string, permissionTarget: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (permissionComponent === null || permissionComponent === undefined) {
+            throw new Error('Required parameter permissionComponent was null or undefined when calling deletePermission.');
         }
-        if (action === null || action === undefined) {
-            throw new Error('Required parameter action was null or undefined when calling deletePermission.');
+        if (permissionAction === null || permissionAction === undefined) {
+            throw new Error('Required parameter permissionAction was null or undefined when calling deletePermission.');
         }
-        if (target === null || target === undefined) {
-            throw new Error('Required parameter target was null or undefined when calling deletePermission.');
+        if (permissionTarget === null || permissionTarget === undefined) {
+            throw new Error('Required parameter permissionTarget was null or undefined when calling deletePermission.');
         }
 
         let headers = this.defaultHeaders;
@@ -149,7 +143,7 @@ export class PermissionsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.delete(`${this.basePath}/acs/permissions/${encodeURIComponent(String(component))}/${encodeURIComponent(String(action))}/${encodeURIComponent(String(target))}`,
+        return this.httpClient.delete(`${this.basePath}/acs/permissions/${encodeURIComponent(String(permissionComponent))}/${encodeURIComponent(String(permissionAction))}/${encodeURIComponent(String(permissionTarget))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -162,24 +156,24 @@ export class PermissionsService {
     /**
      * Retrieves a Permission
      * Retrieves a Permission
-     * @param component Component Name
-     * @param action Action (can be VIEW, EXECUTE, MODIFY or *)
-     * @param target Method name or *(wildcard)
+     * @param permissionComponent Component Name
+     * @param permissionAction Action (can be VIEW, EXECUTE, MODIFY or *)
+     * @param permissionTarget Method name or *(wildcard)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPermission(component: string, action: string, target: string, observe?: 'body', reportProgress?: boolean): Observable<Permission>;
-    public getPermission(component: string, action: string, target: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Permission>>;
-    public getPermission(component: string, action: string, target: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Permission>>;
-    public getPermission(component: string, action: string, target: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (component === null || component === undefined) {
-            throw new Error('Required parameter component was null or undefined when calling getPermission.');
+    public getPermission(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'body', reportProgress?: boolean): Observable<Permission>;
+    public getPermission(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Permission>>;
+    public getPermission(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Permission>>;
+    public getPermission(permissionComponent: string, permissionAction: string, permissionTarget: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (permissionComponent === null || permissionComponent === undefined) {
+            throw new Error('Required parameter permissionComponent was null or undefined when calling getPermission.');
         }
-        if (action === null || action === undefined) {
-            throw new Error('Required parameter action was null or undefined when calling getPermission.');
+        if (permissionAction === null || permissionAction === undefined) {
+            throw new Error('Required parameter permissionAction was null or undefined when calling getPermission.');
         }
-        if (target === null || target === undefined) {
-            throw new Error('Required parameter target was null or undefined when calling getPermission.');
+        if (permissionTarget === null || permissionTarget === undefined) {
+            throw new Error('Required parameter permissionTarget was null or undefined when calling getPermission.');
         }
 
         let headers = this.defaultHeaders;
@@ -200,7 +194,7 @@ export class PermissionsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get(`${this.basePath}/acs/permissions/${encodeURIComponent(String(component))}/${encodeURIComponent(String(action))}/${encodeURIComponent(String(target))}`,
+        return this.httpClient.get(`${this.basePath}/acs/permissions/${encodeURIComponent(String(permissionComponent))}/${encodeURIComponent(String(permissionAction))}/${encodeURIComponent(String(permissionTarget))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -248,4 +242,4 @@ export class PermissionsService {
             }
         );
     }
-
+}

@@ -20,10 +20,9 @@ import { Observable }                                        from 'rxjs/Observab
 
 import { Action } from '../model/action';
 import { EntitlementResult } from '../model/entitlementResult';
-import { ErrorVipera } from '../model/errorVipera';
 import { Permission } from '../model/permission';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 
 
@@ -34,7 +33,7 @@ export class MyselfService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -183,24 +182,24 @@ export class MyselfService {
     /**
      * Check if permission is assigned to the authenticated user
      * Check if permission is assigned to the authenticated user
-     * @param component Component Name
-     * @param action Action (can be VIEW, EXECUTE, MODIFY or *)
-     * @param target Method name or *(wildcard)
+     * @param permissionComponent Component Name
+     * @param permissionAction Action (can be VIEW, EXECUTE, MODIFY or *)
+     * @param permissionTarget Method name or *(wildcard)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isMyselfPermissionEntitled(component: string, action: string, target: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
-    public isMyselfPermissionEntitled(component: string, action: string, target: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
-    public isMyselfPermissionEntitled(component: string, action: string, target: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
-    public isMyselfPermissionEntitled(component: string, action: string, target: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (component === null || component === undefined) {
-            throw new Error('Required parameter component was null or undefined when calling isMyselfPermissionEntitled.');
+    public isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
+    public isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
+    public isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
+    public isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (permissionComponent === null || permissionComponent === undefined) {
+            throw new Error('Required parameter permissionComponent was null or undefined when calling isMyselfPermissionEntitled.');
         }
-        if (action === null || action === undefined) {
-            throw new Error('Required parameter action was null or undefined when calling isMyselfPermissionEntitled.');
+        if (permissionAction === null || permissionAction === undefined) {
+            throw new Error('Required parameter permissionAction was null or undefined when calling isMyselfPermissionEntitled.');
         }
-        if (target === null || target === undefined) {
-            throw new Error('Required parameter target was null or undefined when calling isMyselfPermissionEntitled.');
+        if (permissionTarget === null || permissionTarget === undefined) {
+            throw new Error('Required parameter permissionTarget was null or undefined when calling isMyselfPermissionEntitled.');
         }
 
         let headers = this.defaultHeaders;
@@ -221,7 +220,7 @@ export class MyselfService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get(`${this.basePath}/acs/myself/permissions/${encodeURIComponent(String(component))}/${encodeURIComponent(String(action))}/${encodeURIComponent(String(target))}/entitled`,
+        return this.httpClient.get(`${this.basePath}/acs/myself/permissions/${encodeURIComponent(String(permissionComponent))}/${encodeURIComponent(String(permissionAction))}/${encodeURIComponent(String(permissionTarget))}/entitled`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -230,4 +229,4 @@ export class MyselfService {
             }
         );
     }
-
+}

@@ -15,5 +15,6 @@ export * from './roleUpdate';
 export * from './roles';
 export * from './sharedUserData';
 export * from './user';
+export * from './userAssign';
 export * from './userData';
 export * from './userKey';

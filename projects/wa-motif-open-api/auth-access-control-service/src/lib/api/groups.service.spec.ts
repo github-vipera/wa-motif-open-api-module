@@ -10,6 +10,7 @@ import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { TEST_BASE_PATH } from '../test.variables'
 import * as _ from 'lodash';
 import { Role } from '../model/role';
+import { RoleAssign } from '../model/roleAssign';
 
 describe('GroupsService', () => {
 
@@ -51,6 +52,7 @@ describe('GroupsService', () => {
                         console.log("deleteGroup Error", error);
                     })
                 }, error => {
+                    fail('deleteGroup login failed');
                     console.log("deleteGroup Error", error);
                 })
             })
@@ -79,9 +81,11 @@ describe('GroupsService', () => {
                         expect(value.name).toBe('testgroup');
                         expect(value.description).toBe('testdescription');
                     }, error => {
+                        fail('createGroup failed');
                         console.log("createGroup Error", error);
                     })
                 }, error => {
+                    fail('createGroup login failed');
                     console.log("createGroup Error", error);
                 })
 
@@ -106,9 +110,11 @@ describe('GroupsService', () => {
                         expect(value.name).toBe('testgroup');
                         expect(value.description).toBe('testdescription');
                     }, error => {
+                        fail('getGroup failed');
                         console.log("getGroup Error", error);
                     })
                 }, error => {
+                    fail('getGroup login failed');
                     console.log("getGroup Error", error);
                 })
 
@@ -128,11 +134,18 @@ describe('GroupsService', () => {
 
                     // 3. send the request to test
                     let service = new GroupsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    service.assignGroupRoles('Default', 'testgroup', ['SU']).subscribe(value => {
+
+                    let r:RoleAssign = {
+                        name: 'SU'
+                    }
+
+                    service.assignRoleToGroup('Default', 'testgroup', r).subscribe(value => {
                     }, error => {
+                        fail('assignGroupRoles failed');
                         console.log("assignGroupRoles Error", error);
                     })
                 }, error => {
+                    fail('assignGroupRoles login failed');
                     console.log("assignGroupRoles Error", error);
                 })
             })
@@ -159,9 +172,11 @@ describe('GroupsService', () => {
                         });
                         expect(r).toBeDefined;
                     }, error => {
+                        fail('getGroupRoles failed');
                         console.log("getGroupRoles Error", error);
                     })
                 }, error => {
+                    fail('getGroupRoles login failed');
                     console.log("getGroupRoles Error", error);
                 })
 
@@ -181,11 +196,13 @@ describe('GroupsService', () => {
 
                     // 3. send the request to test
                     let service = new GroupsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    service.removeGroupRoles('Default', 'testgroup', ['SU']).subscribe(value => {
+                    service.removeRoleFromGroup('Default', 'testgroup', 'SU').subscribe(value => {
                     }, error => {
+                        fail('removeGroupRoles failed');
                         console.log("removeGroupRoles Error", error);
                     })
                 }, error => {
+                    fail('removeGroupRoles login failed');
                     console.log("removeGroupRoles Error", error);
                 })
             })
@@ -211,9 +228,11 @@ describe('GroupsService', () => {
                         });
                         expect(r).toBeUndefined;
                     }, error => {
+                        fail('getGroupRoles failed');
                         console.log("getGroupRoles Error", error);
                     })
                 }, error => {
+                    fail('getGroupRoles login failed');
                     console.log("getGroupRoles Error", error);
                 })
 
@@ -242,9 +261,11 @@ describe('GroupsService', () => {
                         });
                         expect(g).toBeDefined;
                     }, error => {
+                        fail('getGroup failed');
                         console.log("getGroup Error", error);
                     })
                 }, error => {
+                    fail('getGroup failed');
                     console.log("getGroup Error", error);
                 })
 
@@ -273,9 +294,11 @@ describe('GroupsService', () => {
                         });
                         expect(g).toBeDefined;
                     }, error => {
+                        fail('getGroups failed');
                         console.log("getGroups Error", error);
                     })
                 }, error => {
+                    fail('getGroups login failed');
                     console.log("getGroups Error", error);
                 })
 
@@ -298,9 +321,11 @@ describe('GroupsService', () => {
                     // 3. send the request to test
                     service.getGroupUsers('Default', 'testgroup').subscribe(value => {
                     }, error => {
+                        fail('getGroups failed');
                         console.log("getGroups Error", error);
                     })
                 }, error => {
+                    fail('getGroups login failed');
                     console.log("getGroups Error", error);
                 })
 
@@ -328,10 +353,12 @@ describe('GroupsService', () => {
                     // 3. send the request to test
                     service.updateGroup('Default', 'testgroup', gu).subscribe(value => {
                     }, error => {
-                        console.log("getGroups Error", error);
+                        fail('updateGroup failed');
+                        console.log("updateGroup Error", error);
                     })
                 }, error => {
-                    console.log("getGroups Error", error);
+                    fail('updateGroup login failed');
+                    console.log("updateGroup Error", error);
                 })
 
             })
@@ -355,9 +382,11 @@ describe('GroupsService', () => {
                         expect(value.name).toBe('testgroup');
                         expect(value.description).toBe('newdescription');
                     }, error => {
+                        fail('getGroup failed');
                         console.log("getGroup Error", error);
                     })
                 }, error => {
+                    fail('getGroup login failed');
                     console.log("getGroup Error", error);
                 })
 
@@ -379,9 +408,11 @@ describe('GroupsService', () => {
                     let service = new GroupsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
                     service.deleteGroup('Default', 'testgroup').subscribe(value => {
                     }, error => {
+                        fail('deleteGroup failed');
                         console.log("deleteGroup Error", error);
                     })
                 }, error => {
+                    fail('deleteGroup login failed');
                     console.log("deleteGroup Error", error);
                 })
             })

@@ -18,15 +18,16 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
-import { ErrorVipera } from '../model/errorVipera';
 import { Group } from '../model/group';
 import { GroupCreate } from '../model/groupCreate';
 import { GroupUpdate } from '../model/groupUpdate';
 import { Role } from '../model/role';
 import { User } from '../model/user';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
+import { GroupAssign } from '../model/groupAssign';
+import { RoleAssign } from '../model/roleAssign';
 
 
 @Injectable()
@@ -36,7 +37,7 @@ export class GroupsService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -62,23 +63,77 @@ export class GroupsService {
 
 
     /**
-     * Assigns the Roles to a group
-     * Assigns the Roles to a group
+     * Assigns group to user
+     * Assigns group to user
+     * @param domain Domain Name
+     * @param userId User Id
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public assignGroupToUser(domain: string, userId: string, body?: GroupAssign, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public assignGroupToUser(domain: string, userId: string, body?: GroupAssign, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public assignGroupToUser(domain: string, userId: string, body?: GroupAssign, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public assignGroupToUser(domain: string, userId: string, body?: GroupAssign, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling assignGroupToUser.');
+        }
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling assignGroupToUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups`,
+            body,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Assigns a role to a group
+     * Assigns a role to a group
      * @param domain Domain Name
      * @param group Group Name
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public assignGroupRoles(domain: string, group: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public assignGroupRoles(domain: string, group: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public assignGroupRoles(domain: string, group: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public assignGroupRoles(domain: string, group: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public assignRoleToGroup(domain: string, group: string, body?: RoleAssign, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public assignRoleToGroup(domain: string, group: string, body?: RoleAssign, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public assignRoleToGroup(domain: string, group: string, body?: RoleAssign, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public assignRoleToGroup(domain: string, group: string, body?: RoleAssign, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling assignGroupRoles.');
+            throw new Error('Required parameter domain was null or undefined when calling assignRoleToGroup.');
         }
         if (group === null || group === undefined) {
-            throw new Error('Required parameter group was null or undefined when calling assignGroupRoles.');
+            throw new Error('Required parameter group was null or undefined when calling assignRoleToGroup.');
         }
 
         let headers = this.defaultHeaders;
@@ -105,6 +160,7 @@ export class GroupsService {
         }
 
         return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}/roles`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -154,6 +210,7 @@ export class GroupsService {
         }
 
         return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -348,8 +405,8 @@ export class GroupsService {
     }
 
     /**
-     * Retrieves the Users  given an group
-     * Retrieves the Users given a group
+     * Retrieves group users
+     * Retrieves group users
      * @param domain Domain Name
      * @param group Group Name
      * @param userId UserId
@@ -457,23 +514,26 @@ export class GroupsService {
     }
 
     /**
-     * Removes the Roles from a group
-     * Removes the Roles from a group
+     * Removes role from a group
+     * Removes role from a group
      * @param domain Domain Name
      * @param group Group Name
-     * @param body 
+     * @param role Role Name
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public removeGroupRoles(domain: string, group: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public removeGroupRoles(domain: string, group: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public removeGroupRoles(domain: string, group: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public removeGroupRoles(domain: string, group: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public removeRoleFromGroup(domain: string, group: string, role: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public removeRoleFromGroup(domain: string, group: string, role: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public removeRoleFromGroup(domain: string, group: string, role: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public removeRoleFromGroup(domain: string, group: string, role: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling removeGroupRoles.');
+            throw new Error('Required parameter domain was null or undefined when calling removeRoleFromGroup.');
         }
         if (group === null || group === undefined) {
-            throw new Error('Required parameter group was null or undefined when calling removeGroupRoles.');
+            throw new Error('Required parameter group was null or undefined when calling removeRoleFromGroup.');
+        }
+        if (role === null || role === undefined) {
+            throw new Error('Required parameter role was null or undefined when calling removeRoleFromGroup.');
         }
 
         let headers = this.defaultHeaders;
@@ -492,14 +552,9 @@ export class GroupsService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
-        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}/roles`,
+        return this.httpClient.delete(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}/roles/${encodeURIComponent(String(role))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -553,6 +608,7 @@ export class GroupsService {
         }
 
         return this.httpClient.put(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/groups/${encodeURIComponent(String(group))}`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -561,4 +617,4 @@ export class GroupsService {
             }
         );
     }
-
+}
