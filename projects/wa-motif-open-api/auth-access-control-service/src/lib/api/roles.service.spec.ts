@@ -1,8 +1,10 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { RolesService } from './roles.service'
+import { ActionsService } from './actions.service'
 import { Role } from '../model/role'
 import { RoleCreate } from '../model/roleCreate'
 import { ActionAssign } from '../model/actionAssign'
+import { ActionCreate } from '../model/actionCreate'
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
 import { MotifCommunicatoriTestHelper } from './motif-communicator-test-helper'
@@ -11,6 +13,8 @@ import { Permission } from '../model/permission'
 import { TEST_BASE_PATH } from '../test.variables'
 import * as _ from 'lodash';
 import { Action } from '../model/action';
+import { wrapListenerWithDirtyLogic } from '@angular/core/src/render3/instructions';
+import { failedLogin, failedTestWithError } from './test-helper';
 
 describe('RolesService', () => {
 
@@ -35,7 +39,7 @@ describe('RolesService', () => {
     afterEach(() => {
     });
 
-    it(`should clean stuff`,
+    it(`should prepare stuff`,
     // 1. declare as async test since the HttpClient works with Observables
     async(
         inject([HttpClient], (http: HttpClient) => {
@@ -46,14 +50,35 @@ describe('RolesService', () => {
             this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
 
                 // 3. send the request to test
-                let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                myService.deleteRole('TESTROLE').subscribe(value => {
-                }, error => {
-                })
-
+                const rolesService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                const actionsService = new ActionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                const deleteAction = () => {
+                    actionsService.deleteAction('TESTACTION').subscribe(createAction, createAction);
+                }
+                const createAction = () => {
+                    let ac: ActionCreate = {
+                        name: 'TESTACTION',
+                        description: 'TESTACTION'
+                    }
+                    actionsService.createAction(ac).subscribe(value => {
+                        let p: Permission = {
+                            component: 'com.vipera.osgi.foundation.webcontent',
+                            action: '*',
+                            target: '*'
+                        }
+                        actionsService.assignPermissionToAction('TESTACTION', p).subscribe(value => {
+                            this.motifCommunicatoriTestHelper.logout();
+                        }, error => {
+                            this.motifCommunicatoriTestHelper.logout();
+                        });
+                    }, error => {
+                        this.motifCommunicatoriTestHelper.logout();
+                        failedTestWithError("cleanStuff", error);
+                    });
+                }
+                rolesService.deleteRole('TESTROLE').subscribe(deleteAction, deleteAction);
             }, error => {
-                fail('deleteRole login failed');
-                console.log("deleteRole error", error);
+                failedLogin("cleanStuff", error);
             })
 
         })
@@ -82,14 +107,14 @@ describe('RolesService', () => {
                     myService.createRole(rc).subscribe(value => {
                         expect(value.name).toBe('TESTROLE');
                         expect(value.description).toBe('testdescription');
+                        this.motifCommunicatoriTestHelper.logout();
                     }, error => {
-                        fail('createRole failed');
-                        console.log("createRole Error", error);
+                        this.motifCommunicatoriTestHelper.logout();
+                        failedTestWithError("createRole", error);
                     })
 
                 }, error => {
-                    fail('createRole login failed');
-                    console.log("createRole error", error);
+                    failedLogin("createRole", error);
                 })
 
             })
@@ -112,14 +137,14 @@ describe('RolesService', () => {
                     myService.getRole('TESTROLE').subscribe(value => {
                         expect(value.name).toBe('TESTROLE');
                         expect(value.description).toBe('testdescription');
+                        this.motifCommunicatoriTestHelper.logout();
                     }, error => {
-                        fail('getRole failed');
-                        console.log("getRole Error", error);
+                        this.motifCommunicatoriTestHelper.logout();
+                        failedTestWithError("getRole", error);
                     })
 
                 }, error => {
-                    fail('getRole login failed');
-                    console.log("getRole error", error);
+                    failedLogin("getRole", error);
                 })
 
             })
@@ -146,14 +171,14 @@ describe('RolesService', () => {
                                 o.description === 'testdescription');
                         });
                         expect(r).toBeDefined;
+                        this.motifCommunicatoriTestHelper.logout();
                     }, error => {
-                        fail('getRoles failed');
-                        console.log("getRoles Error", error);
+                        this.motifCommunicatoriTestHelper.logout();
+                        failedTestWithError("getRoles", error);
                     })
 
                 }, error => {
-                    fail('getRoles login failed');
-                    console.log("getRoles error", error);
+                    failedLogin("getRoles", error);
                 })
 
             })
@@ -175,18 +200,18 @@ describe('RolesService', () => {
                 let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
 
                 let a:ActionAssign = {
-                    name: 'testaction'
+                    name: 'TESTACTION'
                 }
 
-                myService.assignActionToRole('TESTACTION', a).subscribe(value => {
+                myService.assignActionToRole('TESTROLE', a).subscribe(value => {
+                    this.motifCommunicatoriTestHelper.logout();
                 }, error => {
-                    fail('assignActionToRole failed: ' + error);
-                    console.log("assignActionToRole Error", error);
+                    this.motifCommunicatoriTestHelper.logout();
+                    failedTestWithError("assignActionToRole", error);
                 })
 
             }, error => {
-                fail('assignActionToRole login failed');
-                console.log("assignActionToRole error", error);
+                failedLogin("assignActionToRole", error);
             })
 
         })
@@ -206,20 +231,20 @@ describe('RolesService', () => {
 
                 // 3. send the request to test
                 let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                myService.getRoleActions('TESTACTION').subscribe(value => {
+                myService.getRoleActions('TESTROLE').subscribe(value => {
                     expect(value.length).toBeGreaterThan(0);
                     let a: Action = _.find(value, function (o: Action) {
                         return o.name === 'TESTACTION';
                     });
                     expect(a).toBeDefined;
+                    this.motifCommunicatoriTestHelper.logout();
                 }, error => {
-                    fail('getRoleActions failed');
-                    console.log("getRoleActions Error", error);
+                    this.motifCommunicatoriTestHelper.logout();
+                    failedTestWithError("getRoleActions", error);
                 })
 
             }, error => {
-                fail('getRoleActions login failed');
-                console.log("getRoleActions error", error);
+                failedLogin("getRoleActions", error);
             })
 
         })
@@ -247,14 +272,14 @@ describe('RolesService', () => {
                                 o.target === '*');
                         });
                         expect(p).toBeDefined;
+                        this.motifCommunicatoriTestHelper.logout();
                     }, error => {
-                        fail('getRolePermissions failed');
-                        console.log("getRolePermissions Error", error);
+                        this.motifCommunicatoriTestHelper.logout();
+                        failedTestWithError("getRolePermissions", error);
                     })
 
                 }, error => {
-                    fail('getRolePermissions login failed');
-                    console.log("getRolePermissions error", error);
+                    failedLogin("getRolePermissions", error);
                 })
 
             })
@@ -276,14 +301,14 @@ describe('RolesService', () => {
                 let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
 
                 myService.removeActionFromRole('TESTROLE', 'TESTACTION').subscribe(value => {
+                    this.motifCommunicatoriTestHelper.logout();
                 }, error => {
-                    fail('removeActionFromRole failed');
-                    console.log("removeActionFromRole Error", error);
+                    this.motifCommunicatoriTestHelper.logout();
+                    failedTestWithError("removeActionFromRole", error);
                 })
 
             }, error => {
-                fail('removeActionFromRole login failed');
-                console.log("removeActionFromRole error", error);
+                failedLogin("removeActionFromRole", error);
             })
 
         })
@@ -304,14 +329,14 @@ describe('RolesService', () => {
                 // 3. send the request to test
                 let myService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
                 myService.deleteRole('TESTROLE').subscribe(value => {
+                    this.motifCommunicatoriTestHelper.logout();
                 }, error => {
-                    fail('deleteRole failed');
-                    console.log("deleteRole Error", error);
+                    this.motifCommunicatoriTestHelper.logout();
+                    failedTestWithError("deleteRole", error);
                 })
 
             }, error => {
-                fail('deleteRole login failed');
-                console.log("deleteRole error", error);
+                failedLogin("deleteRole", error);
             })
 
         })
@@ -319,4 +344,30 @@ describe('RolesService', () => {
     )
     );
 
+    it(`should clean stuff`,
+    // 1. declare as async test since the HttpClient works with Observables
+    async(
+        inject([HttpClient], (http: HttpClient) => {
+            // 1. inject HttpClient into the test
+            this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+
+            // 2. perform the authentication
+            this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
+
+                // 3. send the request to test
+                const rolesService = new RolesService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                const actionsService = new ActionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                const deleteAction = () => {
+                    actionsService.deleteAction('TESTACTION').subscribe(value => {}, error => {});
+                }
+                rolesService.deleteRole('TESTROLE').subscribe(deleteAction, deleteAction);
+
+            }, error => {
+                failedLogin("cleanStuff", error);
+            })
+
+        })
+
+    )
+    );
 });

@@ -27,6 +27,10 @@ export class MotifCommunicatoriTestHelper {
         return this.authService.login({userName:userName, password:password});
     }
 
+    public logout():void{
+        this.authService.logout();
+    }
+
     /*
     public login(userName:string, password:string):Observable<any>{
         console.log("*************************** motifCommunicatoriTestHelper sending login...", this.authService);

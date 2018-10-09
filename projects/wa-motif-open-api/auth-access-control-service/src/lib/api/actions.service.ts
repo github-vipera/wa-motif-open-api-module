@@ -99,6 +99,7 @@ export class ActionsService {
         }
 
         return this.httpClient.post(`${this.basePath}/acs/actions/${encodeURIComponent(String(action))}/permissions`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -144,6 +145,7 @@ export class ActionsService {
         }
 
         return this.httpClient.post(`${this.basePath}/acs/actions`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -416,6 +418,7 @@ export class ActionsService {
         }
 
         return this.httpClient.put(`${this.basePath}/acs/actions/${encodeURIComponent(String(action))}`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

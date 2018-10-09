@@ -7,6 +7,7 @@ import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { Permission } from '../model/permission'
 import { TEST_BASE_PATH } from '../test.variables'
 import * as _ from 'lodash';
+import { failedLogin, failedTestWithError } from './test-helper';
 
 describe('PermissionsService', () => {
 
@@ -30,6 +31,30 @@ describe('PermissionsService', () => {
 
     afterEach(() => {
     });
+
+    it(`should prepare stuff`,
+    // 1. declare as async test since the HttpClient works with Observables
+    async(
+        inject([HttpClient], (http: HttpClient) => {
+            // 1. inject HttpClient into the test
+            this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+
+            // 2. perform the authentication
+            this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
+
+                let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                myService.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
+                }, error => {
+                })
+
+            }, error => {
+                failedLogin("cleanStuff", error);
+            })
+
+        })
+
+    )
+    );
 
     it(`should delete the test permission`,
     // 1. declare as async test since the HttpClient works with Observables
@@ -162,31 +187,28 @@ describe('PermissionsService', () => {
         )
     );
 
-    it(`should delete the test permission`,
-        // 1. declare as async test since the HttpClient works with Observables
-        async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+    it(`should clean stuff`,
+    // 1. declare as async test since the HttpClient works with Observables
+    async(
+        inject([HttpClient], (http: HttpClient) => {
+            // 1. inject HttpClient into the test
+            this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
 
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
+            // 2. perform the authentication
+            this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
 
-                    // 3. send the request to test
-                    let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
-                    }, error => {
-                        fail('deletePermission failed');
-                        console.log("deletePermission Error", error);
-                    })
-
+                // 3. send the request to test
+                let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
+                myService.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
                 }, error => {
-                    fail('deletePermission login failed');
-                    console.log("deletePermission error", error);
                 })
 
+            }, error => {
+                failedLogin("cleanStuff", error);
             })
 
-        )
+        })
+
+    )
     );
 });
