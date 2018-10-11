@@ -27,7 +27,7 @@ import { Role } from '../model/role';
 import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 import { RoleAssign } from '../model/roleAssign';
-
+import { GroupAssign } from '../model/groupAssign';
 
 @Injectable()
 export class UsersService {
@@ -60,6 +60,59 @@ export class UsersService {
         return false;
     }
 
+    /**
+     * Assigns group to user
+     * Assigns group to user
+     * @param domain Domain Name
+     * @param userId User Id
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public assignGroupToUser(domain: string, userId: string, body?: GroupAssign, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public assignGroupToUser(domain: string, userId: string, body?: GroupAssign, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public assignGroupToUser(domain: string, userId: string, body?: GroupAssign, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public assignGroupToUser(domain: string, userId: string, body?: GroupAssign, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling assignGroupToUser.');
+        }
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling assignGroupToUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post(`${this.basePath}/acs/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}/groups`,
+            body,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * Assigns role to an user

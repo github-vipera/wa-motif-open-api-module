@@ -687,7 +687,7 @@ paths:
     post:
       operationId: assignGroupToUser
       tags:
-        - groups
+        - users
       description: Assigns group to user
       summary: Assigns group to user
       security:

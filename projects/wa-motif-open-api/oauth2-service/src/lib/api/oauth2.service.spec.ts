@@ -50,7 +50,7 @@ describe('OAuth2Service', () => {
                             expect(rt.domain).toBe('Default');
                             expect(rt.userId).toBe('admin');
                             expect(rt.tokenType).toBe('REFRESH_TOKEN');
-                            expect(rt.token).toBeDefined;
+                            expect(rt.token).toBeDefined();
                         });
                     }, error => {
                         console.log("getUserRefreshTokensList Error", error);
@@ -83,7 +83,7 @@ describe('OAuth2Service', () => {
                             expect(at.domain).toBe('Default');
                             expect(at.userId).toBe('admin');
                             expect(at.tokenType).toBe('ACCESS_TOKEN');
-                            expect(at.token).toBeDefined;
+                            expect(at.token).toBeDefined();
                         });
                     }, error => {
                         console.log("getAccessTokensList Error", error);
@@ -176,7 +176,7 @@ describe('OAuth2Service', () => {
                         expect(value.length).toBe(2);
                         value.forEach(function (rt: RefreshToken) {
                             expect(rt.tokenType).toBe('REFRESH_TOKEN');
-                            expect(rt.token).toBeDefined;
+                            expect(rt.token).toBeDefined();
                         });
                     }, error => {
                         console.log("getRefreshTokensList Error", error);

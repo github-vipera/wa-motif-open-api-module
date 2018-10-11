@@ -2,19 +2,17 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { PermissionsService } from './permissions.service'
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { MotifCommunicatoriTestHelper } from './motif-communicator-test-helper'
 import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { Permission } from '../model/permission'
-import { TEST_BASE_PATH } from '../test.variables'
+import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../test.variables'
 import * as _ from 'lodash';
-import { failedLogin, failedTestWithError } from './test-helper';
+import { failLogin, failTestWithError } from './test-helper';
 
 describe('PermissionsService', () => {
-
+    let authService: AuthService;
     let service: PermissionsService;
-    let motifCommunicatoriTestHelper: MotifCommunicatoriTestHelper;
 
-    beforeEach(() => {
+    beforeAll(() => {
         TestBed.configureTestingModule({
             providers: [
                 PermissionsService,
@@ -23,192 +21,93 @@ describe('PermissionsService', () => {
             ],
             imports: [HttpClientModule]
         });
-        service = TestBed.get(PermissionsService);
 
-        console.log("this.motifCommunicatoriTestHelper beforeEach ********");
+        const httpClient = TestBed.get(HttpClient);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        service = new PermissionsService(httpClient, TEST_BASE_PATH, new Configuration());
 
+        let p: Promise<any> = authService.login({ userName: TEST_USERNAME, password: TEST_PASSWORD }).toPromise();
+        p.catch((error) => {
+            failLogin(error);
+        });
+        return p;
+    });
+
+    beforeEach(() => {
     });
 
     afterEach(() => {
     });
 
     it(`should prepare stuff`,
-    // 1. declare as async test since the HttpClient works with Observables
-    async(
-        inject([HttpClient], (http: HttpClient) => {
-            // 1. inject HttpClient into the test
-            this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-            // 2. perform the authentication
-            this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                myService.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
+        async(
+            () => {
+                service.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
                 }, error => {
                 })
-
-            }, error => {
-                failedLogin("cleanStuff", error);
-            })
-
-        })
-
-    )
-    );
-
-    it(`should delete the test permission`,
-    // 1. declare as async test since the HttpClient works with Observables
-    async(
-        inject([HttpClient], (http: HttpClient) => {
-            // 1. inject HttpClient into the test
-            this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-            // 2. perform the authentication
-            this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                // 3. send the request to test
-                let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                myService.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
-                }, error => {
-                    console.log("deletePermission Error", error);
-                })
-
-            }, error => {
-                fail('deletePermission login failed');
-                console.log("deletePermission error", error);
-            })
-
-        })
-
-    )
+            }
+        )
     );
 
     it(`should create a new permission`,
-        // 1. declare as async test since the HttpClient works with Observables
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+            () => {
+                let p: Permission = {
+                    component: 'testcomponent',
+                    action: 'VIEW',
+                    target: 'testtarget'
+                }
 
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-
-                    let p:Permission = {
-                        component: 'testcomponent',
-                        action: 'VIEW',
-                        target: 'testtarget'
-                    }
-
-                    myService.createPermission(p).subscribe(value => {
-                        expect(value.component).toBe('testcomponent');
-                        expect(value.action).toBe('VIEW');
-                        expect(value.target).toBe('testtarget');
-                    }, error => {
-                        fail('createPermission failed');
-                        console.log("createPermission Error", error);
-                    })
-
+                service.createPermission(p).subscribe(value => {
+                    expect(value.component).toBe('testcomponent');
+                    expect(value.action).toBe('VIEW');
+                    expect(value.target).toBe('testtarget');
                 }, error => {
-                    fail('createPermission login failed');
-                    console.log("createPermission error", error);
+                    failTestWithError("should create a new permission", error);
                 })
-
-            })
-
+            }
         )
     );
 
     it(`should retrieve test permission`,
-        // 1. declare as async test since the HttpClient works with Observables
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.getPermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
-                        expect(value.component).toBe('testcomponent');
-                        expect(value.action).toBe('VIEW');
-                        expect(value.target).toBe('testtarget');
-                    }, error => {
-                        fail('getPermission failed');
-                        console.log("getPermission Error", error);
-                    })
-
+            () => {
+                service.getPermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
+                    expect(value.component).toBe('testcomponent');
+                    expect(value.action).toBe('VIEW');
+                    expect(value.target).toBe('testtarget');
                 }, error => {
-                    fail('getPermission login failed');
-                    console.log("getPermission error", error);
+                    failTestWithError("should retrieve test permission", error);
                 })
-
-            })
-
+            }
         )
     );
 
     it(`should retrieve all permissions`,
-        // 1. declare as async test since the HttpClient works with Observables
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.getPermissions().subscribe(value => {
-                        expect(value.length).toBeGreaterThan(0);
-                        let p:Permission = _.find(value, function(o:Permission) {
-                            return (o.component === 'testcomponent' &&
-                                o.action === 'VIEW' &&
-                                o.target === 'testtarget');
-                        });
-                        expect(p).toBeDefined;
-                    }, error => {
-                        fail('getPermissions failed');
-                        console.log("getPermissions Error", error);
-                    })
-
+            () => {
+                service.getPermissions().subscribe(value => {
+                    expect(value.length).toBeGreaterThan(0);
+                    let p: Permission = _.find(value, function (o: Permission) {
+                        return (o.component === 'testcomponent' &&
+                            o.action === 'VIEW' &&
+                            o.target === 'testtarget');
+                    });
+                    expect(p).toBeDefined();
                 }, error => {
-                    fail('getPermissions login failed');
-                    console.log("getPermissions error", error);
+                    failTestWithError("should retrieve all permissions", error);
                 })
-
-            })
-
+            }
         )
     );
 
     it(`should clean stuff`,
-    // 1. declare as async test since the HttpClient works with Observables
-    async(
-        inject([HttpClient], (http: HttpClient) => {
-            // 1. inject HttpClient into the test
-            this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-            // 2. perform the authentication
-            this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                // 3. send the request to test
-                let myService = new PermissionsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                myService.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
+        async(
+            () => {
+                service.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
                 }, error => {
                 })
-
-            }, error => {
-                failedLogin("cleanStuff", error);
-            })
-
-        })
-
-    )
+            }
+        )
     );
 });
