@@ -11,10 +11,13 @@ import * as _ from 'lodash';
 import { Role } from '../model/role';
 import { RoleAssign } from '../model/roleAssign';
 import { failLogin, failTestWithError } from './test-helper';
+import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
+import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
 describe('GroupsService', () => {
     let authService: AuthService;
     let service: GroupsService;
+    let oauth2Service: Oauth2Service;
 
     beforeAll(() => {
         TestBed.configureTestingModule({
@@ -28,6 +31,7 @@ describe('GroupsService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new GroupsService(httpClient, TEST_BASE_PATH, new Configuration());
 
         let p: Promise<any> = authService.login({ userName: TEST_USERNAME, password: TEST_PASSWORD }).toPromise();
@@ -219,6 +223,15 @@ describe('GroupsService', () => {
             () => {
                 service.deleteGroup('Default', 'testgroup').subscribe(value => {
                 }, error => {
+                })
+                let oauthReq: OAuthRequest = {
+                    clientId: '123456789',
+                    token: authService.getRefreshToken(),
+                    tokenType: 'REFRESH_TOKEN'
+                }
+                oauth2Service.revoke(oauthReq).subscribe(value => {
+                }, error => {
+                    failTestWithError("should clean stuff", error);
                 })
             }
         )

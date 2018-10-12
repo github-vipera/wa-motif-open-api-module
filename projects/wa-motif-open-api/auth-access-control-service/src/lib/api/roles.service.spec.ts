@@ -13,9 +13,12 @@ import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } f
 import * as _ from 'lodash';
 import { Action } from '../model/action';
 import { failLogin, failTestWithError } from './test-helper';
+import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
+import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
 describe('RolesService', () => {
     let authService: AuthService;
+    let oauth2Service: Oauth2Service;
     let service: RolesService;
     let actionsService: ActionsService;
 
@@ -31,6 +34,7 @@ describe('RolesService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new RolesService(httpClient, TEST_BASE_PATH, new Configuration());
         actionsService = new ActionsService(httpClient, TEST_BASE_PATH, new Configuration());
 
@@ -200,6 +204,16 @@ describe('RolesService', () => {
             () => {
                 const deleteAction = () => {
                     actionsService.deleteAction('testaction').subscribe(value => { }, error => { });
+
+                    let oauthReq: OAuthRequest = {
+                        clientId: '123456789',
+                        token: authService.getRefreshToken(),
+                        tokenType: 'REFRESH_TOKEN'
+                        }
+                    oauth2Service.revoke(oauthReq).subscribe(value => {
+                    }, error => {
+                        failTestWithError("should clean stuff", error);
+                    })
                 }
                 service.deleteRole('testrole').subscribe(deleteAction, deleteAction);
             }

@@ -7,10 +7,13 @@ import { Permission } from '../model/permission'
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../test.variables'
 import * as _ from 'lodash';
 import { failLogin, failTestWithError } from './test-helper';
+import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
+import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
 describe('PermissionsService', () => {
     let authService: AuthService;
     let service: PermissionsService;
+    let oauth2Service: Oauth2Service;
 
     beforeAll(() => {
         TestBed.configureTestingModule({
@@ -24,6 +27,7 @@ describe('PermissionsService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new PermissionsService(httpClient, TEST_BASE_PATH, new Configuration());
 
         let p: Promise<any> = authService.login({ userName: TEST_USERNAME, password: TEST_PASSWORD }).toPromise();
@@ -106,6 +110,15 @@ describe('PermissionsService', () => {
             () => {
                 service.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
                 }, error => {
+                })
+                let oauthReq: OAuthRequest = {
+                    clientId: '123456789',
+                    token: authService.getRefreshToken(),
+                    tokenType: 'REFRESH_TOKEN'
+                }
+                oauth2Service.revoke(oauthReq).subscribe(value => {
+                }, error => {
+                    failTestWithError("should clean stuff", error);
                 })
             }
         )

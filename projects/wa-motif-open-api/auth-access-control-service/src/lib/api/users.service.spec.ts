@@ -15,12 +15,15 @@ import { Group } from '../model/group';
 import { GroupCreate } from '../model/groupCreate';
 import { GroupAssign } from '../model/groupAssign';
 import { Role } from '../model/role';
+import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
+import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
 const TEST_ROLE = "testrole";
 const TEST_GROUP = "testgroup";
 
 describe('UsersService', () => {
     let authService: AuthService;
+    let oauth2Service: Oauth2Service;
     let service: UsersService;
     let groupsService: GroupsService;
     let rolesService: RolesService;
@@ -37,6 +40,7 @@ describe('UsersService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new UsersService(httpClient, TEST_BASE_PATH, new Configuration());
         groupsService = new GroupsService(httpClient, TEST_BASE_PATH, new Configuration());
         rolesService = new RolesService(httpClient, TEST_BASE_PATH, new Configuration());
@@ -227,6 +231,16 @@ describe('UsersService', () => {
             () => {
                 rolesService.deleteRole(TEST_ROLE).subscribe(value => {}, error => {});
                 groupsService.deleteGroup("Default", TEST_GROUP).subscribe(value => {}, error => {});
+
+                let oauthReq: OAuthRequest = {
+                    clientId: '123456789',
+                    token: authService.getRefreshToken(),
+                    tokenType: 'REFRESH_TOKEN'
+                }
+                oauth2Service.revoke(oauthReq).subscribe(value => {
+                }, error => {
+                    failTestWithError("should clean stuff", error);
+                })
             }
         )
     );

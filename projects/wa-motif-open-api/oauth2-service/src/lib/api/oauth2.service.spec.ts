@@ -2,19 +2,19 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { Oauth2Service } from './oauth2.service'
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { MotifCommunicatoriTestHelper } from './motif-communicator-test-helper'
 import { AuthService, WebConsoleConfig } from 'web-console-core'
-import { TEST_BASE_PATH } from '../test.variables'
+import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../test.variables'
 import { RefreshToken } from '../model/refreshToken';
 import { OAuthRequest } from '../model/oAuthRequest';
 import { AccessToken } from '@wa-motif-open-api/oauth2-service/lib';
+import { failTestWithError, failLogin } from './test-helper';
+import { TVIEW } from '@angular/core/src/render3/interfaces/view';
 
 describe('OAuth2Service', () => {
-
+    let authService: AuthService;
     let service: Oauth2Service;
-    let motifCommunicatoriTestHelper: MotifCommunicatoriTestHelper;
 
-    beforeEach(() => {
+    beforeAll(() => {
         TestBed.configureTestingModule({
             providers: [
                 Oauth2Service,
@@ -23,234 +23,123 @@ describe('OAuth2Service', () => {
             ],
             imports: [HttpClientModule]
         });
-        service = TestBed.get(Oauth2Service);
 
-        console.log("this.motifCommunicatoriTestHelper beforeEach ********");
+        const httpClient = TestBed.get(HttpClient);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        service = new Oauth2Service(httpClient, TEST_BASE_PATH, new Configuration());
 
+        let p: Promise<any> = authService.login({ userName: TEST_USERNAME, password: TEST_PASSWORD }).toPromise();
+        p.catch((error) => {
+            failLogin(error);
+        });
+        return p;
+    });
+
+    beforeEach(() => {
     });
 
     afterEach(() => {
     });
 
     it(`should issue a user refresh tokens list request`,
-        // 1. declare as async test since the HttpClient works with Observables
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.getUserRefreshTokenList('Default', 'admin').subscribe(value => {
-                        expect(value.length).toBeGreaterThan(0);
-                        value.forEach(function (rt: RefreshToken) {
-                            expect(rt.domain).toBe('Default');
-                            expect(rt.userId).toBe('admin');
-                            expect(rt.tokenType).toBe('REFRESH_TOKEN');
-                            expect(rt.token).toBeDefined();
-                        });
-                    }, error => {
-                        console.log("getUserRefreshTokensList Error", error);
-                    })
-
+            () => {
+                service.getUserRefreshTokenList('Default', 'admin').subscribe(value => {
+                    expect(value.length).toBeGreaterThan(0);
+                    value.forEach(function (rt: RefreshToken) {
+                        expect(rt.domain).toBe('Default');
+                        expect(rt.userId).toBe('admin');
+                        expect(rt.tokenType).toBe('REFRESH_TOKEN');
+                        expect(rt.token).toBeDefined();
+                    });
                 }, error => {
-                    console.log("getUserRefreshTokensList error", error);
+                    failTestWithError("should issue a user refresh tokens list request", error);
                 })
-
-            })
-
+            }
         )
     );
 
     it(`should issue a access tokens list request`,
-        // 1. declare as async test since the HttpClient works with Observables
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.getAccessTokenList(this.motifCommunicatoriTestHelper.authService.getRefreshToken()).subscribe(value => {
-                        expect(value.length).toBeGreaterThan(0);
-                        value.forEach(function (at: AccessToken) {
-                            expect(at.domain).toBe('Default');
-                            expect(at.userId).toBe('admin');
-                            expect(at.tokenType).toBe('ACCESS_TOKEN');
-                            expect(at.token).toBeDefined();
-                        });
-                    }, error => {
-                        console.log("getAccessTokensList Error", error);
-                    })
-
+            () => {
+                service.getAccessTokenList(authService.getRefreshToken()).subscribe(value => {
+                    expect(value.length).toBeGreaterThan(0);
+                    value.forEach(function (at: AccessToken) {
+                        expect(at.domain).toBe('Default');
+                        expect(at.userId).toBe('admin');
+                        expect(at.tokenType).toBe('ACCESS_TOKEN');
+                        expect(at.token).toBeDefined();
+                    });
                 }, error => {
-                    console.log("getAccessTokensList error", error);
+                    failTestWithError("should issue a access tokens list request", error);
                 })
-
-            })
-
+            }
         )
     );
 
     it(`should issue a validate refresh token request`,
-        // 1. declare as async test since the HttpClient works with Observables
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let oauthReq:OAuthRequest = {
-                        clientId : '123456789',
-                        token : this.motifCommunicatoriTestHelper.authService.getRefreshToken(),
-                        tokenType : 'REFRESH_TOKEN'
-                    }
-                    let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.validate(oauthReq).subscribe(value => {
-                    }, error => {
-                        console.log("validateRefreshToken Error", error);
-                    })
-
+            () => {
+                let oauthReq: OAuthRequest = {
+                    clientId: '123456789',
+                    token: authService.getRefreshToken(),
+                    tokenType: 'REFRESH_TOKEN'
+                }
+                service.validate(oauthReq).subscribe(value => {
                 }, error => {
-                    console.log("validateRefreshToken error", error);
+                    failTestWithError("should issue a validate refresh token request", error);
                 })
-
-            })
-
+            }
         )
     );
 
     it(`should issue a validate access token request`,
-        // 1. declare as async test since the HttpClient works with Observables
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let oauthReq:OAuthRequest = {
-                        clientId : '123456789',
-                        token : this.motifCommunicatoriTestHelper.authService.getAccessToken(),
-                        tokenType : 'ACCESS_TOKEN'
-                    }
-                    let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.validate(oauthReq).subscribe(value => {
-                    }, error => {
-                        console.log("validateAccessToken Error", error);
-                    })
-
+            () => {
+                let oauthReq: OAuthRequest = {
+                    clientId: '123456789',
+                    token: authService.getAccessToken(),
+                    tokenType: 'ACCESS_TOKEN'
+                }
+                service.validate(oauthReq).subscribe(value => {
                 }, error => {
-                    console.log("validateAccessToken error", error);
+                    failTestWithError("should issue a validate access token request", error);
                 })
-
-            })
-
+            }
         )
     );
 
     it(`should issue a refresh tokens list request`,
         // 1. declare as async test since the HttpClient works with Observables
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.getRefreshTokenList('Default', 1, 2, '-create_time').subscribe(value => {
-                        expect(value.length).toBe(2);
-                        value.forEach(function (rt: RefreshToken) {
-                            expect(rt.tokenType).toBe('REFRESH_TOKEN');
-                            expect(rt.token).toBeDefined();
-                        });
-                    }, error => {
-                        console.log("getRefreshTokensList Error", error);
-                    })
-
+            () => {
+                service.getRefreshTokenList('Default', 1, 1, 'create_time').subscribe(value => {
+                    expect(value.length).toBe(1);
+                    value.forEach(function (rt: RefreshToken) {
+                        expect(rt.tokenType).toBe('REFRESH_TOKEN');
+                        expect(rt.token).toBeDefined();
+                    });
                 }, error => {
-                    console.log("getRefreshTokensList error", error);
+                    failTestWithError("should issue a refresh tokens list request", error);
                 })
-
-            })
-
+            }
         )
     );
 
-    it(`should issue a revoke refresh token request`,
-        // 1. declare as async test since the HttpClient works with Observables
-        async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+    it(`should issue a revoke token request`,
+    async(
+        () => {
+            let oauthReq: OAuthRequest = {
+                clientId: '123456789',
+                token: authService.getRefreshToken(),
+                tokenType: 'REFRESH_TOKEN'
+            }
 
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let oauthReq:OAuthRequest = {
-                        clientId : '123456789',
-                        token : this.motifCommunicatoriTestHelper.authService.getRefreshToken(),
-                        tokenType : 'REFRESH_TOKEN'
-                    }
-                    let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.revoke(oauthReq).subscribe(value => {
-                    }, error => {
-                        console.log("revokeRefreshToken Error", error);
-                    })
-
-                }, error => {
-                    console.log("revokeRefreshToken error", error);
-                })
-
+            service.revoke(oauthReq).subscribe(value => {
+            }, error => {
+                failTestWithError("should issue a revoke token request", error);
             })
-
-        )
+        }
+    )
     );
-
-    it(`should issue a revoke access token request`,
-        // 1. declare as async test since the HttpClient works with Observables
-        async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin", "admin").subscribe(value => {
-
-                    // 3. send the request to test
-                    let oauthReq:OAuthRequest = {
-                        clientId : '123456789',
-                        token : this.motifCommunicatoriTestHelper.authService.getAccessToken(),
-                        tokenType : 'ACCESS_TOKEN'
-                    }
-                    let myService = new Oauth2Service(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.revoke(oauthReq).subscribe(value => {
-                    }, error => {
-                        console.log("revokeAccessToken Error", error);
-                    })
-
-                }, error => {
-                    console.log("revokeAccessToken error", error);
-                })
-
-            })
-
-        )
-    );
-
 });
