@@ -10,7 +10,7 @@ import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } f
 import * as _ from 'lodash';
 import { Role } from '../model/role';
 import { RoleAssign } from '../model/roleAssign';
-import { failLogin, failTestWithError } from './test-helper';
+import { failLogin, failTestWithError } from '../test-helper';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
 import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 

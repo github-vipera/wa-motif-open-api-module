@@ -1,27 +1,25 @@
 import { TestBed, async, inject } from '@angular/core/testing';
-import { ActionsService } from './actions.service';
-import { MyselfService } from './myself.service';
-import { RolesService } from './roles.service';
+import { SecurityService } from './security.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
 import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../test.variables'
 import * as _ from 'lodash';
 import { failTestWithError, failLogin } from '../test-helper';
-import { Action } from '../model/models';
-import { Permission } from '../model/models';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
 import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
-describe('MyselfService', () => {
+const TEST_ACTION: string = "testaction";
+
+describe('SecurityService', () => {
     let authService: AuthService;
-    let service: MyselfService;
     let oauth2Service: Oauth2Service;
+    let service: SecurityService;
 
     beforeAll(() => {
         TestBed.configureTestingModule({
             providers: [
-                ActionsService,
+                SecurityService,
                 { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
                 { provide: WebConsoleConfig, useValue: new WebConsoleConfig('', '') }
             ],
@@ -31,7 +29,7 @@ describe('MyselfService', () => {
         const httpClient = TestBed.get(HttpClient);
         authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
-        service = new MyselfService(httpClient, TEST_BASE_PATH, new Configuration());
+        service = new SecurityService(httpClient, TEST_BASE_PATH, new Configuration());
 
         let p: Promise<any> = authService.login({ userName: TEST_USERNAME, password: TEST_PASSWORD }).toPromise();
         p.catch((error) => {
@@ -52,38 +50,49 @@ describe('MyselfService', () => {
             })
     );
 
-    it(`should retrieve current user actions`,
+    it(`should retrieve sessions`,
         async(
             () => {
-                service.getMyselfActions().subscribe(value => {
+                service.getSessions().subscribe(value => {
                     expect(value.length).toBeGreaterThan(0);
-                    let a: Action = _.find(value, function (o: Action) {
-                        return o.name === "SU_ACTIONS";
-                    });
-                    expect(a).toBeDefined();
                 }, error => {
-                    failTestWithError("should retrieve current user actions", error);
-                })
+                    failTestWithError("should retrieve sessions", error);
+                });
             }
         )
     );
 
-    it(`should retrieve current user permissions`,
-    async(
-        () => {
-            service.getMyselfPermissions().subscribe(value => {
-                expect(value.length).toBeGreaterThan(0);
-                let p: Permission = _.find(value, function (o: Permission) {
-                    return o.component === "com.vipera.osgi.core.platform" &&
-                        o.action === "*" && o.target === "*";
+    it(`should close session`,
+        async(
+            () => {
+                service.getSessions().subscribe(value => {
+                    expect(value.length).toBeGreaterThan(0);
+                    service.closeSession(value[0].id).subscribe(value => {
+                    }, error => {
+                        failTestWithError("should close session", error);
+                    });
+                }, error => {
+                    failTestWithError("should close session", error);
                 });
-                expect(p).toBeDefined();
-            }, error => {
-                failTestWithError("should retrieve current user permissions", error);
-            })
-        }
-    )
-);
+            }
+        )
+    );
+
+    it(`should close current session`,
+        async(
+            () => {
+                service.getSessions().subscribe(value => {
+                    expect(value.length).toBeGreaterThan(0);
+                    service.logoutCurrentUser().subscribe(value => {
+                    }, error => {
+                        failTestWithError("should close current session", error);
+                    });
+                }, error => {
+                    failTestWithError("should close current session", error);
+                });
+            }
+        )
+    );
 
     it(`should clean stuff`,
         async(
@@ -100,5 +109,4 @@ describe('MyselfService', () => {
             }
         )
     );
-
 });

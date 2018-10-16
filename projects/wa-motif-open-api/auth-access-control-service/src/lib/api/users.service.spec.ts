@@ -6,7 +6,7 @@ import { Configuration } from '../configuration'
 import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../test.variables'
 import * as _ from 'lodash';
-import { failTestWithError, failLogin } from './test-helper';
+import { failTestWithError, failLogin } from '../test-helper';
 import { Permission, RoleCreate } from '../model/models';
 import { UsersService } from './users.service';
 import { RoleAssign } from '../model/roleAssign';

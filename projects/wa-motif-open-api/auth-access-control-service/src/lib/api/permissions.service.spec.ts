@@ -6,7 +6,7 @@ import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { Permission } from '../model/permission'
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../test.variables'
 import * as _ from 'lodash';
-import { failLogin, failTestWithError } from './test-helper';
+import { failLogin, failTestWithError } from '../test-helper';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
 import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
