@@ -99,7 +99,7 @@ export class SettingsService {
         }
 
         return this.httpClient.post(`${this.basePath}/cfg/settings/services/${encodeURIComponent(String(service))}/settings`,
-        body,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -333,6 +333,7 @@ export class SettingsService {
         }
 
         return this.httpClient.put(`${this.basePath}/cfg/settings/services/${encodeURIComponent(String(service))}/settings/${encodeURIComponent(String(setting))}`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

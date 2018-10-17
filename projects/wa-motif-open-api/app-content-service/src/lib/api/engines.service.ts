@@ -107,6 +107,7 @@ export class EnginesService {
         }
 
         return this.httpClient.post(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines/${encodeURIComponent(String(engine))}/check`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -160,6 +161,7 @@ export class EnginesService {
         }
 
         return this.httpClient.post(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines/${encodeURIComponent(String(engine))}`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -483,6 +485,7 @@ export class EnginesService {
         }
 
         return this.httpClient.put(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines/${encodeURIComponent(String(engine))}`,
+            body,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
