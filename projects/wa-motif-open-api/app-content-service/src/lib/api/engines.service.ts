@@ -22,12 +22,11 @@ import { AppCheckRequest } from '../model/appCheckRequest';
 import { AppCheckResponse } from '../model/appCheckResponse';
 import { ApplicationVersionList } from '../model/applicationVersionList';
 import { Engine } from '../model/engine';
-import { EngineEntity } from '../model/engineEntity';
-import { EngineEntityList } from '../model/engineEntityList';
+import { EngineCreate } from '../model/engineCreate';
+import { EngineList } from '../model/engineList';
+import { EngineUpdate } from '../model/engineUpdate';
 
 import { WC_API_BASE_PATH } from 'web-console-core'
-
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
@@ -121,20 +120,16 @@ export class EnginesService {
      * Registers a new dynamic engine configuration
      * Registers a new dynamic engine configuration
      * @param domain Domain Name
-     * @param engine Engine Name
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createEngine(domain: string, engine: string, body?: Engine, observe?: 'body', reportProgress?: boolean): Observable<EngineEntity>;
-    public createEngine(domain: string, engine: string, body?: Engine, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EngineEntity>>;
-    public createEngine(domain: string, engine: string, body?: Engine, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EngineEntity>>;
-    public createEngine(domain: string, engine: string, body?: Engine, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createEngine(domain: string, body?: EngineCreate, observe?: 'body', reportProgress?: boolean): Observable<Engine>;
+    public createEngine(domain: string, body?: EngineCreate, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Engine>>;
+    public createEngine(domain: string, body?: EngineCreate, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Engine>>;
+    public createEngine(domain: string, body?: EngineCreate, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling createEngine.');
-        }
-        if (engine === null || engine === undefined) {
-            throw new Error('Required parameter engine was null or undefined when calling createEngine.');
         }
 
         let headers = this.defaultHeaders;
@@ -160,7 +155,7 @@ export class EnginesService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines/${encodeURIComponent(String(engine))}`,
+        return this.httpClient.post(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines`,
             body,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -269,9 +264,9 @@ export class EnginesService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEngine(domain: string, engine: string, observe?: 'body', reportProgress?: boolean): Observable<EngineEntity>;
-    public getEngine(domain: string, engine: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EngineEntity>>;
-    public getEngine(domain: string, engine: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EngineEntity>>;
+    public getEngine(domain: string, engine: string, observe?: 'body', reportProgress?: boolean): Observable<Engine>;
+    public getEngine(domain: string, engine: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Engine>>;
+    public getEngine(domain: string, engine: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Engine>>;
     public getEngine(domain: string, engine: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getEngine.');
@@ -315,9 +310,9 @@ export class EnginesService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEngines(domain: string, observe?: 'body', reportProgress?: boolean): Observable<EngineEntityList>;
-    public getEngines(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EngineEntityList>>;
-    public getEngines(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EngineEntityList>>;
+    public getEngines(domain: string, observe?: 'body', reportProgress?: boolean): Observable<EngineList>;
+    public getEngines(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EngineList>>;
+    public getEngines(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EngineList>>;
     public getEngines(domain: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getEngines.');
@@ -450,10 +445,10 @@ export class EnginesService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateEngine(domain: string, engine: string, body?: Engine, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateEngine(domain: string, engine: string, body?: Engine, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateEngine(domain: string, engine: string, body?: Engine, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateEngine(domain: string, engine: string, body?: Engine, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateEngine(domain: string, engine: string, body?: EngineUpdate, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateEngine(domain: string, engine: string, body?: EngineUpdate, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateEngine(domain: string, engine: string, body?: EngineUpdate, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateEngine(domain: string, engine: string, body?: EngineUpdate, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling updateEngine.');
         }
@@ -494,5 +489,4 @@ export class EnginesService {
             }
         );
     }
-
 }

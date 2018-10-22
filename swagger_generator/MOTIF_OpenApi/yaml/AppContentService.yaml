@@ -24,23 +24,18 @@ components:
     vipera_cookie:
       $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
   schemas: 
-    EngineEntityList:
+    EngineList:
       type: array
       items:
-          $ref: '#/components/schemas/EngineEntity' 
+          $ref: '#/components/schemas/Engine' 
           
-    EngineEntity:
+    Engine:
       allOf:
-        - $ref: '#/components/schemas/Engine' 
+        - $ref: '#/components/schemas/EngineCreate' 
         - type: object
           required:
-            - name
             - domain
           properties:
-            name:
-              type: string
-              example: engineName
-              description: Engine Name
             domain:
               type: string
               description: ViperaOSGi domain
@@ -56,11 +51,16 @@ components:
               format: 'date-time'  
               description: Last Engine check request timestamp       
           
-    Engine:
+    EngineCreate:
       type: object
       required:
+        - name
         - latestVersion
-      properties:       
+      properties:
+        name:
+          description: Engine name
+          type: string
+          example: EngineName
         latestVersion:
           description: Engine latest version
           type: string
@@ -72,8 +72,26 @@ components:
         downloadUrl:
           description: Download URL
           type: string
-          example: www.google.com/1.0.1 
-          
+          example: www.google.com/1.0.1
+
+    EngineUpdate:
+      type: object
+      required:
+        - latestVersion
+      properties:
+        latestVersion:
+          description: Engine latest version
+          type: string
+          example: 1.0.1
+        forbiddenVersion:
+          description: Forbidden versions
+          type: string
+          example: 1.0.0
+        downloadUrl:
+          description: Download URL
+          type: string
+          example: www.google.com/1.0.1
+                        
     AppCheckRequest:
       type: object
       required:
@@ -287,6 +305,33 @@ components:
         example: MyApp          
 paths:
   /appcont/domains/{domain}/engines:
+    post:
+      operationId: createEngine
+      tags:
+        - engines
+      description: Registers a new dynamic engine configuration
+      summary: Registers a new dynamic engine configuration
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EngineCreate'  
+      responses:
+        '200':
+          description: The engine created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Engine'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'  
     get:
       operationId: getEngines
       tags:
@@ -306,7 +351,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EngineEntityList'
+                $ref: '#/components/schemas/EngineList'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -331,37 +376,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EngineEntity'
+                $ref: '#/components/schemas/Engine'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
-    post:
-      operationId: createEngine
-      tags:
-        - engines
-      description: Registers a new dynamic engine configuration
-      summary: Registers a new dynamic engine configuration
-      security:
-        - vipera_oauth2:
-          - 'all:all'
-        - vipera_basic: []
-        - vipera_cookie: []
-      parameters:
-        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
-        - $ref: '#/components/parameters/enginePathParam'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Engine'  
-      responses:
-        '200':
-          description: The engine created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EngineEntity'
-        default:
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'  
     put:
       operationId: updateEngine
       tags:
@@ -380,7 +397,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Engine'  
+              $ref: '#/components/schemas/EngineUpdate'  
       responses:
         '200':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse' 

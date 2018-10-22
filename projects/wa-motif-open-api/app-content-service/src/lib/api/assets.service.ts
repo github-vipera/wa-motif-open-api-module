@@ -21,8 +21,6 @@ import { Observable }                                        from 'rxjs/Observab
 import { AssetBundle } from '../model/assetBundle';
 
 import { WC_API_BASE_PATH } from 'web-console-core'
-
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
@@ -209,8 +207,8 @@ export class AssetsService {
         }
 
         return this.httpClient.put(`${this.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/assets/${encodeURIComponent(String(asset))}/versions/${encodeURIComponent(String(version))}`,
-        body,   
-        {
+            body,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -263,4 +261,3 @@ export class AssetsService {
         );
     }
 
-}

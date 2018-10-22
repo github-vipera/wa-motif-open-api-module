@@ -36,11 +36,18 @@ module.exports = function (config) {
       fixWebpackSourcePaths: true
     },
     reporters: ['progress', 'kjhtml'],
-    port: 9877,
+    port: 9876,
     colors: true,
-    logLevel: config.LOG_TRACE,
+    logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    customLaunchers: {
+      Chrome_with_debugging: {
+        base: 'Chrome',
+        flags: ['--remote-debugging-port=9222'],
+        debug: true
+      }
+    },
+    browsers: ['Chrome_with_debugging'],
     singleRun: false
   });
 };

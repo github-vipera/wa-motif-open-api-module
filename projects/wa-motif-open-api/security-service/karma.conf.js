@@ -17,12 +17,12 @@ module.exports = function (config) {
     },
     proxies: {
       "/rest/v2": {
-        "target": "http://localhost:8080/rest/v2",
+        "target": "http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2",
         "secure": false,
         'changeOrigin': true
       },
       "/oauth2": {
-        "target": "http://localhost:8080/oauth2",
+        "target": "http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/oauth2",
         "secure": false,
         'changeOrigin': true
       }
