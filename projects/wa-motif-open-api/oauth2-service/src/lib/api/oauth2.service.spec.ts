@@ -8,7 +8,6 @@ import { RefreshToken } from '../model/refreshToken';
 import { OAuthRequest } from '../model/oAuthRequest';
 import { AccessToken } from '@wa-motif-open-api/oauth2-service/lib';
 import { failTestWithError, failLogin } from '../test-helper';
-import { TVIEW } from '@angular/core/src/render3/interfaces/view';
 
 describe('OAuth2Service', () => {
     let authService: AuthService;

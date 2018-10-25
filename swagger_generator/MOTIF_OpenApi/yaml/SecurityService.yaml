@@ -196,7 +196,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/sessionPathParam'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'          
@@ -213,7 +213,7 @@ paths:
         - vipera_basic: []
         - vipera_cookie: []
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

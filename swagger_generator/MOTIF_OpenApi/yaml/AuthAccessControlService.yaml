@@ -58,6 +58,8 @@ components:
         name:
           type: string
           example: Action name 
+        description:
+          type: string
     
     RoleUpdate:
       type: object
@@ -289,7 +291,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RoleCreate'
       responses:
-        '200':
+        '201':
           description: OK
           content:
             application/json:
@@ -335,7 +337,7 @@ paths:
       parameters:  
          - $ref: '#/components/parameters/roleNamePathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -359,7 +361,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RoleUpdate'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -411,7 +413,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RoleAssign'     
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -433,7 +435,7 @@ paths:
         - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
         - $ref: '#/components/parameters/roleNamePathParam'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -482,7 +484,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GroupCreate'
       responses:
-        '200':
+        '201':
           description: OK
           content:
             application/json:
@@ -554,7 +556,7 @@ paths:
          - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'       
          - $ref: '#/components/parameters/groupNamePathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -578,7 +580,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GroupUpdate'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -630,7 +632,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RoleAssign'  
       responses:
-        '200':
+        '204':
          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -652,7 +654,7 @@ paths:
         - $ref: '#/components/parameters/groupNamePathParam'
         - $ref: '#/components/parameters/roleNamePathParam'
       responses:
-        '200':
+        '204':
          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -687,7 +689,7 @@ paths:
     post:
       operationId: assignGroupToUser
       tags:
-        - users
+        - groups
       description: Assigns group to user
       summary: Assigns group to user
       security:
@@ -704,7 +706,7 @@ paths:
             schema:
               $ref: '#/components/schemas/GroupAssign' 
       responses:
-        '200':
+        '204':
            $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -726,7 +728,7 @@ paths:
         - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'       
         - $ref: '#/components/parameters/groupNamePathParam'       
       responses:
-        '200':
+        '204':
            $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -879,7 +881,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Permission'
       responses:
-        '200':
+        '201':
           description: OK
           content:
             application/json:
@@ -929,7 +931,7 @@ paths:
         - $ref: '#/components/parameters/permissionActionPathParam' 
         - $ref: '#/components/parameters/permissionTargetPathParam'    
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -978,7 +980,7 @@ paths:
       parameters: 
         - $ref: '#/components/parameters/roleNamePathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -999,7 +1001,7 @@ paths:
         - $ref: '#/components/parameters/roleNamePathParam' 
         - $ref: '#/components/parameters/actionNamePathParam'  
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'        
@@ -1235,7 +1237,7 @@ paths:
       parameters: 
         - $ref: '#/components/parameters/actionNamePathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -1258,7 +1260,7 @@ paths:
         - $ref: '#/components/parameters/permissionActionPathParam'
         - $ref: '#/components/parameters/permissionTargetPathParam'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -1303,7 +1305,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ActionCreate'
       responses:
-        '200':
+        '201':
           description: OK
           content:
             application/json:
@@ -1349,7 +1351,7 @@ paths:
       parameters:  
          - $ref: '#/components/parameters/actionNamePathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -1373,7 +1375,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ActionUpdate'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'      

@@ -165,7 +165,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ConfigurationUpload'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -253,7 +253,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/servicePathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -278,7 +278,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SettingCreate'  
       responses:
-        '200':
+        '201':
           description: OK
           content:
             application/json:
@@ -332,7 +332,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SettingUpdate'  
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -351,7 +351,7 @@ paths:
         - $ref: '#/components/parameters/servicePathParam'   
         - $ref: '#/components/parameters/settingPathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -371,7 +371,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/tagPathParam'  
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -394,7 +394,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Tag'  
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError' 
@@ -435,7 +435,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/tagPathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -456,7 +456,7 @@ paths:
         - $ref: '#/components/parameters/servicePathParam' 
         - $ref: '#/components/parameters/tagPathParam' 
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -477,7 +477,7 @@ paths:
         - $ref: '#/components/parameters/propertyPathParam'
         - $ref: '#/components/parameters/tagPathParam'    
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
