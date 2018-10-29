@@ -188,7 +188,7 @@ components:
           
     AssetBundleEntity:
       allOf:
-        - $ref: '#/components/schemas/AssetBundle' 
+        - $ref: '#/components/schemas/AssetBundleUpdate' 
         - type: object
           required:
             - name
@@ -230,12 +230,12 @@ components:
               description: Bundle requires this app version
               example: 1.1.0
               
-    AssetBundle:
+    AssetBundleUpdate:
       type: object
       required:
-        - public
+        - published
       properties:       
-        public:
+        published:
           description: Whether this bundle is publicly visible
           type: boolean
           example: true
@@ -324,7 +324,7 @@ paths:
             schema:
               $ref: '#/components/schemas/EngineCreate'  
       responses:
-        '200':
+        '201':
           description: The engine created
           content:
             application/json:
@@ -399,7 +399,7 @@ paths:
             schema:
               $ref: '#/components/schemas/EngineUpdate'  
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse' 
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError' 
@@ -418,7 +418,7 @@ paths:
         - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
         - $ref: '#/components/parameters/enginePathParam'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -460,7 +460,7 @@ paths:
       parameters:
         - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -542,7 +542,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AssetBundleUpload'  
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -567,9 +567,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AssetBundle'
+              $ref: '#/components/schemas/AssetBundleUpdate'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
@@ -614,7 +614,7 @@ paths:
         - $ref: '#/components/parameters/assetPathParam'
         - $ref: '#/components/parameters/versionPathParam'
       responses:
-        '200':
+        '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

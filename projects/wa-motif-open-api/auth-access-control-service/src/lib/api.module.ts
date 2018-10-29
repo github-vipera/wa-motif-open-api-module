@@ -18,18 +18,18 @@ import { UsersService } from './api/users.service';
     RolesService,
     UsersService ]
 })
-export class AuthAccessControlModule {
+export class AuthAccessControlServiceModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
         return {
-            ngModule: AuthAccessControlModule,
+            ngModule: AuthAccessControlServiceModule,
             providers: [ { provide: Configuration, useFactory: configurationFactory } ]
         };
     }
 
-    constructor( @Optional() @SkipSelf() parentModule: AuthAccessControlModule,
+    constructor( @Optional() @SkipSelf() parentModule: AuthAccessControlServiceModule,
                  @Optional() http: HttpClient) {
         if (parentModule) {
-            throw new Error('AuthAccessControlModule is already loaded. Import in your base AppModule only.');
+            throw new Error('AuthAccessControlServiceModule is already loaded. Import in your base AppModule only.');
         }
         if (!http) {
             throw new Error('You need to import the HttpClientModule in your AppModule! \n' +
