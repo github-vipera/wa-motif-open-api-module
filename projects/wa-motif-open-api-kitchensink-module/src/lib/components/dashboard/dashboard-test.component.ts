@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { PluginView } from 'web-console-core'
+import { Component, OnInit, Input, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { PluginView, StatusBarService, StatusBarItem } from 'web-console-core'
 import { WCToasterService } from 'web-console-ui-kit'
-import { GridsterItem, GridsterConfig, GridType, CompactType } from 'web-console-ui-kit'
+import { Gridster } from 'web-console-ui-kit'
 import { timer } from 'rxjs';
 
 @Component({
@@ -12,18 +12,17 @@ import { timer } from 'rxjs';
 @PluginView("Dashboard",{
   iconName: "ico-json" 
 })
-export class DashboardTestComponent implements OnInit {
+export class DashboardTestComponent implements OnInit, OnDestroy, AfterViewInit {
 
   dateTime:Date = new Date;
   counter: number = 1;
-  options: GridsterConfig;
+  options: Gridster.GridsterConfig;
   
-  operationCountsItem:GridsterItem;
-  dateTimeItem:GridsterItem;
-  gaugeItem:GridsterItem;
+  operationCountsItem:Gridster.GridsterItem;
+  dateTimeItem:Gridster.GridsterItem;
+  gaugeItem:Gridster.GridsterItem;
 
   public numOfSessions:number=4;
-
 
   gaugeType = "semi";
   gaugeValue = 33;
@@ -57,8 +56,7 @@ export class DashboardTestComponent implements OnInit {
   
   //chart <<=======
 
-  constructor(private toaster: WCToasterService) {
-
+  constructor(private toaster: WCToasterService ) {
 
     this.single = [
       {
@@ -129,11 +127,12 @@ export class DashboardTestComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.options = {
       itemChangeCallback: this.itemChange,
       itemResizeCallback: this.itemResize,
-      gridType: GridType.Fixed,
-      compactType: CompactType.None,
+      gridType: Gridster.GridType.Fixed,
+      compactType: Gridster.CompactType.None,
       draggable: {
         enabled: true
       },
@@ -167,8 +166,14 @@ export class DashboardTestComponent implements OnInit {
 
     timer(0, 1000).subscribe(x=>{
       this.dateTime = new Date();
-  });
+    });
+   
+  }
 
+  ngOnDestroy(){
+  }
+
+  ngAfterViewInit(){
   }
 
   onSelect(event) {

@@ -27,7 +27,7 @@ import { EngineList } from '../model/engineList';
 import { EngineUpdate } from '../model/engineUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 import { EnginesServiceInterface }                            from './engines.serviceInterface';
 
@@ -41,7 +41,7 @@ export class EnginesService implements EnginesServiceInterface {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
 
         if (configuration) {
             this.configuration = configuration;

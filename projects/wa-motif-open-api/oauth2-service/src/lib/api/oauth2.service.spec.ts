@@ -6,7 +6,7 @@ import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../test.variables'
 import { RefreshToken } from '../model/refreshToken';
 import { OAuthRequest } from '../model/oAuthRequest';
-import { AccessToken } from '@wa-motif-open-api/oauth2-service/lib';
+import { AccessToken } from '../model/accessToken';
 import { failTestWithError, failLogin } from '../test-helper';
 
 describe('OAuth2Service', () => {

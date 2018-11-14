@@ -6,7 +6,7 @@ import { AuthService, WebConsoleConfig } from 'web-console-core'
 import { TEST_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables'
 import * as _ from 'lodash';
 import { failTestWithError, b64toFile, blobToB64 } from '../../../../test-helper';
-import { AssetBundleUpdate } from 'swagger_generator/output/sources';
+import { AssetBundleUpdate } from '../model/assetBundleUpdate';
 
 const TEST_ENGINE: string = "testengine";
 const TEST_ASSET: string = "UEsDBBQAAAAIADiK2kK82AhoWAAAAIYAAAAKAAAAaW5kZXguaHRtbLNRdPF3DokMcFXIKMnNseOygVAKQGCTkZqYAmGCubmpJYkKyRmJRcWpJbZKpSVpuhZKUJX6CKU2SfkplUi6Cuw8UnNy8hXC84tyUmz0C2A6IMqAOkH2AQBQSwECHwAUAAAACAA4itpCvNgIaFgAAACGAAAACgAkAAAAAAAAACAAAAAAAAAAaW5kZXguaHRtbAoAIAAAAAAAAQAYAGSXplGAcs4B2tp3OoByzgHa2nc6gHLOAVBLBQYAAAAAAQABAFwAAACAAAAAAAA=";
