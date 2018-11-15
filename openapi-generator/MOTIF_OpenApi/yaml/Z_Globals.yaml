@@ -1,0 +1,381 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Web Content Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2/'
+components:
+  securitySchemes:
+    vipera_oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: 'http://localhost:8080/oauth2/token'
+          scopes:
+            'all:all': complete access
+    vipera_basic:
+      type: http
+      scheme: basic
+    vipera_cookie:
+      type: apiKey
+      in: cookie
+      name: JSESSIONID  # cookie name
+  headers:
+    x-page:
+      description: Current page
+      schema:
+        type: integer
+    x-page-size:
+      description: Page size
+      schema:
+        type: integer
+    x-total-pages:
+      description: Total pages
+      schema:
+        type: integer
+    x-total-records:
+      description: Total records
+      schema:
+        type: integer
+  schemas:
+    UserKey:
+      type: object
+      required:
+        - domain
+        - userId
+      properties:
+        domain:
+          type: string
+          example: Default
+        userId:
+          type: string
+          example: joe
+    UserData:
+      type: object
+      properties:
+        userIdInt:
+          type: string
+          example: 123456
+        msisdn:
+          type: string
+          example: 555123456
+        serial:
+          type: string
+          example: 12345678
+    SharedUserData:
+      type: object
+      properties:
+        locale:
+          type: string
+          example: IT
+        state:
+          type: string
+          example: ACTIVE
+        prevState:
+          type: string
+          example: PREACTIVE
+        email:
+          type: string
+          example: test@vipera.com
+        created:
+          type: string
+          format: date-time
+        lastLogin:
+          type: string
+          format: date-time
+    User:
+      allOf:
+        - $ref: '#/components/schemas/UserKey'
+        - $ref: '#/components/schemas/UserData'
+        - $ref: '#/components/schemas/SharedUserData'
+    AdminUser:
+      allOf:
+        - $ref: '#/components/schemas/UserKey'
+        - $ref: '#/components/schemas/SharedUserData'
+        - type: object
+          properties:
+            firstName:
+              type: string
+              example: John
+            lastName:
+              type: string
+              example: Doe
+    ClientUser:
+      allOf:
+        - $ref: '#/components/schemas/UserKey'
+        - $ref: '#/components/schemas/SharedUserData'
+    Property:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+          example: Key
+        value:
+          type: string
+          example: Value
+    DomainData:
+        type: object
+        required:
+          - description
+        properties:
+          description:
+            type: string
+            example: Default Domain
+    Domain:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/DomainData'
+        - type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              example: Default
+    Application:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Vipera
+        description:
+          type: string
+          example: Vipera Application
+        category:
+          type: string
+          example: System Category
+        offline:
+          type: boolean
+          example: false
+        needsActivation:
+          type: boolean
+          example: true
+        otpReuse:
+          type: boolean
+          example: false
+        otpFormat:
+          type: string
+          example: '[a-z0-9]+'
+        otpLength:
+          type: integer
+          example: 6
+        otpExpiry:
+          type: string
+          example: -1
+        otpMaxFailures:
+          type: integer
+          example: 3
+        instanceKeyLength:
+          type: integer
+          example: 32
+        viperaSerialFormat:
+          type: string
+          example: '[a-zA-Z0-9]+'
+        viperaSerialLength:
+          type: integer
+          example: 16
+        registerPasswd:
+          type: boolean
+          example: false
+        registerUser:
+          type: boolean
+          example: false
+        userIdFormat:
+          type: string
+          example: '[a-zA-Z0-9]+'
+        userIdLength:
+          type: integer
+          example: 16
+        passwordHistory:
+          type: integer
+          example: 0
+        passwordMaxFailures:
+          type: integer
+          example: -1
+        allowMultipleSessions:
+          type: boolean
+          example: false
+        allowMultipleInstall:
+          type: boolean
+          example: true
+        verifyClientIp:
+          type: boolean
+          example: false
+        passwordExpiry:
+          type: string
+          example: -1
+        passwordFormat:
+          type: string
+          example: '.+'
+        encryptActive:
+          type: boolean
+          example: false
+    Channel:
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            type: string
+            example: JSON
+    Credentials:
+        type: object
+        required:
+          - password
+          - passwordVerify
+        properties:
+          password:
+            type: string
+            example: Password
+          passwordVerify:
+            type: string
+            example: Password
+    ErrorVipera:
+      type: object
+      description: Specific platform error from Vipera MOTIF
+      properties:
+        code:
+          type: string
+          example: E:V_ILLEGAL_ARGUMENT
+        class:
+          type: string
+          example: com.vipera.osgi.bss.counters.IllegalArgumentException
+        details:
+          type: string
+          example: argument
+  parameters:
+    channelPathParam:
+      name: channel
+      description: Channel Name (REST,JSON,SMS,...)
+      in: path
+      required: true
+      schema:
+        type: string
+    domainPathParam:
+      name: domain
+      description: Domain Name 
+      in: path
+      required: true
+      schema:
+        type: string
+    applicationPathParam:
+      name: application
+      description: Application Name
+      in: path
+      required: true
+      schema:
+        type: string
+    servicePathParam:
+      name: service
+      description: Service Name
+      in: path
+      required: true
+      schema:
+        type: string
+    propertyPathParam:
+      name: property
+      description: Property
+      in: path
+      required: true
+      schema:
+        type: string
+    operationPathParam:
+      name: operation
+      description: Operation
+      in: path
+      required: true
+      schema:
+        type: string
+    userIdPathParam:
+      name: userId
+      description: User Id
+      in: path
+      required: true
+      schema:
+        type: string
+    userStatePathParam:
+      name: state
+      description: User State
+      in: path
+      required: true
+      schema:
+        type: string
+    pageQueryParam:
+      name: page
+      in: query
+      description: Page (omit to retrieve all records at once)
+      required: false
+      schema:
+        type: integer
+        example: 1
+    pageSizeQueryParam:
+      name: page_size
+      in: query
+      description: Page size
+      required: false
+      schema:
+        type: integer
+        example: 30
+    sortQueryParam:
+      name: sort
+      in: query
+      description: Sorting fields
+      required: false
+      schema:
+        type: string
+        example: '-created'
+    userIdQueryParam:
+      name: userId
+      description: UserId
+      in: query
+      required: false
+      schema:
+        type: string
+        example: 'jo%'
+    userIdIntQueryParam:
+      name: userIdInt
+      description: Internal UserId
+      in: query
+      required: false
+      schema:
+        type: string
+        example: 'jo%'
+
+  responses:
+    GeneralViperaOkResponse:
+      description: General Vipera OK Response
+      content:
+        application/json: 
+          schema:
+            type: object
+    GeneralViperaError:
+      description: General Vipera Error
+      headers:
+        X-Vipera-Error-Code:
+          description: Error code
+          schema:
+            type: string
+        X-Vipera-Error-Class:
+          description: Error class
+          schema:
+            type: string
+        X-Vipera-Error-Details:
+          description: Error details
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVipera'
+paths: {}

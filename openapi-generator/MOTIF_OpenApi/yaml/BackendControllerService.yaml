@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Backend Controller Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+tags:
+  - name: backendctrl
+    description: Backend Controller Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    UserCreate:
+      type: object
+      allOf:
+        - $ref: './Z_Globals.yaml#/components/schemas/UserData'
+        - type: object
+          properties:
+            userId:
+              type: string
+              example: 555123456
+            expiry:
+              type: string
+              example: 6h
+    UserUpdate:
+      type: object
+      properties:
+        msisdn:
+          type: string
+          example: 555123456        
+              
+    UserActualData:
+      type: object  
+      allOf:
+        - $ref: './Z_Globals.yaml#/components/schemas/User'  
+        - type: object
+          properties:
+            status:
+              type: string
+              example: ACTIVE
+            activationKey:
+              type: string
+              example: 555123456
+    
+  responses:
+    UserResponse:
+      description: User Response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserActualData'
+paths:
+  /bectrl/domains/{domain}/users:
+    post:
+      operationId: createUser
+      tags:
+        - backendctrl
+      description: Creates an user
+      summary: Creates an user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+      responses:
+        '201':
+          $ref: '#/components/responses/UserResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /bectrl/domains/{domain}/users/{userId}:
+    put:
+      operationId: updateUser
+      tags:
+        - backendctrl
+      description: Updates an user
+      summary: Updates an user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /bectrl/domains/{domain}/users/{userId}/reactivate:
+    post:
+      operationId: reactivateUser
+      tags:
+        - backendctrl
+      description: Reactivates an user
+      summary: Reactivates an user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /bectrl/domains/{domain}/users/{userId}/block:
+    post:
+      operationId: blockUser
+      tags:
+        - backendctrl
+      description: Blocks an user
+      summary: Blocks an user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

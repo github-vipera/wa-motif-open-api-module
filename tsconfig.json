@@ -70,6 +70,18 @@
       ],
       "@wa-motif-open-api/auth-access-control-service/*": [
         "dist/wa-motif-open-api/auth-access-control-service/*"
+      ],
+      "@wa-motif-open-api/backend-controller-service": [
+        "dist/wa-motif-open-api/backend-controller-service"
+      ],
+      "@wa-motif-open-api/backend-controller-service/*": [
+        "dist/wa-motif-open-api/backend-controller-service/*"
+      ],
+      "@wa-motif-open-api/catalog-service": [
+        "dist/wa-motif-open-api/catalog-service"
+      ],
+      "@wa-motif-open-api/catalog-service/*": [
+        "dist/wa-motif-open-api/catalog-service/*"
       ]
     }
   }

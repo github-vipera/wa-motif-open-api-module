@@ -447,6 +447,76 @@
           }
         }
       }
+    },
+    "@wa-motif-open-api/backend-controller-service": {
+      "root": "projects/wa-motif-open-api/backend-controller-service",
+      "sourceRoot": "projects/wa-motif-open-api/backend-controller-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/backend-controller-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/backend-controller-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/backend-controller-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/backend-controller-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/backend-controller-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/backend-controller-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/backend-controller-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/catalog-service": {
+      "root": "projects/wa-motif-open-api/catalog-service",
+      "sourceRoot": "projects/wa-motif-open-api/catalog-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/catalog-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/catalog-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/catalog-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/catalog-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/catalog-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/catalog-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/catalog-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "my-web-admin"

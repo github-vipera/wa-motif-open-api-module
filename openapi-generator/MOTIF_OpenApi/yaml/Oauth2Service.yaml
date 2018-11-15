@@ -1,0 +1,237 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif OAuth2 Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+tags:
+  - name: oauth2
+    description: OAuth2 Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas: 
+    OAuthRequest:
+      type: object
+      required:
+        - token
+        - clientId
+      properties:
+        token:
+          type: string
+          description : OAuth2 Token
+          example: 496375e28eba6f9344b31e23b0d6bfab
+        clientId:
+          type: string
+          description : Client Id
+          example: MOBILEDEVICE
+        tokenType:  
+          type: string
+          description : ACCESS_TOKEN or REFRESH_TOKEN (if not set default is ACCESS_TOKEN)
+          example: ACCESS_TOKEN    
+    RefreshTokenList:
+      type: array
+      items:
+        $ref: '#/components/schemas/RefreshToken'
+    AccessTokenList:
+      type: array
+      items:
+        $ref: '#/components/schemas/AccessToken'
+    AccessToken:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/OAuthToken'
+        - type: object
+          required:
+             - refreshToken
+          properties:   
+            refreshToken:
+               type: string
+               description : OAuth2 Refresh Token
+               example: 496375e28eba6f9344b31e23b0d6bfab 
+    RefreshToken:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/OAuthToken'
+    OAuthToken:
+      type: object
+      allOf:
+        - $ref: './Z_Globals.yaml#/components/schemas/UserKey'
+        - type: object
+          required:
+             - token
+             - tokenType
+          properties:   
+            clientId:
+               type: string
+               description : Client ID     
+            token:
+              type: string
+              description : OAuth2 Token
+              example: 496375e28eba6f9344b31e23b0d6bfab
+            tokenType:
+              type: string
+              description : ACCESS_TOKEN or REFRESH_TOKEN
+              example: ACCESS_TOKEN    
+            createTime:
+              type: string
+              example: '2016-08-30 17:12:46.542Z'
+              format: 'date-time'
+              description: Creation timestamp  
+            expiryTime:
+              type: string
+              example: '2016-08-30 19:12:46.542Z'
+              format: 'date-time'
+              description: Expiry timestamp     
+  parameters:
+    refreshTokenPathParam:
+      name: refreshToken
+      in: path
+      required: true
+      schema:
+        type: string
+        example: b31430cf1d9cb288b7838f91f9a40f14
+
+paths:
+  /oauth2/revoke:
+    post:
+      operationId: revoke
+      tags:
+        - oauth2
+      description: Revokes OAuth2 Token
+      summary: Revokes OAuth2 Token
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuthRequest'
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /oauth2/validate:
+    post:
+      operationId: validate
+      tags:
+        - oauth2
+      description: Validates OAuth2 Token
+      summary: Validates OAuth2 Token
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []  
+      requestBody:    
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuthRequest'
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'   
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /oauth2/domains/{domain}/refreshTokens:
+    get:
+      operationId: getRefreshTokenList
+      tags:
+        - oauth2
+      description: Get OAuth2 Refresh Tokens of a specific domain
+      summary: Get OAuth2 Refresh Tokens of a specific domain
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/sortQueryParam'
+      responses:
+        '200':
+          description: OK
+          headers:
+            x-page:
+              $ref: './Z_Globals.yaml#/components/headers/x-page'
+            x-page-size:
+              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
+            x-total-pages:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
+            x-total-records:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenList'  
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /oauth2/refreshTokens/{refreshToken}/accessTokens:
+    get:
+      operationId: getAccessTokenList
+      tags:
+        - oauth2
+      description: Get OAuth2 Access Tokens by Refresh Token
+      summary: Get OAuth2 Access Tokens by Refresh Token
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []  
+      parameters:
+        - $ref: '#/components/parameters/refreshTokenPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenList'  
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /oauth2/domains/{domain}/users/{userId}/refreshTokens:
+    get:
+      operationId: getUserRefreshTokenList
+      tags:
+        - oauth2
+      description: Get User OAuth2 Refresh Tokens
+      summary: Get User OAuth2 Refresh Tokens
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []  
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenList'  
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
