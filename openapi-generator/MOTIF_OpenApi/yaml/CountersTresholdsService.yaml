@@ -1,0 +1,645 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Counters and Thresholds Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+tags:
+  - name: counters
+    description: Counters related
+  - name: users
+    description: Counters related
+  - name: thresholds
+    description: Thresholds related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    CounterInfoEntityList:
+      type: array
+      items:
+          $ref: '#/components/schemas/CounterInfoEntity' 
+          
+    CounterInfoEntity:
+      allOf:
+        - $ref: '#/components/schemas/CounterInfo'
+        - type: object
+          required:
+            - created
+          properties:
+            created:
+                type: string
+                example: '2016-08-30 17:12:46.542Z'
+                format: 'date-time'
+          
+    CounterInfo:
+      description: Counter Info can be assigned to an operation, to a service, to a service contexts or to an application (relation will be checked in this order)   
+      type: object
+      required:
+        - name
+        - description
+        - fn
+        - enabled
+        - domain 
+      properties:
+        name:
+          type: string
+          example: TestCounter
+        enabled:
+          type: boolean
+          example: true
+        description:
+          type: string
+          example: Count logins
+        fn:
+          type: string
+          example: addAmount
+        fnParams:
+          type: string
+          example: '{ "period": "D", "type": 1 }' 
+        channel:
+          nullable: true
+          type: string
+          example: REST
+        domain:
+          type: string
+          example: Default
+        application:
+          type: string
+          example: vipera
+          nullable: true
+        service:
+          description: if not null, also application is mandatory
+          type: string
+          example: appcont
+          nullable: true
+        operation:
+          description: if not null, also service and application are mandatory
+          type: string
+          example: appcheck
+          nullable: true
+        serviceContext:
+          description: if not null, also application is mandatory. Used only if operation and service are null
+          type: string
+          example: rest  
+          nullable: true       
+                         
+    CounterInfoUpdatableFields:
+      type: object
+      required:
+        - description
+        - fn
+        - enabled
+      properties:
+        enabled:
+          type: boolean
+          example: 'true'
+        description:
+          type: string
+          example: 'Count logins'
+        fn:
+          type: string
+          example: addAmount
+        fnParams:
+          type: string
+          example: '{ "period": "D", "type": 1 }'
+                  
+    CountersEntityList:
+        type: array
+        items:
+            $ref: '#/components/schemas/CounterEntity' 
+            
+    CounterEntity:
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            type: string
+            example: 'CounterName'
+          counter:
+            type: number
+            format: double
+            example: '112.5'
+          previousCounter:
+            type: number
+            format: double
+            example: '110'
+          lastIncrement:
+            type: number
+            format: double
+            example: '2.5'
+          created:
+            type: string
+            example: '2016-08-30 17:12:46.542Z'
+            format: 'date-time'
+          lastCountDate:
+            type: string
+            example: '2017-10-24 13:12:46.543Z'
+            format: 'date-time'
+
+    ThresholdInfoEntityList:
+        type: array
+        items:
+            $ref: '#/components/schemas/ThresholdInfoEntity'
+            
+    ThresholdInfoEntity:
+      allOf:
+        - $ref: '#/components/schemas/ThresholdInfo'
+        - type: object
+          required:
+            - created
+          properties:
+            created:
+              type: string
+              example: '2016-08-30 17:12:46.542Z'
+              format: 'date-time'
+            
+    ThresholdInfo:
+        type: object
+        required:
+          - name
+          - enabled
+          - type
+          - counterInfoName
+          - userId
+          - domain
+          - fn
+          - deny
+        properties:
+          name:
+              type: string
+              example: 'ThresholdName'
+          description:
+            type: string
+            example: 'If user login are more than 10 in a day, block him'
+          enabled:
+            type: boolean
+            example: 'true'
+          deny:
+            type: boolean
+            description: if threshold trigger activate, deny user request or not
+            example: 'true'
+          type:
+            type: string
+            description: REQUEST (check on user request) or SCHEDULED (check over an interval time)
+            example: 'REQUEST'
+            #enum:
+            #  - REQUEST
+            #  - SCHEDULED
+          counterInfoName:
+            type: string
+            example: 'counterName'
+          userId:
+            type: string
+            example: 'userId'
+          domain:
+            type: string
+            example: Default
+          fn:
+            type: string
+            example: checkThreshold
+          fnParams:
+            type: string
+            example: '{ "threshold": 20000 }'
+          action:
+            type: string
+            example: sendAlert
+          actionParams:
+            type: string
+            example: '{ "msg": Threshold activated }'
+            
+    CounterInfoName:
+        type: object
+        required:
+         - counterInfoName
+        properties:
+          counterInfoName:
+            type: string
+            example: 'counterName'
+            
+    Variation:
+        type: object
+        required:
+         - variation
+        properties:
+          variation:
+            type: number
+            format: double
+            example: '112.5'
+            
+  parameters:
+    counterInfoPathParam:
+      name: counterInfo
+      description: Counter Info name
+      in: path
+      required: true
+      schema:
+        type: string   
+    thresholdPathParam:
+      name: threshold
+      description: Threshold name
+      in: path
+      required: true
+      schema:
+        type: string  
+    channelQueryParam:
+      name: channel
+      description: Channel
+      in: query
+      example: JSON
+      schema:
+        type: string
+    domainQueryParam:
+      name: domain
+      description: Domain
+      in: query
+      example: Default
+      schema:
+        type: string
+    applicationQueryParam:
+      name: application
+      description: Application
+      in: query
+      example: Vipera
+      schema:
+        type: string
+    serviceQueryParam:
+      name: service
+      description: Service
+      in: query
+      example: appcont
+      schema:
+        type: string
+    operationQueryParam:
+      name: operation
+      description: Operation
+      in: query
+      example: appcheck
+      schema:
+        type: string
+    serviceContextQueryParam:
+      name: serviceContext
+      description: Service Context
+      in: query
+      example: rest
+      schema:
+        type: string
+    counterInfoQueryParam:
+      name: counterInfo
+      description: Counter Info Name
+      in: query
+      example: TEST
+      schema:
+        type: string
+        
+paths:
+  /counterthreshold/counters/infos:
+    post:
+      operationId: createCounterInfo
+      tags:
+        - counters
+      description: Creates Counter Info
+      summary: Creates Counter Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterInfo'    
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterInfoEntity'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+    get:
+      operationId: getCounterInfoList
+      tags:
+        - counters
+      description: Retrieves Counter Info List
+      summary: Retrieves Counter Info List
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterInfoEntityList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    
+  /counterthreshold/counters/infos/{counterInfo}:
+    put:   
+      operationId: updateCounterInfo
+      tags:
+        - counters
+      description: Updates Counter Info
+      summary: Updates Counter Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/counterInfoPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterInfoUpdatableFields'    
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+   
+    get:
+      operationId: getCounterInfo
+      tags:
+        - counters
+      description: Retrieves Counter Info
+      summary: Retrieves Counter Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/counterInfoPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterInfoEntity'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+    delete:
+      operationId: deleteCounterInfo
+      tags:
+        - counters
+      description: Deletes Counter Info
+      summary: Deletes Counter Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/counterInfoPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /counterthreshold/counters/infos/{counterInfo}/enable:
+    post:   
+      operationId: enableCounterInfo
+      tags:
+        - counters
+      description: Enables Counter Info
+      summary: Enables Counter Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/counterInfoPathParam'  
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+ 
+  /counterthreshold/counters/infos/{counterInfo}/disable:
+    post:   
+      operationId: disableCounterInfo
+      tags:
+        - counters
+      description: Disables Counter Info
+      summary: Disables Counter Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/counterInfoPathParam'  
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+                   
+  /counterthreshold/counters/infos/{counterInfo}/thresholds:
+    get:
+      operationId: getThresholdInfoList
+      tags:
+        - counters
+      description: Retrieves Threshold Info List
+      summary: Retrieves Threshold Info List
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/counterInfoPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThresholdInfoEntityList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /counterthreshold/domain/{domain}/user/{userId}/counters:
+    get:
+      operationId: getUserCounters
+      tags:
+        - users
+      description: Retrieves User Counters Values
+      summary: Retrieves User Counters Values
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+        - $ref: '#/components/parameters/counterInfoQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/sortQueryParam'
+      responses:
+        '200':
+          description: OK
+          headers:
+            x-page:
+              $ref: './Z_Globals.yaml#/components/headers/x-page'
+            x-page-size:
+              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
+            x-total-pages:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
+            x-total-records:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountersEntityList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /counterthreshold/domain/{domain}/user/{userId}/counters/{counterInfo}:
+    put:
+      operationId: updateUserCounter
+      tags:
+        - users
+      description: Updates User Counter Value
+      summary: Updates User Counter Value
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/counterInfoPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Variation'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /counterthreshold/thresholds:
+    post:
+      operationId: createThresholdInfo
+      tags:
+        - thresholds
+      description: Creates Threshold Info
+      summary: Creates Threshold Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThresholdInfo'    
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThresholdInfoEntity'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /counterthreshold/thresholds/{threshold}:
+    delete:
+      operationId: deleteThresholdInfo
+      tags:
+        - thresholds
+      description: Deletes Threshold Info
+      summary: Deletes Threshold Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/thresholdPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    
+    put:   
+      operationId: updateThresholdInfo
+      tags:
+        - thresholds
+      description: Updates Threshold Info
+      summary: Updates Threshold Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/thresholdPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThresholdInfo'    
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+   
+    get:
+      operationId: getThresholdInfo
+      tags:
+        - thresholds
+      description: Retrieves Threshold Info
+      summary: Retrieves Threshold Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/thresholdPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThresholdInfoEntity'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+   

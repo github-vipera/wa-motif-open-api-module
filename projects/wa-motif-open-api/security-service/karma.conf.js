@@ -15,18 +15,6 @@ module.exports = function (config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    proxies: {
-      "/rest/v2": {
-        "target": "http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2",
-        "secure": false,
-        'changeOrigin': true
-      },
-      "/oauth2": {
-        "target": "http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/oauth2",
-        "secure": false,
-        'changeOrigin': true
-      }
-    },
     proxyRes: function(proxyRes, req, res, options) {
       proxyRes.headers['Access-Control-Expose-Headers'] = '*';
     },

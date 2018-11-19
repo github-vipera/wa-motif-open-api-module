@@ -517,6 +517,76 @@
           }
         }
       }
+    },
+    "@wa-motif-open-api/context-service": {
+      "root": "projects/wa-motif-open-api/context-service",
+      "sourceRoot": "projects/wa-motif-open-api/context-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/context-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/context-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/context-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/context-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/context-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/context-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/context-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/counters-thresholds-service": {
+      "root": "projects/wa-motif-open-api/counters-thresholds-service",
+      "sourceRoot": "projects/wa-motif-open-api/counters-thresholds-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/counters-thresholds-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/counters-thresholds-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/counters-thresholds-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/counters-thresholds-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/counters-thresholds-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/counters-thresholds-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/counters-thresholds-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "my-web-admin"

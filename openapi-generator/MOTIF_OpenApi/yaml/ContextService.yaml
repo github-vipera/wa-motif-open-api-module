@@ -1,0 +1,539 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Context Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+tags:
+  - name: contexts
+    description: Context Service related
+  - name: attributes
+    description: Context Service Attribute related
+  - name: values
+    description: Context Service Value related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:           
+    ServiceContextValue:
+      type: object
+      required:
+        - value
+        - attribute
+      properties:
+        value:
+          type: string
+          example: myValue
+        attribute:  
+           $ref: '#/components/schemas/ServiceContextAttribute' 
+
+    ServiceContextValueList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceContextValue'      
+            
+    ServiceContextAttribute:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+          example: MyAttributeName     
+        type:
+          type: string
+          example: Boolean   
+
+    ServiceContextAttributeList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceContextAttribute' 
+  
+    ServiceContextAttributeCreate:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ServiceContextAttribute' 
+    
+    ServiceContextAttributeUpdate:
+      type: object
+      properties:
+        newName:
+          type: string
+          example: MyNewAttributeName     
+        newType:
+          type: string
+          example: Boolean   
+                
+    ServiceContextUpdate:
+      type: object
+      properties:
+        newName:
+          type: string
+          example: NewTestContext
+        newChannel:
+          type: string
+          example: REST
+        newCategoryName:
+          type: string
+          example: OfflineMessage
+        enabled:
+          type: boolean
+          example: true  
+
+    ServiceContextCreate:
+      type: object
+      required:
+          - name
+          - channel
+      properties:
+          name:
+            type: string
+            example: TestContext
+          channel:
+            type: string
+            example: REST
+          enabled:
+            type: boolean
+            example: true  
+
+    ServiceContext:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceContextCreate'
+      - type: object
+        required:
+          - domain
+          - application
+        properties:
+          domain:
+            type: string
+            example: Default
+          application:
+            type: string
+            example: vipera
+          serviceOperationList:
+            type: array
+            items:
+              $ref: '#/components/schemas/ServiceContextValue' 
+
+    ServiceContextList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceContext'      
+
+    ValueCreate:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Value'
+      - type: object
+        required:
+          - attribute
+        properties:
+          attribute:
+            type: string
+            example: MyAttribute
+              
+    Value:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          example: MyValue
+               
+  parameters:
+    contextPathParam:
+      name: context
+      required: true
+      in: path
+      description: Context Name
+      schema:
+        type: string
+        example: 'MyContextName'
+    attributePathParam:
+      name: attribute
+      required: true
+      in: path
+      description: Attribute Name
+      schema:
+        type: string
+        example: 'MyAttributeName'      
+        
+paths:
+
+  /contextservice/contexts:
+    get:
+      operationId: getContexts
+      tags:
+        - contexts
+      description: Retrieves all Service Contexts
+      summary: Retrieves all Service Contexts
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []          
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContextList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /contextservice/domains/{domain}/applications/{application}/contexts:
+    post:
+      operationId: createContext
+      tags:
+        - contexts
+      description: Creates a Service Context
+      summary: Creates a Service Context
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceContextCreate'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContext'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getApplicationContexts
+      tags:
+        - contexts
+      description: Retrieves all Service Contexts given an application
+      summary: Retrieves all Service Contexts given an application
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContextList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /contextservice/domains/{domain}/applications/{application}/contexts/{context}:
+    get:
+      operationId: getContext
+      tags:
+        - contexts
+      description: Retrieves a Service Context
+      summary: Retrieves a Service Context
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+        - $ref: '#/components/parameters/contextPathParam' 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContext'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateContext
+      tags:
+        - contexts
+      description: Updates a Service Context
+      summary: Updates a Service Context
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+        - $ref: '#/components/parameters/contextPathParam' 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceContextUpdate'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteContext
+      tags:
+        - contexts
+      description: Deletes a Service Context
+      summary: Deletes a Service Context
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+        - $ref: '#/components/parameters/contextPathParam' 
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /contextservice/attributes:
+    post:
+      operationId: createAttribute
+      tags:
+        - attributes
+      description: Creates a Service Context Attribute
+      summary: Creates a Service Context Attribute
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceContextAttributeCreate'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContextAttribute'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getAttributes
+      tags:
+        - attributes
+      description: Retrieves all Service Context Attributes
+      summary: Retrieves all Service Context Attributes
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContextAttributeList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /contextservice/attributes/{attribute}:
+    get:
+      operationId: getAttribute
+      tags:
+        - attributes
+      description: Retrieves a Service Context Attribute
+      summary: Retrieves a Service Context Attribute
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/attributePathParam' 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContextAttribute'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateAttribute
+      tags:
+        - attributes
+      description: Updates a Service Context Attribute
+      summary: Updates a Service Context Attribute
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceContextAttributeUpdate'
+      parameters:  
+        - $ref: '#/components/parameters/attributePathParam' 
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteAttribute
+      tags:
+        - attributes
+      description: Deletes a Service Context Attribute
+      summary: Deletes a Service Context Attribute
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/attributePathParam' 
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'       
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'        
+
+  /contextservice/domains/{domain}/applications/{application}/contexts/{context}/attributes:
+    post:
+      operationId: createValue
+      tags:
+        - values
+      description: Creates a Service Context Value
+      summary: Creates a Service Context Value
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'                  
+        - $ref: '#/components/parameters/contextPathParam' 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValueCreate'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContextValue'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /contextservice/domains/{domain}/applications/{application}/contexts/{context}/attributes/{attribute}:
+    get:
+      operationId: getValue
+      tags:
+        - values
+      description: Retrieves a Service Context Value
+      summary: Retrieves a Service Context Value
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'                  
+        - $ref: '#/components/parameters/contextPathParam'
+        - $ref: '#/components/parameters/attributePathParam'  
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceContextValue'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateValue
+      tags:
+        - values
+      description: Updates a Service Context Value
+      summary: Updates a Service Context Value
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Value'
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'                  
+        - $ref: '#/components/parameters/contextPathParam'
+        - $ref: '#/components/parameters/attributePathParam'  
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'    
+    delete:
+      operationId: deleteValue
+      tags:
+        - values
+      description: Deletes a Service Context Value
+      summary: Deletes a Service Context Value
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'                  
+        - $ref: '#/components/parameters/contextPathParam'
+        - $ref: '#/components/parameters/attributePathParam'  
+      responses:
+        '200':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+                   

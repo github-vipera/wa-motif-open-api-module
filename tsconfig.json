@@ -82,6 +82,18 @@
       ],
       "@wa-motif-open-api/catalog-service/*": [
         "dist/wa-motif-open-api/catalog-service/*"
+      ],
+      "@wa-motif-open-api/context-service": [
+        "dist/wa-motif-open-api/context-service"
+      ],
+      "@wa-motif-open-api/context-service/*": [
+        "dist/wa-motif-open-api/context-service/*"
+      ],
+      "@wa-motif-open-api/counters-thresholds-service": [
+        "dist/wa-motif-open-api/counters-thresholds-service"
+      ],
+      "@wa-motif-open-api/counters-thresholds-service/*": [
+        "dist/wa-motif-open-api/counters-thresholds-service/*"
       ]
     }
   }
