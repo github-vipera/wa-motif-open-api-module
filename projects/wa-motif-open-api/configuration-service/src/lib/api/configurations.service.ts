@@ -22,7 +22,7 @@ import { ErrorVipera } from '../model/errorVipera';
 import { Tag } from '../model/tag';
 import { TagList } from '../model/tagList';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH }                                 from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 import { ConfigurationsServiceInterface }                            from './configurations.serviceInterface';
 
@@ -37,7 +37,6 @@ export class ConfigurationsService implements ConfigurationsServiceInterface {
     public configuration = new Configuration();
 
     constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-
         if (configuration) {
             this.configuration = configuration;
             this.configuration.basePath = configuration.basePath || basePath || this.basePath;

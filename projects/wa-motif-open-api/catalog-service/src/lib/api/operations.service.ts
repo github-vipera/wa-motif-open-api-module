@@ -22,7 +22,7 @@ import { ErrorVipera } from '../model/errorVipera';
 import { ServiceOperation } from '../model/serviceOperation';
 import { ServiceOperationProperties } from '../model/serviceOperationProperties';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH }                                 from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 import { OperationsServiceInterface }                            from './operations.serviceInterface';
 
