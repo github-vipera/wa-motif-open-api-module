@@ -22,7 +22,7 @@ import { ErrorVipera } from '../model/errorVipera';
 import { ServiceOperation } from '../model/serviceOperation';
 import { ServiceOperationProperties } from '../model/serviceOperationProperties';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH }                                 from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 import { OperationsServiceInterface }                            from './operations.serviceInterface';
 
@@ -36,7 +36,7 @@ export class OperationsService implements OperationsServiceInterface {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
 
         if (configuration) {
             this.configuration = configuration;

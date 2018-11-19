@@ -23,7 +23,7 @@ import { Service } from '../model/service';
 import { ServiceCreate } from '../model/serviceCreate';
 import { ServiceUpdate } from '../model/serviceUpdate';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH }                                 from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 import { ServicesServiceInterface }                            from './services.serviceInterface';
 
@@ -37,7 +37,7 @@ export class ServicesService implements ServicesServiceInterface {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
 
         if (configuration) {
             this.configuration = configuration;
