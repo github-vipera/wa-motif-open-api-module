@@ -12,18 +12,18 @@ import { BackendctrlService } from './api/backendctrl.service';
   providers: [
     BackendctrlService ]
 })
-export class BackendControllerModule {
+export class BackendControllerServiceModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
         return {
-            ngModule: BackendControllerModule,
+            ngModule: BackendControllerServiceModule,
             providers: [ { provide: Configuration, useFactory: configurationFactory } ]
         };
     }
 
-    constructor( @Optional() @SkipSelf() parentModule: BackendControllerModule,
+    constructor( @Optional() @SkipSelf() parentModule: BackendControllerServiceModule,
                  @Optional() http: HttpClient) {
         if (parentModule) {
-            throw new Error('BackendControllerModule is already loaded. Import in your base AppModule only.');
+            throw new Error('BackendControllerServiceModule is already loaded. Import in your base AppModule only.');
         }
         if (!http) {
             throw new Error('You need to import the HttpClientModule in your AppModule! \n' +

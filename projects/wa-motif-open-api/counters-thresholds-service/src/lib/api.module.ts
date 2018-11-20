@@ -16,18 +16,18 @@ import { UsersService } from './api/users.service';
     ThresholdsService,
     UsersService ]
 })
-export class ApiModule {
+export class CountersThresholdsServiceModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
         return {
-            ngModule: ApiModule,
+            ngModule: CountersThresholdsServiceModule,
             providers: [ { provide: Configuration, useFactory: configurationFactory } ]
         };
     }
 
-    constructor( @Optional() @SkipSelf() parentModule: ApiModule,
+    constructor( @Optional() @SkipSelf() parentModule: CountersThresholdsServiceModule,
                  @Optional() http: HttpClient) {
         if (parentModule) {
-            throw new Error('ApiModule is already loaded. Import in your base AppModule only.');
+            throw new Error('CountersThresholdsServiceModule is already loaded. Import in your base AppModule only.');
         }
         if (!http) {
             throw new Error('You need to import the HttpClientModule in your AppModule! \n' +
