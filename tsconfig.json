@@ -94,6 +94,78 @@
       ],
       "@wa-motif-open-api/counters-thresholds-service/*": [
         "dist/wa-motif-open-api/counters-thresholds-service/*"
+      ],
+      "@wa-motif-open-api/datarecords-service": [
+        "dist/wa-motif-open-api/datarecords-service"
+      ],
+      "@wa-motif-open-api/datarecords-service/*": [
+        "dist/wa-motif-open-api/datarecords-service/*"
+      ],
+      "@wa-motif-open-api/file-install-service": [
+        "dist/wa-motif-open-api/file-install-service"
+      ],
+      "@wa-motif-open-api/file-install-service/*": [
+        "dist/wa-motif-open-api/file-install-service/*"
+      ],
+      "@wa-motif-open-api/license-management-service": [
+        "dist/wa-motif-open-api/license-management-service"
+      ],
+      "@wa-motif-open-api/license-management-service/*": [
+        "dist/wa-motif-open-api/license-management-service/*"
+      ],
+      "@wa-motif-open-api/log-service": [
+        "dist/wa-motif-open-api/log-service"
+      ],
+      "@wa-motif-open-api/log-service/*": [
+        "dist/wa-motif-open-api/log-service/*"
+      ],
+      "@wa-motif-open-api/messaging-service": [
+        "dist/wa-motif-open-api/messaging-service"
+      ],
+      "@wa-motif-open-api/messaging-service/*": [
+        "dist/wa-motif-open-api/messaging-service/*"
+      ],
+      "@wa-motif-open-api/otp-service": [
+        "dist/wa-motif-open-api/otp-service"
+      ],
+      "@wa-motif-open-api/otp-service/*": [
+        "dist/wa-motif-open-api/otp-service/*"
+      ],
+      "@wa-motif-open-api/performance-service": [
+        "dist/wa-motif-open-api/performance-service"
+      ],
+      "@wa-motif-open-api/performance-service/*": [
+        "dist/wa-motif-open-api/performance-service/*"
+      ],
+      "@wa-motif-open-api/plugin-auth-service": [
+        "dist/wa-motif-open-api/plugin-auth-service"
+      ],
+      "@wa-motif-open-api/plugin-auth-service/*": [
+        "dist/wa-motif-open-api/plugin-auth-service/*"
+      ],
+      "@wa-motif-open-api/plugin-registry-service": [
+        "dist/wa-motif-open-api/plugin-registry-service"
+      ],
+      "@wa-motif-open-api/plugin-registry-service/*": [
+        "dist/wa-motif-open-api/plugin-registry-service/*"
+      ],
+      "@wa-motif-open-api/scheduler-service": [
+        "dist/wa-motif-open-api/scheduler-service"
+      ],
+      "@wa-motif-open-api/scheduler-service/*": [
+        "dist/wa-motif-open-api/scheduler-service/*"
+      ],
+      "@wa-motif-open-api/system-service": [
+        "dist/wa-motif-open-api/system-service"
+      ],
+      "@wa-motif-open-api/system-service/*": [
+        "dist/wa-motif-open-api/system-service/*"
+      ],
+      "@wa-motif-open-api/web-content-service": [
+        "dist/wa-motif-open-api/web-content-service"
+      ],
+      "@wa-motif-open-api/web-content-service/*": [
+        "dist/wa-motif-open-api/web-content-service/*"
       ]
     }
   }

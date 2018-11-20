@@ -1,0 +1,323 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Web Content Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: webcontent
+    description: Web Content Service related
+components:
+  
+  schemas:
+    BundleUpload:
+      type: object
+      required:
+        - bundle
+      properties:
+        bundle:
+          type: string
+          format: binary
+        overwrite:
+          type: boolean
+          example: false
+    BundleUpdate:
+      type: object
+      properties:
+        context:
+          type: string
+          example: '/my-console'
+        domain:
+          type: string
+          example: 'Default'
+        application:
+          type: string
+          example: 'vipera'
+    BundleStatusList:
+      type: array
+      items:
+        $ref: '#/components/schemas/BundleStatus' 
+    BundleStatus:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/Bundle' 
+        status:
+          type: array
+          items:
+             $ref: '#/components/schemas/ClusterBundleStatus' 
+    ClusterBundleStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          example: PUBLISHED
+        instance:
+          type: string
+          example: Node1  
+
+    BundleList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Bundle' 
+    Bundle:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'my-console'
+        version:
+          type: string
+          example: '1.0.0'
+        context:
+          type: string
+          example: '/webconsole'
+  parameters:
+    bundleNamePathParam:
+      name: bundleName
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 'my-console'
+    bundleVersionPathParam:
+      name: bundleVersion
+      in: path
+      required: true
+      schema:
+        type: string
+        example: '1.0.0'
+paths:
+  /webcontent/bundles:
+    put:
+      operationId: uploadBundle
+      tags:
+        - webcontent
+      description: Uploads a Web Content Bundle
+      summary: Uploads a Web Content Bundle
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BundleUpload'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getBundlesList
+      tags:
+        - webcontent
+      description: Retrieves Web Content Bundles Info
+      summary: Retrieves Web Content Bundles Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BundleList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /webcontent/bundles/{bundleName}/versions/{bundleVersion}:
+    get:
+      operationId: downloadBundle
+      tags:
+        - webcontent
+      description: Downloads a Web Content Bundle
+      summary: Downloads a Web Content Bundle
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/bundleNamePathParam'
+        - $ref: '#/components/parameters/bundleVersionPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateBundle
+      tags:
+        - webcontent
+      description: Update a Web Content Bundle
+      summary: Update a Web Content Bundle
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BundleUpdate'
+      parameters:
+        - $ref: '#/components/parameters/bundleNamePathParam'
+        - $ref: '#/components/parameters/bundleVersionPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteBundle
+      tags:
+        - webcontent
+      description: Delete a Web Content Bundle
+      summary: Delete a Web Content Bundle
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/bundleNamePathParam'
+        - $ref: '#/components/parameters/bundleVersionPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /webcontent/bundles/status:
+    get:
+      operationId: getBundlesStatusList
+      tags:
+        - webcontent
+      description: Retrieves Web Content Bundles Status
+      summary: Retrieves Web Content Bundles Status
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BundleStatusList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /webcontent/bundles/{bundleName}/versions/{bundleVersion}/status:
+    get:
+      operationId: getBundleStatus
+      tags:
+        - webcontent
+      description: Retrieves a Web Content Bundle Status
+      summary: Retrieves a Web Content Bundle Status
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/bundleNamePathParam'
+        - $ref: '#/components/parameters/bundleVersionPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BundleStatus'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /webcontent/bundles/{bundleName}/versions/{bundleVersion}/info:
+    get:
+      operationId: getBundle
+      tags:
+        - webcontent
+      description: Retrieves a Web Content Bundle Info
+      summary: Retrieves a Web Content Bundle Info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/bundleNamePathParam'
+        - $ref: '#/components/parameters/bundleVersionPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bundle'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /webcontent/bundles/{bundleName}/versions/{bundleVersion}/publish:
+    post:
+      operationId: publishBundle
+      tags:
+        - webcontent
+      description: Publish a Web Content Bundle
+      summary: Publish a Web Content Bundle
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/bundleNamePathParam'
+        - $ref: '#/components/parameters/bundleVersionPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /webcontent/bundles/{bundleName}/versions/{bundleVersion}/unpublish:
+    post:
+      operationId: unpublishBundle
+      tags:
+        - webcontent
+      description: Unpublish a Web Content Bundle
+      summary: Unpublish a Web Content Bundle
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/bundleNamePathParam'
+        - $ref: '#/components/parameters/bundleVersionPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

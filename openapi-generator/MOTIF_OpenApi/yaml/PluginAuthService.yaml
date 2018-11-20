@@ -1,0 +1,253 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Plugin Auth Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: auth
+    description: Plugin Auth Service related
+  - name: myself
+    description: Plugin Auth Service current user related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    UserPasswordVerification:
+      type: object
+      allOf:
+        - $ref: './Z_Globals.yaml#/components/schemas/User'
+        - type: object
+          required:
+            - pwd
+            - vpwd
+          properties:
+            application:
+              type: string
+              example: 'Vipera'
+            pwd:
+              type: string
+              example: 'viperapass'
+            vpwd:
+              type: string
+              example: 'viperapass'
+    UserRegistration:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UserPasswordVerification'
+    UserActivation:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UserPasswordVerification'
+        - type: object
+          required:
+            - key
+          properties:
+            key:
+              type: string
+              example: 'key'
+            ack:
+              type: string
+              example: 'ACK'
+            nick:
+              type: string
+              example: 'nickname'
+            engine:
+              type: string
+              example: 'engine'
+            enginever:
+              type: string
+              example: 'enginever'
+            asset:
+              type: string
+              example: 'asset'
+            assetver:
+              type: string
+              example: 'assetver'
+            vipserial:
+              type: string
+              example: 'vipserial'
+            pwd:
+              type: string
+              example: 'viperapass'
+            vpwd:
+              type: string
+              example: 'viperapass'
+    UserPasswordChange:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UserPasswordVerification'
+        - type: object
+          required:
+            - npwd
+          properties:
+            npwd:
+              type: string
+              example: 'vipera1pass'
+    UserStatus:
+      type: object
+      properties: 
+        status:
+          type: string
+          example: 'ACTIVE'
+    UserActKey:
+      type: object
+      properties: 
+        key:
+          type: string
+          example: 'key'
+    RespAckKey:
+      type: object
+      properties: 
+        actKey:
+          type: string
+          example: 'ActKey'
+  parameters:
+    domainParam:
+      name: domain
+      description: The domain
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 'Default'
+    userIdParam:
+      name: userId
+      description: The user ID
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 'joe'
+paths:
+  /auth/domains/{domain}/users:
+    post:
+      operationId: registerUser
+      tags:
+        - auth
+      description: Registers user
+      summary: Registers user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/domainParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStatus'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /auth/myself/status:
+    get:
+      operationId: getUserStatus
+      tags:
+        - myself
+      description: Gets the status of the user by its ID
+      summary: Gets the status of the user by its ID
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStatus'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'  
+          
+  /auth/myself/activate:
+    post:
+      operationId: activateUser
+      tags:
+        - myself
+      description: Activates an user
+      summary: Activates an user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserActivation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStatus'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /auth/myself/deactivate:
+    post:
+      operationId: deactivateUser
+      tags:
+        - myself
+      description: Handles deactivation
+      summary: Handles deactivation
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /auth/myself/chgpwd:
+    post:
+      operationId: changePasswd
+      tags:
+        - myself
+      description: Changes passwd
+      summary: Changes passwd
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordChange'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  

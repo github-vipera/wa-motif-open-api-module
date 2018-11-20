@@ -1,0 +1,226 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif File Install Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: bundles
+    description: Bundles related
+  - name: directories
+    description: Directories related
+components:
+  
+  schemas:
+    FileUpload:
+      type: object
+      required:
+        - file
+        - directory
+      properties:
+        file:
+          description: Plugin jar file
+          type: string
+          format: binary
+        directory:
+          type: string
+          description: Destination dir where install plugin
+          example: plugins
+        deleteOtherVersions:
+          description: Delete other plugin versions
+          type: boolean
+          example: false
+          
+    OsgiBundleList:
+      type: array
+      items:
+          $ref: '#/components/schemas/OsgiBundle' 
+          
+    OsgiBundle:
+      type: object
+      required:
+        - name
+        - directory
+      properties:
+        name:
+          description: Plugin jar name
+          type: string
+          example: myplugin.jar
+        directory:
+          type: string
+          description: Plugin jar installation directory
+          example: plugins   
+          
+    OsgiBundleDirectoryList:
+      type: array
+      items:
+          $ref: '#/components/schemas/OsgiBundleDirectory' 
+          
+    OsgiBundleDirectory:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          description: Folder Name
+          type: string
+          example: /bundle
+        description:
+          type: string
+          description: Folder Name Description
+          example: System folder plugins 
+  parameters:
+      bundlePathParam:
+        name: bundle
+        in: path
+        required: true
+        description: Bundle File Name
+        schema:
+          type: string
+          example: fileName    
+      directoryPathParam:
+        name: directory
+        in: path
+        required: true
+        description: Directory relative path
+        schema:
+          type: string
+          example: /bundle 
+        
+paths:
+  /fileinstall/bundles:
+    put:
+      operationId: uploadBundle
+      tags:
+        - bundles
+      description: Uploads a Bundle Plugin jar
+      summary: Uploads a Bundle Plugin jar
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUpload'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /fileinstall/directories/{directory}/bundles: 
+    get:
+      operationId: listBundles
+      tags:
+        - directories
+      description: Lists the OSGi bundles in a directory
+      summary: Lists the OSGi bundles in a directory
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/directoryPathParam'    
+      responses:
+        '200':
+          description: List of the bundles inside a directory
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OsgiBundleList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteBundles
+      tags:
+        - directories
+      description: Deletes Bundle Plugin jars included into directory
+      summary: Deletes Bundle Plugin jars included into directory
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/directoryPathParam'    
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /fileinstall/directories/{directory}/bundles/{bundle}: 
+    delete:
+      operationId: deleteBundle
+      tags:
+        - directories
+      description: Deletes Bundle Plugin jar contained into directory
+      summary: Deletes Bundle Plugin jar contained into directory
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/directoryPathParam'    
+        - $ref: '#/components/parameters/bundlePathParam'    
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+                  
+  /fileinstall/directories/{directory}/scan: 
+    post:
+      operationId: scanDirectory
+      tags:
+        - directories
+      description: Scans a directory and installs/updates/deletes bundles
+      summary: Scans a directory and installs/updates/deletes bundles
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/directoryPathParam'        
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+ 
+  /fileinstall/directories: 
+    get:
+      operationId: listDirectories
+      tags:
+        - directories
+      description: Lists the OSGi bundle directories
+      summary: Lists the OSGi bundle directories
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: The list of directories that contain bundles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OsgiBundleDirectoryList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

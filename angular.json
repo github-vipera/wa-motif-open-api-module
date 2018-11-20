@@ -587,6 +587,426 @@
           }
         }
       }
+    },
+    "@wa-motif-open-api/datarecords-service": {
+      "root": "projects/wa-motif-open-api/datarecords-service",
+      "sourceRoot": "projects/wa-motif-open-api/datarecords-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/datarecords-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/datarecords-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/datarecords-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/datarecords-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/datarecords-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/datarecords-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/datarecords-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/file-install-service": {
+      "root": "projects/wa-motif-open-api/file-install-service",
+      "sourceRoot": "projects/wa-motif-open-api/file-install-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/file-install-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/file-install-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/file-install-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/file-install-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/file-install-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/file-install-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/file-install-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/license-management-service": {
+      "root": "projects/wa-motif-open-api/license-management-service",
+      "sourceRoot": "projects/wa-motif-open-api/license-management-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/license-management-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/license-management-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/license-management-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/license-management-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/license-management-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/license-management-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/license-management-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/log-service": {
+      "root": "projects/wa-motif-open-api/log-service",
+      "sourceRoot": "projects/wa-motif-open-api/log-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/log-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/log-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/log-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/log-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/log-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/log-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/log-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/messaging-service": {
+      "root": "projects/wa-motif-open-api/messaging-service",
+      "sourceRoot": "projects/wa-motif-open-api/messaging-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/messaging-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/messaging-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/messaging-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/messaging-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/messaging-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/messaging-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/messaging-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/otp-service": {
+      "root": "projects/wa-motif-open-api/otp-service",
+      "sourceRoot": "projects/wa-motif-open-api/otp-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/otp-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/otp-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/otp-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/otp-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/otp-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/otp-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/otp-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/performance-service": {
+      "root": "projects/wa-motif-open-api/performance-service",
+      "sourceRoot": "projects/wa-motif-open-api/performance-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/performance-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/performance-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/performance-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/performance-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/performance-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/performance-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/performance-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/plugin-auth-service": {
+      "root": "projects/wa-motif-open-api/plugin-auth-service",
+      "sourceRoot": "projects/wa-motif-open-api/plugin-auth-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/plugin-auth-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/plugin-auth-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/plugin-auth-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/plugin-auth-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/plugin-auth-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/plugin-auth-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/plugin-auth-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/plugin-registry-service": {
+      "root": "projects/wa-motif-open-api/plugin-registry-service",
+      "sourceRoot": "projects/wa-motif-open-api/plugin-registry-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/plugin-registry-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/plugin-registry-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/plugin-registry-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/plugin-registry-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/plugin-registry-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/plugin-registry-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/plugin-registry-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/scheduler-service": {
+      "root": "projects/wa-motif-open-api/scheduler-service",
+      "sourceRoot": "projects/wa-motif-open-api/scheduler-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/scheduler-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/scheduler-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/scheduler-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/scheduler-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/scheduler-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/scheduler-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/scheduler-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/system-service": {
+      "root": "projects/wa-motif-open-api/system-service",
+      "sourceRoot": "projects/wa-motif-open-api/system-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/system-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/system-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/system-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/system-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/system-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/system-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/system-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "@wa-motif-open-api/web-content-service": {
+      "root": "projects/wa-motif-open-api/web-content-service",
+      "sourceRoot": "projects/wa-motif-open-api/web-content-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/web-content-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/web-content-service/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/web-content-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/web-content-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/web-content-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/web-content-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/web-content-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "my-web-admin"

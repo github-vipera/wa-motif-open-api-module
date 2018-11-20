@@ -1,0 +1,222 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Performance Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: performance
+    description: Performance
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    PerfTimeSerie:
+      type: object
+      required:
+        - name
+        - startTime
+        - count
+        - total
+        - average
+        - stdDev
+        - min
+        - max
+        - totalSq
+      properties:
+        name:
+          type: string
+          example: test
+        startTime:
+          type: integer
+          format: int64
+          example: 1522076569227
+        count:
+          type: integer
+          example: 10
+        total:
+          type: number
+          format: double
+          example: 12343.23
+        average:
+          type: number
+          format: double
+          example: 12343.23
+        stdDev:
+          type: number
+          format: double
+          example: 12343.23
+        min:
+          type: number
+          format: double
+          example: 12343.23
+        max:
+          type: number
+          format: double
+          example: 12343.23
+        totalSq:
+          type: number
+          format: double
+          example: 12343.23
+    PerfTimeSerieAdd:
+      type: object
+      required:
+        - serie
+        - value
+      properties:
+        serie:
+          type: string
+          example: counters
+        value:
+          type: number
+          format: double
+          example: 12343.23
+    PerfTimeSeriesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/PerfTimeSerie'
+  parameters:
+    perfTimeSeriePathParam:
+      name: timeSerie
+      description: Performance Time Serie Name
+      in: path
+      required: true
+      schema:
+        type: string
+paths:
+  /performance/series:
+    post:
+      operationId: addPerfTimeSeries
+      tags:
+        - performance
+      description: Updates performance time series with new data
+      summary: Updates performance time series with new data
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerfTimeSerieAdd'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getPerfTimeSeries
+      tags:
+        - performance
+      description: Retrieves performance time series
+      summary: Retrieves performance time series
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfTimeSeriesList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deletePerformanceTimeSeries
+      tags:
+        - performance
+      description: Deletes all performance time series
+      summary: Deletes all performance time series
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /performance/series/names:
+    get:
+      operationId: getPerfTimeSeriesNames
+      tags:
+        - performance
+      description: Retrieves performance time series names
+      summary: Retrieves performance time series names
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /performance/series/{timeSerie}:
+    get:
+      operationId: getPerfTimeSerie
+      tags:
+        - performance
+      description: Retrieves specific performance time serie
+      summary: Retrieves specific performance time serie
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/perfTimeSeriePathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfTimeSerie'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deletePerfTimeSerie
+      tags:
+        - performance
+      description: Deletes specific performance time serie
+      summary: Deletes specific performance time serie
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/perfTimeSeriePathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          

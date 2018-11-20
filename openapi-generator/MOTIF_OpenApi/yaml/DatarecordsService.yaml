@@ -1,0 +1,258 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Datarecords Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: datarecords
+    description: Datarecords Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    DatarecordTypesList:
+      type: array
+      items:
+        type: string 
+    CoreDatarecord:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          example: '2016-08-30 17:12:46.542Z'
+          format: 'date-time'
+        serviceExecutionId:
+          type: string        
+    Datarecord:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CoreDatarecord'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: string 
+    DatarecordList:
+      type: object
+      properties:
+        headers:
+          type: array
+          items:
+            type: string 
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Datarecord' 
+  parameters:
+    typePathParam:
+      name: type
+      description: Datarecords type (PERFORMANCE, TRANSACTION, DIAGNOSTIC, SECURITY...)
+      in: path
+      required: true
+      schema:
+        type: string
+        example: PERFORMANCE
+    typeQueryParam:
+      name: type
+      description: Datarecords type (PERFORMANCE, TRANSACTION, DIAGNOSTIC, SECURITY...)
+      in: query
+      required: false
+      schema:
+        type: string
+        example: PERFORMANCE
+    hashedSessionQueryParam:
+      name: hashedSession
+      description: Hashed session (SHA512)
+      in: query
+      required: false
+      schema:
+        type: string
+        example: EE26B0DD4AF7E749AA1A8EE3C10AE9923F618980772E473F8819A5D4940E0DB27AC185F8A0E1D5F84F88BC887FD67B143732C304CC5FA9AD8E6F57F50028A8FF
+    usersIdQueryParam:
+      name: usersId
+      description: User natural ID
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+        example: 123
+    operationsQueryParam:
+      name: operations
+      description: Operations list
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    fromDateQueryParam:
+      name: fromDate
+      description: From date (2016-08-30 17:12:46)
+      in: query
+      required: false
+      schema:
+        type: string
+        example: '2016-08-30 17:12:46'
+    toDateQueryParam:
+      name: toDate
+      description: To date (2016-08-30 17:12:46)
+      in: query
+      required: false
+      schema:
+        type: string
+        example: '2016-08-30 17:12:46'
+    resultCodeQueryParam:
+      name: resultCode
+      description: Result code
+      in: query
+      required: false
+      schema:
+        type: string
+    anyErrorQueryParam:
+      name: anyError
+      description: Default value is false
+      in: query
+      required: false
+      schema:
+        type: boolean
+    singleCsvQueryParam:
+      name: singleCsv
+      description: Default value is true
+      in: query
+      required: false
+      schema:
+        type: boolean
+paths:
+  /datarecords/types:
+    get:
+      operationId: getDatarecordsTypes
+      tags:
+        - datarecords
+      description: Retrieve datarecords types
+      summary: Retrieve datarecords types
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatarecordTypesList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /datarecords/types/{type}:
+    get:
+      operationId: getDatarecords
+      tags:
+        - datarecords
+      description: Get datarecords by type
+      summary: Get datarecords by type
+      security:
+        - vipera_oauth2:
+          - all:all
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/typePathParam'
+        - $ref: '#/components/parameters/fromDateQueryParam'
+        - $ref: '#/components/parameters/toDateQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/sortQueryParam'
+      responses:
+        '200':
+          description: OK
+          headers:
+            x-page:
+              $ref: './Z_Globals.yaml#/components/headers/x-page'
+            x-page-size:
+              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
+            x-total-pages:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
+            x-total-records:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatarecordList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /datarecords/types/{type}/export:
+    get:
+      operationId: exportDatarecords
+      tags:
+        - datarecords
+      description: Export datarecords as csv file
+      summary: Export datarecords as csv file
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/typePathParam'
+        - $ref: '#/components/parameters/hashedSessionQueryParam'
+        - $ref: '#/components/parameters/usersIdQueryParam'
+        - $ref: '#/components/parameters/operationsQueryParam'
+        - $ref: '#/components/parameters/fromDateQueryParam'
+        - $ref: '#/components/parameters/toDateQueryParam'
+        - $ref: '#/components/parameters/resultCodeQueryParam'
+        - $ref: '#/components/parameters/anyErrorQueryParam'
+        - $ref: '#/components/parameters/singleCsvQueryParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /datarecords/types/{type}/export/verify:
+    get:
+      operationId: verifyDatarecordsExport
+      tags:
+        - datarecords
+      description: Verify datarecords export with these param queries don't exceed limits
+      summary: Verify datarecords export with these param queries don't exceed limits
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/typePathParam'
+        - $ref: '#/components/parameters/hashedSessionQueryParam'
+        - $ref: '#/components/parameters/usersIdQueryParam'
+        - $ref: '#/components/parameters/operationsQueryParam'
+        - $ref: '#/components/parameters/fromDateQueryParam'
+        - $ref: '#/components/parameters/toDateQueryParam'
+        - $ref: '#/components/parameters/resultCodeQueryParam'
+        - $ref: '#/components/parameters/anyErrorQueryParam'
+        - $ref: '#/components/parameters/singleCsvQueryParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif System Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: system
+    description: System Service
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:           
+    HealthReport:
+      type: object
+      required:
+        - status
+        - ignoredBundles
+        - notActiveBundleList
+      properties:
+        status:
+          type: string
+          description: OK if all not ignored bundle has started, WARNING if an ignored bundle has not started, ERROR if a not ignored bundle ahsn't started
+          example: OK
+        ignoredBundles: 
+          type: array
+          items:
+            type: string
+        notActiveBundleList:
+          type: array
+          items:
+              $ref: '#/components/schemas/Bundle'        
+          
+    Bundle:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: com.vipera.osgi.core.common
+        state:
+          type: string
+          example: ACTIVE
+        version:
+          type: string
+          example: 2.0.0    
+
+paths:
+  /system/health:
+    get:
+      operationId: getSystemHealth
+      tags:
+        - system
+      description: Get System Health Report
+      summary: Get System Health Report
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthReport'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  
+          

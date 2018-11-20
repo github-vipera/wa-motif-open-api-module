@@ -1,0 +1,162 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Plugin Registry Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Local machine
+tags:
+  - name: registry
+    description: The Plugin Registry Service provides a centralized directory service whereby platform plugins can be discovered and loaded.
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    PluginList:
+      type: array
+      items:
+          $ref: '#/components/schemas/Plugin' 
+    Plugin:
+      type: object
+      required:
+        - name
+        - version
+        - status
+      properties:
+        name:
+          type: string
+          example: com.vipera.osgi.foundation.fileinstall
+        version:
+          type: string
+          example: 1.1.19
+        status:
+          type: string
+          example: REGISTERED
+    PluginInstall:
+      type: object
+      required:
+        - file
+      properties:
+        file:
+          type: string
+          format: binary
+        overwrite:
+          type: boolean
+          example: false
+    PluginUninstall:
+      type: object
+      properties:
+        removeConfig:
+          type: boolean
+          example: false
+  parameters:
+    allQueryParam:
+      name: all
+      description: Indicates whether you want to get all plugins or not
+      in: query
+      required: false
+      schema:
+        type: boolean
+        example: false
+    statusQueryParam:
+      name: status
+      description: The status of the plugins
+      in: query
+      required: false
+      schema:
+        type: string
+        example: ACTIVE
+    pluginNamePathParam:
+      name: plugin
+      description: The name of the plugin
+      in: path
+      required: true
+      schema:
+        type: string
+        example: PluginDefault
+paths:
+  /registry/plugins:
+    get:
+      operationId: getPlugins
+      tags:
+        - registry
+      description: Gets Installed Plugins
+      summary: Gets Installed Plugins
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/allQueryParam'
+        - $ref: '#/components/parameters/statusQueryParam'
+      responses:
+        '200':
+          description: The list of plugins that are currently installed on the platform.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PluginList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /registry/plugins/install:
+    put:
+      operationId: installPlugin
+      tags:
+        - registry
+      description: Uploads a Plugin and install it
+      summary: Uploads a Plugin and install it
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PluginInstall'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /registry/plugins/{plugin}:
+    delete:
+      operationId: uninstallPlugin
+      tags:
+        - registry
+      description: Uninstalls a plugin
+      summary: Uninstalls a plugin
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/pluginNamePathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PluginUninstall'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+              

@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Messaging Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: msg
+    description: Messaging Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    SendData:
+      type: object
+      properties:
+        url:
+          type: string
+          example: 'sms://41792125936'
+        message:
+          type: string
+          example: 'Hi, this is a message'
+        link:
+          type: string
+          example: 'https://example.com'
+    SmsCreated:
+        type: object
+        properties:
+          msgid:
+            type: string
+            example: '000001'
+paths:
+  /msgs/send:
+    post:
+      operationId: send
+      tags:
+        - msg
+      description: Sends a message to a destination URL
+      summary: Sends a message to a destination URL
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendData'
+      responses:
+        '200':
+          description: Return of the ID of the sms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmsCreated'                
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
