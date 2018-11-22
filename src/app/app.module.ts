@@ -10,8 +10,9 @@ import { ToolBarModule } from '@progress/kendo-angular-toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'web-console-core'
-import { PlatformServiceModule, BASE_PATH } from '@wa-motif-open-api/platform-service'
+import { PlatformServiceModule } from '@wa-motif-open-api/platform-service'
 import { SecurityServiceModule } from '@wa-motif-open-api/security-service'
+import { ConfigurationServiceModule } from '@wa-motif-open-api/configuration-service'
 import { environment } from '../environments/environment';
 import { WC_API_BASE_PATH, WC_OAUTH_BASE_PATH } from 'web-console-core'
 import { OAuth2ServiceModule } from '@wa-motif-open-api/oauth2-service';
@@ -40,7 +41,8 @@ const appRoutes: Routes = [
     GridModule,
     PlatformServiceModule,
     OAuth2ServiceModule,
-    SecurityServiceModule
+    SecurityServiceModule,
+    ConfigurationServiceModule
   ],
   providers: [ 
     { provide: WC_API_BASE_PATH, useValue: environment.API_BASE_PATH }, 
