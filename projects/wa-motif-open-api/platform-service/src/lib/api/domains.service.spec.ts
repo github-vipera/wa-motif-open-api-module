@@ -1,66 +1,100 @@
 import { TestBed, async, inject } from '@angular/core/testing';
+import { DomainsService } from './domains.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { DomainsService } from './domains.service'
-import { MotifCommunicatoriTestHelper } from './motif-communicator-test-helper'
 import { AuthService, WebConsoleConfig } from 'web-console-core'
-import { TEST_BASE_PATH } from '../test.variables'
+import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables'
+import { failTestWithError, failLogin } from '../../../../test-helper';
+import * as _ from 'lodash';
+import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
+import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
+import { DomainCreate } from '../model/domainCreate';
+
+const TEST_DOMAIN: string = "testdomain";
 
 describe('DomainsService', () => {
+    let authService: AuthService;
+    let oauth2Service: Oauth2Service;
+    let service: DomainsService;
 
-    let service : DomainsService;
-    let motifCommunicatoriTestHelper:MotifCommunicatoriTestHelper;
-    
-    beforeEach(() => {
-        TestBed.configureTestingModule({ 
-            providers: [ 
+    beforeAll(() => {
+        TestBed.configureTestingModule({
+            providers: [
                 DomainsService,
                 { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
-                { provide :WebConsoleConfig, useValue: new WebConsoleConfig('','') }
+                { provide: WebConsoleConfig, useValue: new WebConsoleConfig('', '') }
             ],
-            imports: [ HttpClientModule ]
+            imports: [HttpClientModule]
         });
-        service = TestBed.get(DomainsService);
 
-        console.log("this.motifCommunicatoriTestHelper beforeEach ********");
+        const httpClient = TestBed.get(HttpClient);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
+        service = new DomainsService(httpClient, TEST_BASE_PATH, new Configuration());
 
+        let p: Promise<any> = authService.login({ userName: TEST_USERNAME, password: TEST_PASSWORD }).toPromise();
+        p.catch((error) => {
+            failLogin(error);
+        });
+        return p;
+    });
+
+    beforeEach(() => {
     });
 
     afterEach(() => {
     });
 
-    
-    it(`should issue a domain list request`,
-        // 1. declare as async test since the HttpClient works with Observables
+    it(`should prepare stuff`,
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-                
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin","admin").subscribe(value=>{
-                    
-                    // 3. send the request to test
-                    let myService = new DomainsService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    myService.getDomains().subscribe(value=>{
-                        expect(value).toEqual([
-                            {description: "Test Domain description modified", name: "TestDomain"},
-                            {description: "The default domain", name: "Default"}
-                        ]
-                        );
-                    },error=>{
-                        console.log("getDomains error", error);
-                    })
-                    
-                }, error=>{
-                    console.log("Authentication error", error);
+            () => {
+            })
+    );
+
+    it(`should create a new domain`,
+        async(
+            () => {
+                let dc: DomainCreate = {
+                    name: TEST_DOMAIN,
+                    description: "testdescription"
+                }
+                service.createDomain(dc).subscribe(value => {
+                    expect(value.name).toBe(TEST_DOMAIN);
+                    expect(value.description).toBe('testdescription');
+                }, error => {
+                    failTestWithError("should create a new domain", error);
                 })
-                
-            })  
-    
+            }
         )
     );
-    
-  
+
+    it(`should retrieve a domain`,
+        async(
+            () => {
+                service.getDomain(TEST_DOMAIN).subscribe(value => {
+                    expect(value.name).toBe(TEST_DOMAIN);
+                    expect(value.description).toBe('testdescription');
+                }, error => {
+                    failTestWithError("should retrieve a domain", error);
+                })
+            }
+        )
+    );
+
+    it(`should clean stuff`,
+        async(
+            () => {
+                let oauthReq: OAuthRequest = {
+                    clientId: '123456789',
+                    token: authService.getRefreshToken(),
+                    tokenType: 'REFRESH_TOKEN'
+                }
+                oauth2Service.revoke(oauthReq).subscribe(value => {
+                }, error => {
+                    failTestWithError("should clean stuff", error);
+                })
+            }
+        )
+    );
 
 });

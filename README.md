@@ -80,6 +80,36 @@ Modify the `src/lib/api.module.ts` file of the new library project you created e
 
 Under the `src/lib/api` folder you will find all the self-generated services.
 
+Each of this services has to be modified by adding to the imports this line:
+```typescript
+import { WC_API_BASE_PATH } from 'web-console-core'
+```
+
+Also change `BASE_PATH` to `WC_API_BASE_PATH` in the constructor:
+```typescript
+constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+```
+
+If you want to test your services you have to add this property to `karma.conf.js`:
+```javascript
+    proxyRes: function(proxyRes, req, res, options) {
+      proxyRes.headers['Access-Control-Expose-Headers'] = '*';
+    },
+```
+
+If you want to debug your services from `Visual Studio` you also have to add these properties:
+```javascript
+    customLaunchers: {
+      Chrome_with_debugging: {
+        base: 'Chrome',
+        flags: ['--remote-debugging-port=9222'],
+        debug: true
+      }
+    },
+    browsers: ['Chrome_with_debugging'],
+```
+Remember to remove the old `browsers` property.
+
 You can check if all the changes are ok trying to run a build as follows:
 
 ```bash
@@ -90,104 +120,93 @@ ng build @wa-motif-open-api/my-new-service
 
 Like all the other Angular standard tests, the tests of your new services will be based on [Jasmine test Framework](https://jasmine.github.io/).
 
-Because all APIs need authentication before being invoked, you may find this helper class that can be invoked in your tests useful for logging in automatically:
-
-```typescript
-import { Injectable }                      		from '@angular/core';
-import { HttpClient }                           from '@angular/common/http';
-import { MotifConnectorService, AuthService } 	from 'web-console-core'
-import { Observable} 							from "rxjs";
-
-
-@Injectable()
-export class MotifCommunicatoriTestHelper {
-
-    public motifConnector:MotifConnectorService;
-    public authService:AuthService;
-
-    constructor(private http:HttpClient){
-        this.motifConnector = new MotifConnectorService(http);
-        this.authService = new AuthService(http, 'http://your_motif_test_environment:8080', null, null);
-    }
-
-    public login(userName:string, password:string):Observable<any>{
-        return this.authService.login({userName:userName, password:password});
-    }
-    
-}
-```
-
 To create the tests of your services you will need to create a typescrypt spec.ts file for each of them.
 
 You will need to initialize the Web Console system so that you can perform some basic operations (such as authentication):
 
 ```typescript
-describe('UsersService', () => {
-    let motifCommunicatoriTestHelper:MotifCommunicatoriTestHelper;
-    
-    beforeEach(() => {
-        TestBed.configureTestingModule({ 
-            providers: [ 
+describe('DomainsService', () => {
+    let authService: AuthService;
+    let oauth2Service: Oauth2Service;
+    let service: DomainsService;
+
+    beforeAll(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                DomainsService,
                 { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
-                { provide :WebConsoleConfig, useValue: new WebConsoleConfig('','') }
+                { provide: WebConsoleConfig, useValue: new WebConsoleConfig('', '') }
             ],
-            imports: [ HttpClientModule ]
+            imports: [HttpClientModule]
         });
+
+        const httpClient = TestBed.get(HttpClient);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
+        service = new DomainsService(httpClient, TEST_BASE_PATH, new Configuration());
+
+        let p: Promise<any> = authService.login({ userName: TEST_USERNAME, password: TEST_PASSWORD }).toPromise();
+        p.catch((error) => {
+            failLogin(error);
+        });
+        return p;
+    });
+
+    beforeEach(() => {
     });
 
     afterEach(() => {
     });
 
-    
-    it(`should issue a users list request`,
-        // 1. declare as async test since the HttpClient works with Observables
+    it(`should prepare stuff`,
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
+            () => {
+            })
+    );
 
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin","admin").subscribe(value=>{
-                    
-                    // 3. send the request to test
-                    let userService = new UsersService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    userService.getUsersList('Default').subscribe(value=>{
-                        expect(value.length).toBe(16);
-                    },error=>{
-                        console.log("getUsersList Error", error);
-                    })
-                    
-                }, error=>{
-                    console.log("Authentication error", error);
+    it(`should create a new domain`,
+        async(
+            () => {
+                let dc: DomainCreate = {
+                    name: TEST_DOMAIN,
+                    description: "testdescription"
+                }
+                service.createDomain(dc).subscribe(value => {
+                    expect(value.name).toBe(TEST_DOMAIN);
+                    expect(value.description).toBe('testdescription');
+                }, error => {
+                    failTestWithError("should create a new domain", error);
                 })
-                
-            })  
-
+            }
         )
     );
 
-    it(`should issue a user info`,
-        // 1. declare as async test since the HttpClient works with Observables
+    it(`should retrieve a domain`,
         async(
-            inject([HttpClient], (http: HttpClient) => {
-                // 1. inject HttpClient into the test
-                this.motifCommunicatoriTestHelper = new MotifCommunicatoriTestHelper(http);
-
-                // 2. perform the authentication
-                this.motifCommunicatoriTestHelper.login("admin","admin").subscribe(value=>{
-                    
-                    // 3. send the request to test
-                    let userService = new UsersService(this.motifCommunicatoriTestHelper.http, TEST_BASE_PATH, new Configuration());
-                    userService.getUser('Default','admin').subscribe(value=>{
-                        expect(value.userId).toEqual('admin')
-                    },error=>{
-                        console.log("getUsersList Error", error);
-                    })
-                }, error=>{
-                    console.log("Authentication error", error);
+            () => {
+                service.getDomain(TEST_DOMAIN).subscribe(value => {
+                    expect(value.name).toBe(TEST_DOMAIN);
+                    expect(value.description).toBe('testdescription');
+                }, error => {
+                    failTestWithError("should retrieve a domain", error);
                 })
-                
-            })  
+            }
+        )
+    );
+
+    it(`should clean stuff`,
+        async(
+            () => {
+                let oauthReq: OAuthRequest = {
+                    clientId: '123456789',
+                    token: authService.getRefreshToken(),
+                    tokenType: 'REFRESH_TOKEN'
+                }
+                oauth2Service.revoke(oauthReq).subscribe(value => {
+                }, error => {
+                    failTestWithError("should clean stuff", error);
+                })
+            }
         )
     );
 
@@ -195,9 +214,11 @@ describe('UsersService', () => {
 
 ```
 
-As you can see in the `beforeEach` call, the Web Console components needed to run this test are added.
+As you can see in the `beforeAll` call, the Web Console components needed to run this test are added and authentication is performed.
 
-The service that you intend to test can be instantiated directly in your test case.
+The service that you intend to test is also instantiated there.
+
+The `should clean stuff` test case is used to clean the authentication tokens used in the tests.
 
 For a complete reference on Angular tests we refer you to the official guide you can find here: [Angular Testing](https://angular.io/guide/testing).
 

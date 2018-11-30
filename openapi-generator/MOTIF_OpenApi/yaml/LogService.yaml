@@ -1,0 +1,250 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Log Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: log
+    description: Log Service
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:           
+    LogTail:
+      type: object
+      required:
+        - data
+        - lines
+      properties:
+        data:
+          type: string
+          description: Number of log lines
+          example: Lines of log
+        lines:
+          type: integer
+          description: Number of lines
+          example: 100
+    LogLevel:
+      type: object
+      required:
+        - level
+      properties:
+        level:
+          type: string
+          description: Log level
+          example: DEBUG
+    LogLevelUpdate:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/LogLevel'
+
+  parameters:
+    linesToTailQueryParam:
+      name: lines
+      required: true
+      in: query
+      description: Number of lines to tail
+      schema:
+        type: integer
+        example: 100
+    componentPathParam:
+      name: component
+      required: true
+      in: path
+      description: Component
+      schema:
+        type: string
+        example: com.vipera.osgi.core.platform
+        
+paths:
+  /logs/current:
+    get:
+      operationId: downloadCurrentLog
+      tags:
+        - log
+      description: Download current log
+      summary: Download current log
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /logs/current/tail:
+    get:
+      operationId: tailCurrentLog
+      tags:
+        - log
+      description: Tail current log
+      summary: Tail current log
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/linesToTailQueryParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogTail'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /logs/root/level:
+    put:
+      operationId: setRootLogLevel
+      tags:
+        - log
+      description: Set root log level
+      summary: Set root log level
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogLevelUpdate'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getRootLogLevel
+      tags:
+        - log
+      description: Retrieves root log level
+      summary: Retrieves root log level
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogLevel'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /logs/components/level:
+    put:
+      operationId: setDefaultComponentLogLevel
+      tags:
+        - log
+      description: Set default component log level
+      summary: Set default component log level
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogLevelUpdate'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getDefaultComponentLogLevel
+      tags:
+        - log
+      description: Retrieves default component log level
+      summary: Retrieves default component log level
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogLevel'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /logs/components/{component}/level:
+    put:
+      operationId: setComponentLogLevel
+      tags:
+        - log
+      description: Set component log level
+      summary: Set component log level
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/componentPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogLevelUpdate'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getComponentLogLevel
+      tags:
+        - log
+      description: Retrieves component log level
+      summary: Retrieves component log level
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/componentPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogLevel'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          

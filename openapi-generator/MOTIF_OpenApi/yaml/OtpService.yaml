@@ -1,0 +1,160 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif OTP Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: otp
+    description: OTP Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    OtpCreate:
+      type: object
+      required:
+        - application
+      properties:
+        application:
+          type: string
+          example: 'Vipera'
+    Otp:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          example: '1234'
+    OTPEntity:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          example: '1234'
+        key:
+          type: string
+          example: '{SHA_512}641c1b75360d2cfc6488ca62ba41c4a197636fb8f1634305f834acf14f0bc4417e2fc9b6593b59c12002b7ce533edd0d2e38f3e979fa13ae779a47fe356e56fa'
+        scope:
+          type: string
+          example: 'AccountCreation'
+        created:
+          type: string
+          example: '2016-08-30 17:12:46.542Z'
+          format: 'date-time'
+          description: Creation timestamp
+        consumed:
+          type: string
+          example: '2016-08-30 17:12:46.542Z'
+          format: 'date-time'
+          description: OTP consumation timestamp
+        expiry:
+          type: string
+          example: '1d'
+        maxFail:
+          type: integer
+          example: '3'
+        failures:
+          type: integer
+          example: '1'
+    OTPList:
+      type: array
+      items:
+        $ref: '#/components/schemas/OTPEntity'
+  parameters:
+    otpIdPathParam:
+      name: otpId
+      description: OTP ID
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+paths:
+  /otp/domains/{domain}/users/{userId}:
+    post:
+      operationId: createOtp
+      tags:
+        - otp
+      description: Creates an OTP
+      summary: Creates an OTP
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpCreate'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Otp'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getOtpList
+      tags:
+        - otp
+      description: Get User OTPs
+      summary: Get User OTPs
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/userIdPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OTPList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  /otp/{otpId}:
+    delete:
+      operationId: deleteOtp
+      tags:
+        - otp
+      description: Deletes an OTP
+      summary: Deletes an OTP
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/otpIdPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

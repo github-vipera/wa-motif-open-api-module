@@ -1,0 +1,352 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Scheduler Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: scheduler
+    description: Scheduler Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:           
+    ScheduledTaskEntityList:
+      type: array
+      items:
+          $ref: '#/components/schemas/ScheduledTaskEntity'      
+     
+    ScheduledTaskEntity:
+      allOf:
+        - $ref: '#/components/schemas/ScheduledTask'
+        - type: object
+          required:
+            - name
+            - created
+            - updated
+          properties:
+            name:
+              type: string
+              description: Task Name
+              example: Clean Task
+            created:
+              type: string
+              example: '2016-08-30 17:12:46.542Z'
+              format: 'date-time'
+              description: Creation timestamp
+            updated:
+              type: string
+              example: '2017-09-14 12:16:26.832Z'
+              format: 'date-time'  
+              description: Update timestamp      
+     
+    ScheduledTaskCreate:
+      type: object
+      allOf:
+       - $ref: '#/components/schemas/ScheduledTask' 
+       - type: object
+         required:
+            - name
+            - overwrite
+         properties:
+            name:
+              type: string
+              description: Task Name
+              example: Clean Task
+            overwrite:
+              type: boolean
+              description: Overwrite existent task
+              example: true  
+               
+    ScheduledTask:
+      type: object
+      required:
+        - enabled
+        - cronPattern
+        - serviceName
+        - serviceMethod
+        - clusterExecutionPolicy
+        - failurePolicy
+      properties:
+        enabled:
+          type: boolean
+          description: Task enabled or not
+          example: true
+        cronPattern:
+          type: string
+          description: Pattern in cron format to affirm when task must be executed
+          example: '*/5 * * * *'   
+        serviceName:
+          type: string
+          description: Name of the service that exposes the method to call
+          example: com.vipera.osgi.foundation.oauth2  
+        serviceMethod:
+          type: string
+          description: Method to be called
+          example: deleteExpiredOauthTokens    
+        jsonParams:
+          type: string
+          description: Task parameters in JSON format
+          example: '{"campaignCurfewDomain":"VIPERALAB","campaignCurfewApplication":"DeKitchenSink"}' 
+        clusterExecutionPolicy:
+          type: string
+          description: Cluster execution policy (supported values are JUST_ONE_MEMBER, EVERY_MEMBER)
+          example: JUST_ONE_MEMBER  
+        failurePolicy:
+          type: string
+          description: Failure policy (supported values are LOG_ONLY, MAIL_OUT)
+          example: LOG_ONLY  
+    
+    ScheduledTaskExecutionEntityList:
+      type: array
+      items:
+          $ref: '#/components/schemas/ScheduledTaskExecutionEntity'      
+     
+    ScheduledTaskExecutionEntity:
+      type: object
+      properties:
+        taskExecId:
+          type: string
+          description: Task execution Id
+          example: datamon_201701031245 
+        taskName:
+          type: string
+          description: Scheduled task that generated this execution
+          example: datamon_201701031245 
+        created:
+          type: string
+          example: '2016-08-30 17:12:46.542Z'
+          format: 'date-time'
+          description: Creation timestamp  
+        elapsed:  
+          type: integer
+          format: int64
+          description: Elapsed time of this execution (millis)
+          example: 19240        
+        resultCode:
+          type: string
+          description: Result Code
+          example: OK 
+        resultDesc:
+          type: string
+          description: esult description
+          example: No errors 
+        workerId:
+          type: string
+          description: Id of the worker instance that actually executed the task
+          example: ViperaOSGi-Node1 
+                   
+  parameters:
+    taskPathParam:
+      name: task
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 'MyTaskName'
+    taskExecResultCodeQueryParam:
+      name: taskExecResultCode
+      in: query
+      required: false
+      schema:
+        type: string
+        example: 'OK'
+        
+paths:
+  /scheduler/tasks:
+    post:
+      operationId: createTask
+      tags:
+        - scheduler
+      description: Adds a task to the scheduler
+      summary: Adds a task to the scheduler
+      security:
+        - vipera_oauth2:
+          - all:all
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduledTaskCreate'  
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledTaskEntity'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getTaskList
+      tags:
+        - scheduler
+      description: Retrieves a list of scheduled tasks
+      summary: Retrieves a list of scheduled tasks
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledTaskEntityList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError' 
+
+  /scheduler/tasks/{task}:
+    get:
+      operationId: getTask
+      tags:
+        - scheduler
+      description: Retrieves a scheduled task
+      summary: Retrieves a scheduled task
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/taskPathParam' 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledTaskEntity'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateTask
+      tags:
+        - scheduler
+      description: Updates an already scheduled task
+      summary: Updates an already scheduled task
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/taskPathParam' 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduledTask'  
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'    
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteTask
+      tags:
+        - scheduler
+      description: Removes a task from the scheduler
+      summary: Removes a task from the scheduler
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: '#/components/parameters/taskPathParam' 
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'    
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /scheduler/tasks/{task}/enable:
+      post:
+        operationId: enableTask
+        tags:
+          - scheduler
+        description: Enables a task
+        summary: Enables a task
+        security:
+          - vipera_oauth2:
+            - 'all:all'
+        parameters:  
+          - $ref: '#/components/parameters/taskPathParam' 
+        responses:
+          '204':
+            $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'    
+          default:
+            $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'  
+            
+  /scheduler/tasks/{task}/disable:
+      post:
+        operationId: disableTask
+        tags:
+          - scheduler
+        description: Disables a task
+        summary: Disables a task
+        security:
+          - vipera_oauth2:
+            - 'all:all'
+        parameters:  
+          - $ref: '#/components/parameters/taskPathParam' 
+        responses:
+          '204':
+            $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'    
+          default:
+            $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'  
+          
+  /scheduler/tasks/{task}/executions:
+    get:
+      operationId: getTaskExecutionsList
+      tags:
+        - scheduler
+      description: List task executions starting from last
+      summary: List task executions starting from last
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+          - $ref: '#/components/parameters/taskPathParam' 
+          - $ref: '#/components/parameters/taskExecResultCodeQueryParam'
+          - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
+          - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
+          - $ref: './Z_Globals.yaml#/components/parameters/sortQueryParam'
+      responses:
+        '200':
+          description: OK
+          headers:
+            x-page:
+              $ref: './Z_Globals.yaml#/components/headers/x-page'
+            x-page-size:
+              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
+            x-total-pages:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
+            x-total-records:
+              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledTaskExecutionEntityList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'             

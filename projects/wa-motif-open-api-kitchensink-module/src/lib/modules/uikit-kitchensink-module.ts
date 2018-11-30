@@ -2,23 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WebConsoleCoreModule } from 'web-console-core'
-import { WebConsoleUIKitCoreModule, WebConsoleUIKitDataModule, WebConsoleUIKitModuleKendoProvider } from 'web-console-ui-kit'
-import { GridsterModule } from 'web-console-ui-kit';
-import { WebConsoleUIKitChartsModule } from 'web-console-ui-kit';
+import { WebConsoleUIKitCoreModule, WebConsoleUIKitDataModule } from 'web-console-ui-kit'
+import { WebConsoleUIKitGridsterProviderModule, WebConsoleUIKitNgxChartsProviderModule, WebConsoleUIKitKendoProviderModule } from 'web-console-ui-kit';
 import { DashboardTestComponent } from '../components/dashboard/dashboard-test.component'
 import { UsersListComponent } from '../components/users-list/users-list.component'
-import { WAMotifOpenApiModule } from 'wa-motif-open-api-module'
 
 @NgModule({
   imports: [
     WebConsoleCoreModule, 
     WebConsoleUIKitCoreModule, 
     WebConsoleUIKitDataModule, 
-    WebConsoleUIKitModuleKendoProvider, 
-    GridsterModule, 
+    WebConsoleUIKitGridsterProviderModule, 
+    WebConsoleUIKitNgxChartsProviderModule, 
+    WebConsoleUIKitKendoProviderModule, 
     CommonModule, 
-    WebConsoleUIKitChartsModule, 
-    WAMotifOpenApiModule,
     FormsModule
   ],
   entryComponents:[DashboardTestComponent, UsersListComponent],

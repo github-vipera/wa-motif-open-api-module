@@ -1,0 +1,178 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif License Management Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: '/rest/v2'
+  - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+tags:
+  - name: license
+    description: License Management Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas: 
+    LicenseUpload:
+      type: object
+      required:
+        - file
+      properties:
+        file:
+          type: string
+          format: binary
+          
+    LicenseList:
+      type: array
+      items:
+          $ref: '#/components/schemas/License'      
+     
+    License:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Licensed product
+          example: ViperaOSGI
+        productVersion:
+          type: string
+          description: Licensed product version
+          example: 1.0.0
+        customerName:
+          type: string
+          description: License owner name
+          example: Customer Name   
+        customerEmail:
+          type: string
+          description: License owner e-mail
+          example: develop@vipera.com  
+        issueDate:
+          type: string
+          example: '2016-08-30 17:12:46.542Z'
+          format: 'date-time'
+          description: License is valid from this date
+        expiryDate:
+          type: string
+          example: '2017-09-14 12:16:26.832Z'
+          format: 'date-time'  
+          description: License is valid till this date       
+        license:
+          type: string
+          description: License encoded as string
+          example: S/iyTHbtJVsODu/35Y5mLLb8FKiLr37fGtT4c+bMWgKvwdcw8  
+        maxUserNumber:
+          type: integer
+          format: int64
+          description: Maximum number of users
+          example: 100  
+          
+  parameters:
+    productNamePathParam:
+      name: productName
+      description: License name     
+      in: path
+      required: true
+      schema:
+        type: string
+        example: ViperaOSGI        
+    productVersionPathParam:
+      name: productVersion
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 1.9
+paths:
+  /licenses:
+    put:
+      operationId: upload
+      tags:
+        - license
+      description: Uploads license onto server
+      summary: Uploads license onto server
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LicenseUpload'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: listLicenses
+      tags:
+        - license
+      description: Returns all licenses
+      summary: Returns all licenses
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /licenses/{productName}/{productVersion}:
+    delete:
+      operationId: delete
+      tags:
+        - license
+      description: Deletes license
+      summary: Deletes license
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/productNamePathParam'   
+        - $ref: '#/components/parameters/productVersionPathParam' 
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /licenses/validate:
+    get:
+      operationId: validate
+      tags:
+        - license
+      description: Validate current Motif version license
+      summary: Validate current Motif version license
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  

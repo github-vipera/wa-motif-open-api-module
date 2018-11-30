@@ -1,0 +1,407 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Service Catalog API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+tags:
+  - name: applications
+    description: Applications related
+  - name: services
+    description: Services related
+  - name: operations
+    description: Operations related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas: 
+    ServiceList:
+      type: array
+      items:
+          $ref: '#/components/schemas/Service' 
+          
+    ServiceCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: appcont
+
+    Service:
+      type: object
+      required:
+        - channel
+        - domain
+        - application
+        - name
+        - enabled
+      properties:
+        name:
+          type: string
+          example: appcont
+        channel:
+          type: string
+          example: REST
+        domain:
+          type: string
+          example: Default
+        application:
+          type: string
+          example: vipera
+        enabled:
+          type: boolean
+          example: true  
+        serviceOperationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceOperation' 
+          
+    ServiceOperation:  
+      type: object
+      allOf: 
+      - $ref: '#/components/schemas/ServiceOperationProperties'   
+      - type: object
+        required:
+          - name
+        properties: 
+          name:
+            type: string
+            example: appcheck 
+          
+    ServiceOperationProperties:     
+      type: object
+      required:
+        - description
+        - pluginName
+        - counted
+        - secure
+        - sessionless
+        - encryptActive
+      properties:
+        description:
+          type: string
+          example: Checks if client has last App Content 
+        pluginName:
+          type: string
+          example: com.vipera.osgi.foundation.appcontent
+        inputParams:
+          type: string
+        outputParams:
+          type: string
+        counted:
+          type: boolean
+          example: false
+        secure:
+          type: boolean
+          example: false 
+        sessionless:
+          type: boolean
+          example: true
+        encryptActive:
+          type: boolean
+          example: true                       
+          
+    ServiceUpdate:
+        type: object
+        required:
+          - enabled
+          - systemCategory
+        properties:
+          enabled:
+            type: boolean
+            example : 'true'
+          systemCategory:  
+            type: string
+            example : systemCategoryName  
+            
+    Property:
+        type: object
+        required:
+          - name
+          - value
+        properties:
+          name:
+            type: string
+            example : Password Format
+          value:  
+            type: string
+            example : '[a-z]+'
+paths:
+  /catalog/channels/{channel}/domains/{domain}/applications/{application}/services:
+    post:
+      operationId: createService
+      tags:
+        - services
+      description: Creates service
+      summary: Creates service 
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceCreate'  
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /catalog/channels/{channel}/domains/{domain}/applications/{application}/services/{service}:
+    get:
+      operationId: getService
+      tags:
+        - services
+      description: Collects service infos
+      summary: Collects service infos
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/servicePathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteService
+      tags:
+        - services
+      description: Deletes service
+      summary: Deletes service
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/servicePathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateService
+      tags:
+        - services
+      description: Updates service 
+      summary: Updates service
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/servicePathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceUpdate'  
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /catalog/domains/{domain}/applications/{application}/services:
+    get:
+      operationId: getServiceList
+      tags:
+        - applications
+      description: Collects all service infos that belong to an application
+      summary: Collects all service infos that belong to an application
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /catalog/domains/{domain}/applications/{application}/properties/{property}:
+    get:
+      operationId: getApplicationProperty
+      tags:
+        - applications
+      description: Gets application property value
+      summary: Gets application property value
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/propertyPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Property'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
+  /catalog/channels/{channel}/domains/{domain}/applications/{application}/services/{service}/operations:
+    post:
+      operationId: createServiceOperation
+      tags:
+        - operations
+      description: Creates service operation
+      summary: Creates service operation
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/servicePathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceOperation'  
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceOperation'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /catalog/channels/{channel}/domains/{domain}/applications/{application}/services/{service}/operations/{operation}:
+    get:
+      operationId: getServiceOperation
+      tags:
+        - operations
+      description: Collects service operation infos
+      summary: Collects service operation infos
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/servicePathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/operationPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceOperation'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteServiceOperation
+      tags:
+        - operations
+      description: Deletes service operation
+      summary: Deletes service operation
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/servicePathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/operationPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateServiceOperation
+      tags:
+        - operations
+      description: Updates service operation
+      summary: Updates service operation
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/servicePathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/operationPathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceOperationProperties'  
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
