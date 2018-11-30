@@ -1,11 +1,11 @@
 {
-  "name": "@wa-motif-open-api/configuration-service",
-  "version": "0.0.1",
-  "scripts": {
-    "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
-  },
-  "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
-  }
+    "name": "@wa-motif-open-api/configuration-service",
+    "version": "0.0.4",
+    "scripts": {
+        "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
+    },
+    "peerDependencies": {
+        "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+        "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+    }
 }
