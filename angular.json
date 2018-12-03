@@ -704,6 +704,11 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api/log-service/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api/log-service/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/wa-motif-open-api/log-service/ng-package.json"
+            }
           }
         },
         "test": {
