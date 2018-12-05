@@ -9,9 +9,9 @@ info:
     name: Vipera Motif commercial license
     url: 'http://www.vipera.com'
 servers:
-  - url: '/rest/v2'
   - url: 'http://localhost:8080/rest/v2'
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+  - url: '/rest/v2'
 tags:
   - name: license
     description: License Management Service related
@@ -96,7 +96,7 @@ components:
 paths:
   /licenses:
     put:
-      operationId: upload
+      operationId: uploadLicense
       tags:
         - license
       description: Uploads license onto server
@@ -139,7 +139,7 @@ paths:
 
   /licenses/{productName}/{productVersion}:
     delete:
-      operationId: delete
+      operationId: deleteLicense
       tags:
         - license
       description: Deletes license
@@ -160,7 +160,7 @@ paths:
   
   /licenses/validate:
     get:
-      operationId: validate
+      operationId: validateLicense
       tags:
         - license
       description: Validate current Motif version license

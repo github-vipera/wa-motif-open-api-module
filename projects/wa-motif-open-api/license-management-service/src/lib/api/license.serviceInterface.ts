@@ -31,7 +31,7 @@ export interface LicenseServiceInterface {
     * @param productName License name
     * @param productVersion 
     */
-    _delete(productName: string, productVersion: string, extraHttpRequestParams?: any): Observable<any>;
+    deleteLicense(productName: string, productVersion: string, extraHttpRequestParams?: any): Observable<any>;
 
     /**
     * Returns all licenses
@@ -44,12 +44,12 @@ export interface LicenseServiceInterface {
     * Uploads license onto server
     * @param file 
     */
-    upload(file: Blob, extraHttpRequestParams?: any): Observable<any>;
+    uploadLicense(file: Blob, extraHttpRequestParams?: any): Observable<any>;
 
     /**
     * Validate current Motif version license
     * Validate current Motif version license
     */
-    validate(extraHttpRequestParams?: any): Observable<any>;
+    validateLicense(extraHttpRequestParams?: any): Observable<any>;
 
 }

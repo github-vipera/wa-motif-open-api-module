@@ -21,7 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { LicenseList } from '../model/licenseList';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { LicenseServiceInterface }                            from './license.serviceInterface';
 
@@ -31,7 +31,7 @@ import { LicenseServiceInterface }                            from './license.se
 })
 export class LicenseService implements LicenseServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -69,15 +69,15 @@ export class LicenseService implements LicenseServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public _delete(productName: string, productVersion: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public _delete(productName: string, productVersion: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public _delete(productName: string, productVersion: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public _delete(productName: string, productVersion: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteLicense(productName: string, productVersion: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteLicense(productName: string, productVersion: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteLicense(productName: string, productVersion: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteLicense(productName: string, productVersion: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (productName === null || productName === undefined) {
-            throw new Error('Required parameter productName was null or undefined when calling _delete.');
+            throw new Error('Required parameter productName was null or undefined when calling deleteLicense.');
         }
         if (productVersion === null || productVersion === undefined) {
-            throw new Error('Required parameter productVersion was null or undefined when calling _delete.');
+            throw new Error('Required parameter productVersion was null or undefined when calling deleteLicense.');
         }
 
         let headers = this.defaultHeaders;
@@ -176,12 +176,12 @@ export class LicenseService implements LicenseServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public upload(file: Blob, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public upload(file: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public upload(file: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public upload(file: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadLicense(file: Blob, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public uploadLicense(file: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public uploadLicense(file: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public uploadLicense(file: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (file === null || file === undefined) {
-            throw new Error('Required parameter file was null or undefined when calling upload.');
+            throw new Error('Required parameter file was null or undefined when calling uploadLicense.');
         }
 
         let headers = this.defaultHeaders;
@@ -249,10 +249,10 @@ export class LicenseService implements LicenseServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public validate(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public validate(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public validate(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public validate(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public validateLicense(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public validateLicense(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public validateLicense(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public validateLicense(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
