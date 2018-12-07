@@ -13,6 +13,7 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
+import { AssetBundleEntityList } from '../model/assetBundleEntityList';
 import { AssetBundleUpdate } from '../model/assetBundleUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
@@ -42,6 +43,13 @@ export interface AssetsServiceInterface {
     * @param version Version
     */
     downloadAsset(domain: string, asset: string, version: string, extraHttpRequestParams?: any): Observable<Blob>;
+
+    /**
+    * Retrieves asset bundles by domain
+    * Retrieves asset bundles by domain
+    * @param domain Domain Name
+    */
+    getAssets(domain: string, extraHttpRequestParams?: any): Observable<AssetBundleEntityList>;
 
     /**
     * Updates the public flag of an asset bundle

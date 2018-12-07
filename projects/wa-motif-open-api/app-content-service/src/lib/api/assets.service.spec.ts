@@ -81,6 +81,18 @@ describe('AssetsService', () => {
         )
     );
 
+    it(`should get a list of assets`,
+    async(
+        () => {
+            service.getAssets("Default").subscribe(value => {
+                expect(value.length).toBeGreaterThan(0);
+            }, error => {
+                failTestWithError("should get a list of assets", error);
+            })
+        }
+    )
+    );
+
     it(`should update an asset`,
         async(
             () => {

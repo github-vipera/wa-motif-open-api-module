@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AssetBundleEntityList } from '../model/assetBundleEntityList';
 import { AssetBundleUpdate } from '../model/assetBundleUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
@@ -179,6 +180,60 @@ export class AssetsService implements AssetsServiceInterface {
         return this.httpClient.get(`${this.configuration.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/assets/${encodeURIComponent(String(asset))}/versions/${encodeURIComponent(String(version))}`,
             {
                 responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Retrieves asset bundles by domain
+     * Retrieves asset bundles by domain
+     * @param domain Domain Name
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAssets(domain: string, observe?: 'body', reportProgress?: boolean): Observable<AssetBundleEntityList>;
+    public getAssets(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AssetBundleEntityList>>;
+    public getAssets(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AssetBundleEntityList>>;
+    public getAssets(domain: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling getAssets.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<AssetBundleEntityList>(`${this.configuration.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/assets`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
