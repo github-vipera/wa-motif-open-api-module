@@ -10,6 +10,8 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+  - url: '/rest/v2'
 tags:
   - name: engines
     description: Dynamic Engine related
@@ -544,6 +546,28 @@ paths:
       responses:
         '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getAssets
+      tags:
+        - assets
+      description: Retrieves asset bundles by domain
+      summary: Retrieves asset bundles by domain
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+      responses:
+        '200':
+          description: Returns the asset bundles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetBundleEntityList'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
  
