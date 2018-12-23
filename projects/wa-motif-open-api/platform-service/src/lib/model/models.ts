@@ -23,6 +23,7 @@ export * from './domainCreate';
 export * from './domainData';
 export * from './domainUpdate';
 export * from './domainsList';
+export * from './errorVipera';
 export * from './locale';
 export * from './localeCreate';
 export * from './localeUpdate';

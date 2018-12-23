@@ -8,14 +8,15 @@ import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
 import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
-import { DomainCreate } from '../model/domainCreate';
-
-const TEST_DOMAIN: string = "testdomain";
+import { DomainCreate } from '../model/models';
+import { DomainUpdate } from '../model/models';
 
 describe('DomainsService', () => {
     let authService: AuthService;
-    let oauth2Service: Oauth2Service;
     let service: DomainsService;
+    let oauth2Service: Oauth2Service;
+
+    let TEST_DOMAIN: string = "TEST_DOMAIN";
 
     beforeAll(() => {
         TestBed.configureTestingModule({
@@ -48,7 +49,13 @@ describe('DomainsService', () => {
     it(`should prepare stuff`,
         async(
             () => {
-            })
+                service.deleteDomain(TEST_DOMAIN).subscribe(value => {
+                }, error => {
+                })
+
+            }
+
+        )
     );
 
     it(`should create a new domain`,
@@ -56,7 +63,7 @@ describe('DomainsService', () => {
             () => {
                 let dc: DomainCreate = {
                     name: TEST_DOMAIN,
-                    description: "testdescription"
+                    description: 'testdescription'
                 }
                 service.createDomain(dc).subscribe(value => {
                     expect(value.name).toBe(TEST_DOMAIN);
@@ -68,14 +75,41 @@ describe('DomainsService', () => {
         )
     );
 
-    it(`should retrieve a domain`,
+    it(`should retrieve test domain`,
         async(
             () => {
                 service.getDomain(TEST_DOMAIN).subscribe(value => {
                     expect(value.name).toBe(TEST_DOMAIN);
                     expect(value.description).toBe('testdescription');
                 }, error => {
-                    failTestWithError("should retrieve a domain", error);
+                    failTestWithError("should retrieve test domain", error);
+                })
+            }
+        )
+    );
+
+    it(`should update test domain`,
+        async(
+            () => {
+                let du: DomainUpdate = {
+                    description: 'testdescription2'
+                }
+                service.updateDomain(TEST_DOMAIN, du).subscribe(value => {
+                }, error => {
+                    failTestWithError("should update test domain", error);
+                })
+            }
+        )
+    );
+
+    it(`should retrieve updated test domain`,
+        async(
+            () => {
+                service.getDomain(TEST_DOMAIN).subscribe(value => {
+                    expect(value.name).toBe(TEST_DOMAIN);
+                    expect(value.description).toBe('testdescription2');
+                }, error => {
+                    failTestWithError("should retrieve updated test domain", error);
                 })
             }
         )
@@ -84,6 +118,9 @@ describe('DomainsService', () => {
     it(`should clean stuff`,
         async(
             () => {
+                service.deleteDomain(TEST_DOMAIN).subscribe(value => {
+                }, error => {
+                })
                 let oauthReq: OAuthRequest = {
                     clientId: '123456789',
                     token: authService.getRefreshToken(),
