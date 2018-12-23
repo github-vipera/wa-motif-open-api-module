@@ -13,5 +13,8 @@
 
 export interface ServiceUpdate { 
     enabled: boolean;
-    systemCategory: string;
+    countersPlugin?: string;
+    thresholdChecksPlugin?: string;
+    thresholdActionsPlugin?: string;
+    systemCategory?: string;
 }

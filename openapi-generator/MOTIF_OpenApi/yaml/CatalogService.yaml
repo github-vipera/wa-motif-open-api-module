@@ -10,6 +10,8 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+  - url: '/rest/v2'
 tags:
   - name: applications
     description: Applications related
@@ -63,7 +65,19 @@ components:
           example: vipera
         enabled:
           type: boolean
-          example: true  
+          example: true
+        countersPlugin:
+          type: string
+          example: com.vipera.osgi.bss.countersthresholds.plugin.vipera
+        thresholdChecksPlugin:
+          type: string
+          example: com.vipera.osgi.bss.countersthresholds.plugin.vipera
+        thresholdActionsPlugin:
+          type: string
+          example: com.vipera.osgi.bss.countersthresholds.plugin.vipera
+        category:
+          type: string
+          example: TestCategory
         serviceOperationList:
           type: array
           items:
@@ -118,12 +132,20 @@ components:
         type: object
         required:
           - enabled
-          - systemCategory
         properties:
           enabled:
             type: boolean
             example : 'true'
-          systemCategory:  
+          countersPlugin:
+            type: string
+            example: com.vipera.osgi.bss.countersthresholds.plugin.vipera
+          thresholdChecksPlugin:
+            type: string
+            example: com.vipera.osgi.bss.countersthresholds.plugin.vipera
+          thresholdActionsPlugin:
+            type: string
+            example: com.vipera.osgi.bss.countersthresholds.plugin.vipera
+          systemCategory:
             type: string
             example : systemCategoryName  
             

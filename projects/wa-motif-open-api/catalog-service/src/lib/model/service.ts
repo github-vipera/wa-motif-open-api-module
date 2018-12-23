@@ -18,5 +18,9 @@ export interface Service {
     domain: string;
     application: string;
     enabled: boolean;
+    countersPlugin?: string;
+    thresholdChecksPlugin?: string;
+    thresholdActionsPlugin?: string;
+    category?: string;
     serviceOperationList?: Array<ServiceOperation>;
 }

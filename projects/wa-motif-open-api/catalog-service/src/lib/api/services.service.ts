@@ -23,7 +23,7 @@ import { Service } from '../model/service';
 import { ServiceCreate } from '../model/serviceCreate';
 import { ServiceUpdate } from '../model/serviceUpdate';
 
-import { WC_API_BASE_PATH }                                 from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
 import { ServicesServiceInterface }                            from './services.serviceInterface';
 
