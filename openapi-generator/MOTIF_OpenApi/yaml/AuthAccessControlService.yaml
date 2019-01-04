@@ -10,6 +10,8 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+  - url: '/rest/v2'
 tags:
   - name: roles
     description: Role related
@@ -278,8 +280,8 @@ paths:
       operationId: createRole
       tags:
         - roles
-      description: Creates a Role
-      summary: Creates a Role
+      description: Creates a role
+      summary: Creates a role
       security:
         - vipera_oauth2:
           - 'all:all'
@@ -305,8 +307,8 @@ paths:
       operationId: getRole
       tags:
         - roles
-      description: Retrieves a Role
-      summary: Retrieves a Role
+      description: Retrieves a role
+      summary: Retrieves a role
       security:
         - vipera_oauth2:
           - 'all:all'
@@ -327,8 +329,8 @@ paths:
       operationId: deleteRole
       tags:
         - roles
-      description: Deletes a Role
-      summary: Deletes a Role
+      description: Deletes a role
+      summary: Deletes a role
       security:
         - vipera_oauth2:
           - 'all:all'
@@ -469,8 +471,8 @@ paths:
       operationId: createGroup
       tags:
         - groups
-      description: Creates a Group
-      summary: Creates a Group
+      description: Creates a group
+      summary: Creates a group
       security:
         - vipera_oauth2:
           - 'all:all'
@@ -522,8 +524,8 @@ paths:
       operationId: getGroup
       tags:
         - groups
-      description: Retrieves a Group
-      summary: Retrieves a Group
+      description: Retrieves a group
+      summary: Retrieves a group
       security:
         - vipera_oauth2:
           - 'all:all'
@@ -545,8 +547,8 @@ paths:
       operationId: deleteGroup
       tags:
         - groups
-      description: Deletes a Group
-      summary: Deletes a Group
+      description: Deletes a group
+      summary: Deletes a group
       security:
         - vipera_oauth2:
           - 'all:all'
@@ -590,8 +592,8 @@ paths:
       operationId: getGroupRoles
       tags:
         - groups
-      description: Retrieves the Roles given a group
-      summary: Retrieves the Roles  given an group
+      description: Retrieves the roles given a group
+      summary: Retrieves the roles given an group
       security:
         - vipera_oauth2:
           - 'all:all'
@@ -658,7 +660,61 @@ paths:
          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
-    
+
+  /acs/domains/{domain}/groups/{group}/actions:
+    get:
+      operationId: getGroupActions
+      tags:
+        - groups
+      description: Retrieves the actions given a group
+      summary: Retrieves the actions given an group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: '#/components/parameters/groupNamePathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Action'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /acs/domains/{domain}/groups/{group}/permissions:
+    get:
+      operationId: getGroupPermissions
+      tags:
+        - groups
+      description: Retrieves the permissions given a group
+      summary: Retrieves the permissions given an group
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:              
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: '#/components/parameters/groupNamePathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Permission'      
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  
   /acs/domains/{domain}/users/{userId}/groups:
     get:
       operationId: getUserGroups
@@ -689,7 +745,7 @@ paths:
     post:
       operationId: assignGroupToUser
       tags:
-        - groups
+        - users
       description: Assigns group to user
       summary: Assigns group to user
       security:

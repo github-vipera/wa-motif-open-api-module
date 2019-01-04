@@ -1,8 +1,11 @@
 import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
+
+
 import { ActionsService } from './api/actions.service';
 import { GroupsService } from './api/groups.service';
+import { MyselfService } from './api/myself.service';
 import { PermissionsService } from './api/permissions.service';
 import { RolesService } from './api/roles.service';
 import { UsersService } from './api/users.service';
@@ -14,6 +17,7 @@ import { UsersService } from './api/users.service';
   providers: [
     ActionsService,
     GroupsService,
+    MyselfService,
     PermissionsService,
     RolesService,
     UsersService ]

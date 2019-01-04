@@ -191,6 +191,28 @@ describe('GroupsService', () => {
         )
     );
 
+    it(`should retrieve group actions`,
+        async(
+            () => {
+                service.getGroupActions('Default', 'testgroup').subscribe(value => {
+                }, error => {
+                    failTestWithError("should retrieve group actions", error);
+                })
+            }
+        )
+    );
+
+    it(`should retrieve group permissions`,
+        async(
+            () => {
+                service.getGroupPermissions('Default', 'testgroup').subscribe(value => {
+                }, error => {
+                    failTestWithError("should retrieve group permissions", error);
+                })
+            }
+        )
+    );
+
     it(`should update group`,
         async(
             () => {
