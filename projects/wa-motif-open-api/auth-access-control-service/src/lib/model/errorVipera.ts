@@ -9,9 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ActionUpdate } from './actionUpdate';
 
 
-export interface ActionCreate extends ActionUpdate { 
-    name: string;
+/**
+ * Specific platform error from Vipera MOTIF
+ */
+export interface ErrorVipera { 
+    code?: string;
+    _class?: string;
+    details?: string;
 }

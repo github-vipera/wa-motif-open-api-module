@@ -152,7 +152,7 @@ describe('UsersService', () => {
                     });
                     expect(g).toBeDefined();
                 }, error => {
-                    failTestWithError("should retrieve user actions", error);
+                    failTestWithError("should retrieve user groups", error);
                 })
             }
         )
