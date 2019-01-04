@@ -31,6 +31,7 @@ import { User } from '../model/user';
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 import { GroupsServiceInterface }                            from './groups.serviceInterface';
+import { WC_API_BASE_PATH }                                 from 'web-console-core'
 
 
 @Injectable({
@@ -42,7 +43,7 @@ export class GroupsService implements GroupsServiceInterface {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
 
         if (configuration) {
             this.configuration = configuration;

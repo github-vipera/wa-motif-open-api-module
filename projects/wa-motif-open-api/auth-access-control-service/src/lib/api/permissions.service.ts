@@ -24,6 +24,7 @@ import { Permission } from '../model/permission';
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 import { PermissionsServiceInterface }                            from './permissions.serviceInterface';
+import { WC_API_BASE_PATH }                                 from 'web-console-core'
 
 
 @Injectable({
@@ -35,7 +36,7 @@ export class PermissionsService implements PermissionsServiceInterface {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
 
         if (configuration) {
             this.configuration = configuration;
