@@ -2,3 +2,4 @@ dist
 node_modules
 documentation
 swagger_generator/output/sources
+package_dist
