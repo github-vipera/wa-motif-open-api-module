@@ -1,6 +1,6 @@
 {
     "name": "@wa-motif-open-api/configuration-service",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "scripts": {
         "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
     },
