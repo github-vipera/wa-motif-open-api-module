@@ -14,9 +14,9 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { OTPList } from '../model/oTPList';
 import { Otp } from '../model/otp';
 import { OtpCreate } from '../model/otpCreate';
+import { OtpList } from '../model/otpList';
 
 
 import { Configuration }                                     from '../configuration';
@@ -49,6 +49,6 @@ export interface OtpServiceInterface {
     * @param domain Domain Name
     * @param userId User Id
     */
-    getOtpList(domain: string, userId: string, extraHttpRequestParams?: any): Observable<OTPList>;
+    getOtpList(domain: string, userId: string, extraHttpRequestParams?: any): Observable<OtpList>;
 
 }

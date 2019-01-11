@@ -13,4 +13,5 @@
 
 export interface OtpCreate { 
     application: string;
+    scope?: string;
 }

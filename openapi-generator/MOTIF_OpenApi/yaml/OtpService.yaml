@@ -9,9 +9,9 @@ info:
     name: Vipera Motif commercial license
     url: 'http://www.vipera.com'
 servers:
-  - url: '/rest/v2'
   - url: 'http://localhost:8080/rest/v2'
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+  - url: '/rest/v2'
 tags:
   - name: otp
     description: OTP Service related
@@ -32,22 +32,26 @@ components:
         application:
           type: string
           example: 'Vipera'
+        scope:
+          type: string
+          example: 'activation'
     Otp:
       type: object
       required:
-        - id
+        - key
       properties:
-        id:
+        key:
           type: string
           example: '1234'
-    OTPEntity:
+    OtpEntity:
       type: object
       required:
         - id
       properties:
         id:
-          type: string
-          example: '1234'
+          type: integer
+          format: int64
+          example: '12'
         key:
           type: string
           example: '{SHA_512}641c1b75360d2cfc6488ca62ba41c4a197636fb8f1634305f834acf14f0bc4417e2fc9b6593b59c12002b7ce533edd0d2e38f3e979fa13ae779a47fe356e56fa'
@@ -73,10 +77,10 @@ components:
         failures:
           type: integer
           example: '1'
-    OTPList:
+    OtpList:
       type: array
       items:
-        $ref: '#/components/schemas/OTPEntity'
+        $ref: '#/components/schemas/OtpEntity'
   parameters:
     otpIdPathParam:
       name: otpId
@@ -86,6 +90,7 @@ components:
       schema:
         type: integer
         format: int64
+        example: '12'
 paths:
   /otp/domains/{domain}/users/{userId}:
     post:
@@ -136,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OTPList'
+                $ref: '#/components/schemas/OtpList'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /otp/{otpId}:

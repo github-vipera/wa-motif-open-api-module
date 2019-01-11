@@ -9,8 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OTPEntity } from './oTPEntity';
+import { OtpEntity } from './otpEntity';
 
 
-export interface OTPList extends Array<OTPEntity> { 
+export interface OtpList extends Array<OtpEntity> { 
 }
