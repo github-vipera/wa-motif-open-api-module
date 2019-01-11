@@ -12,5 +12,5 @@
 
 
 export interface Otp { 
-    id: string;
+    key: string;
 }

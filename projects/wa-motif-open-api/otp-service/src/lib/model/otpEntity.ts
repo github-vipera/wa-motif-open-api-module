@@ -11,8 +11,8 @@
  */
 
 
-export interface OTPEntity { 
-    id: string;
+export interface OtpEntity { 
+    id: number;
     key?: string;
     scope?: string;
     /**
