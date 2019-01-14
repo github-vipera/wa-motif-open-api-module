@@ -144,11 +144,6 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api-module/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api-module/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/wa-motif-open-api-module/ng-package.prod.json"
-            }
           }
         },
         "test": {
@@ -184,11 +179,6 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api-kitchensink-module/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api-kitchensink-module/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/wa-motif-open-api-kitchensink-module/ng-package.prod.json"
-            }
           }
         },
         "test": {
@@ -224,11 +214,6 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api/platform-service/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api/platform-service/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/wa-motif-open-api/platform-service/ng-package.prod.json"
-            }
           }
         },
         "test": {
@@ -264,11 +249,6 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api/security-service/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api/security-service/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/wa-motif-open-api/security-service/ng-package.prod.json"
-            }
           }
         },
         "test": {
@@ -304,11 +284,6 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api/app-content-service/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api/app-content-service/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/wa-motif-open-api/app-content-service/ng-package.prod.json"
-            }
           }
         },
         "test": {
@@ -344,11 +319,6 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api/configuration-service/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api/configuration-service/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/wa-motif-open-api/configuration-service/ng-package.prod.json"
-            }
           }
         },
         "test": {
@@ -384,11 +354,6 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api/oauth2-service/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api/oauth2-service/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/wa-motif-open-api/oauth2-service/ng-package.prod.json"
-            }
           }
         },
         "test": {

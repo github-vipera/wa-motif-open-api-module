@@ -6,7 +6,8 @@
     },
     "peerDependencies": {
         "@angular/common": "^7.0.0",
-        "@angular/core": "^7.0.0"
+        "@angular/core": "^7.0.0",
+        "web-console-core": "^0.1.0"
     },
     "dependencies": {}
 }
