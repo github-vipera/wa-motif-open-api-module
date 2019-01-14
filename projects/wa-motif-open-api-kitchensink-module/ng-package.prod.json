@@ -2,6 +2,14 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/wa-motif-open-api-kitchensink-module",
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+    "web-console-core": "WebConsoleCore",
+    "@progress/kendo-angular-grid": "KendoAngularGrid",
+    "@wa-motif-open-api/platform-service": "PlatformService",
+    "typescript-string-operations": "TypescriptStringOperations",
+    "lodash": "_",
+    "web-console-ui-kit": "WebConsoleUiKit"
+    }
   }
 }

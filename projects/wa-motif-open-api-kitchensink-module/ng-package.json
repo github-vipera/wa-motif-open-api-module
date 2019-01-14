@@ -3,6 +3,14 @@
   "dest": "../../dist/wa-motif-open-api-kitchensink-module",
   "deleteDestPath": false,
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+    "web-console-core": "WebConsoleCore",
+    "@progress/kendo-angular-grid": "KendoAngularGrid",
+    "@wa-motif-open-api/platform-service": "PlatformService",
+    "typescript-string-operations": "TypescriptStringOperations",
+    "lodash": "_",
+    "web-console-ui-kit": "WebConsoleUiKit"
+    }
   }
 }

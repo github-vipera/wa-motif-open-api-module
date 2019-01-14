@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/wa-motif-open-api/plugin-auth-service",
+  "lib": {
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+		"web-console-core": "WebConsoleCore"
+    }
+  }
+}
