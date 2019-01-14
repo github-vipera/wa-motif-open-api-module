@@ -8,7 +8,7 @@ import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
 import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
-import { DomainCreate } from 'openapi-generator/output/sources';
+import { DomainCreate } from '../model/models';
 import { DomainUpdate } from '../model/models';
 import { ApplicationCreate, ApplicationUpdate } from '@wa-motif-open-api/platform-service/lib';
 
