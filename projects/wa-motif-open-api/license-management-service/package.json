@@ -1,6 +1,6 @@
 {
     "name": "@wa-motif-open-api/license-management-service",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "scripts": {
         "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
     },
