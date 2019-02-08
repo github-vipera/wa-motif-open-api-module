@@ -14,9 +14,7 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { Bundle } from '../model/bundle';
-import { BundleList } from '../model/bundleList';
 import { BundleStatus } from '../model/bundleStatus';
-import { BundleStatusList } from '../model/bundleStatusList';
 import { BundleUpdate } from '../model/bundleUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
@@ -24,7 +22,7 @@ import { ErrorVipera } from '../model/errorVipera';
 import { Configuration }                                     from '../configuration';
 
 
-export interface WebcontentServiceInterface {
+export interface BundlesServiceInterface {
     defaultHeaders: HttpHeaders;
     configuration: Configuration;
     
@@ -65,13 +63,13 @@ export interface WebcontentServiceInterface {
     * Retrieves Web Content Bundles Info
     * Retrieves Web Content Bundles Info
     */
-    getBundlesList(extraHttpRequestParams?: any): Observable<BundleList>;
+    getBundlesList(extraHttpRequestParams?: any): Observable<Array<Bundle>>;
 
     /**
     * Retrieves Web Content Bundles Status
     * Retrieves Web Content Bundles Status
     */
-    getBundlesStatusList(extraHttpRequestParams?: any): Observable<BundleStatusList>;
+    getBundlesStatusList(extraHttpRequestParams?: any): Observable<Array<BundleStatus>>;
 
     /**
     * Publish a Web Content Bundle
