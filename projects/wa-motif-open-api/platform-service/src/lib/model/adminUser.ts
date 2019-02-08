@@ -13,7 +13,7 @@ import { SharedUserData } from './sharedUserData';
 import { UserKey } from './userKey';
 
 
-export interface AdminUser extends UserKey { 
+export interface AdminUser extends UserKey, SharedUserData { 
     firstName?: string;
     lastName?: string;
 }
