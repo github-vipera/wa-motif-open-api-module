@@ -9,12 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ServiceContextCreate } from './serviceContextCreate';
 import { ServiceContextValue } from './serviceContextValue';
 
 
-export interface ServiceContext extends ServiceContextCreate { 
+export interface ServiceContext { 
+    name: string;
+    channel: string;
+    enabled?: boolean;
     domain: string;
     application: string;
-    serviceOperationList?: Array<ServiceContextValue>;
+    valuesList?: Array<ServiceContextValue>;
 }

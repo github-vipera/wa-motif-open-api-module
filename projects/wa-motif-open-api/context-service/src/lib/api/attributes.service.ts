@@ -21,7 +21,6 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { ServiceContextAttribute } from '../model/serviceContextAttribute';
 import { ServiceContextAttributeCreate } from '../model/serviceContextAttributeCreate';
-import { ServiceContextAttributeList } from '../model/serviceContextAttributeList';
 import { ServiceContextAttributeUpdate } from '../model/serviceContextAttributeUpdate';
 
 import { WC_API_BASE_PATH } from 'web-console-core'
@@ -235,9 +234,9 @@ export class AttributesService implements AttributesServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAttributes(observe?: 'body', reportProgress?: boolean): Observable<ServiceContextAttributeList>;
-    public getAttributes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ServiceContextAttributeList>>;
-    public getAttributes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ServiceContextAttributeList>>;
+    public getAttributes(observe?: 'body', reportProgress?: boolean): Observable<Array<ServiceContextAttribute>>;
+    public getAttributes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServiceContextAttribute>>>;
+    public getAttributes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServiceContextAttribute>>>;
     public getAttributes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -269,7 +268,7 @@ export class AttributesService implements AttributesServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ServiceContextAttributeList>(`${this.configuration.basePath}/contextservice/attributes`,
+        return this.httpClient.get<Array<ServiceContextAttribute>>(`${this.configuration.basePath}/contextservice/attributes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

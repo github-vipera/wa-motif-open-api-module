@@ -10,6 +10,8 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+  - url: '/rest/v2'
 tags:
   - name: contexts
     description: Context Service related
@@ -26,45 +28,10 @@ components:
     vipera_cookie:
       $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
   schemas:           
-    ServiceContextValue:
-      type: object
-      required:
-        - value
-        - attribute
-      properties:
-        value:
-          type: string
-          example: myValue
-        attribute:  
-           $ref: '#/components/schemas/ServiceContextAttribute' 
-
-    ServiceContextValueList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ServiceContextValue'      
-            
-    ServiceContextAttribute:
-      type: object
-      required:
-        - name
-        - type
-      properties:
-        name:
-          type: string
-          example: MyAttributeName     
-        type:
-          type: string
-          example: Boolean   
-
-    ServiceContextAttributeList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ServiceContextAttribute' 
-  
     ServiceContextAttributeCreate:
       type: object
       allOf:
-        - $ref: '#/components/schemas/ServiceContextAttribute' 
+        - $ref: './Z_Globals.yaml#/components/schemas/ServiceContextAttribute' 
     
     ServiceContextAttributeUpdate:
       type: object
@@ -108,31 +75,6 @@ components:
             type: boolean
             example: true  
 
-    ServiceContext:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceContextCreate'
-      - type: object
-        required:
-          - domain
-          - application
-        properties:
-          domain:
-            type: string
-            example: Default
-          application:
-            type: string
-            example: vipera
-          serviceOperationList:
-            type: array
-            items:
-              $ref: '#/components/schemas/ServiceContextValue' 
-
-    ServiceContextList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ServiceContext'      
-
     ValueCreate:
       type: object
       allOf:
@@ -173,7 +115,6 @@ components:
         example: 'MyAttributeName'      
         
 paths:
-
   /contextservice/contexts:
     get:
       operationId: getContexts
@@ -192,7 +133,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContextList'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextList'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -222,7 +163,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContext'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContext'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     get:
@@ -245,7 +186,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContextList'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextList'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -271,7 +212,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContext'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContext'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     put:
@@ -343,7 +284,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContextAttribute'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextAttribute'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     get:
@@ -363,7 +304,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContextAttributeList'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextAttributeList'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   
@@ -387,7 +328,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContextAttribute'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextAttribute'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     put:
@@ -459,7 +400,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContextValue'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextValue'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getValues
+      tags:
+        - values
+      description: Retrieves Service Context Values
+      summary: Retrieves Service Context Values
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:  
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'                  
+        - $ref: '#/components/parameters/contextPathParam' 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextValueList'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -486,7 +451,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceContextValue'
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextValue'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     put:

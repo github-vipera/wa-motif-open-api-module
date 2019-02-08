@@ -16,7 +16,6 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { ServiceContext } from '../model/serviceContext';
 import { ServiceContextCreate } from '../model/serviceContextCreate';
-import { ServiceContextList } from '../model/serviceContextList';
 import { ServiceContextUpdate } from '../model/serviceContextUpdate';
 
 
@@ -52,7 +51,7 @@ export interface ContextsServiceInterface {
     * @param domain Domain Name
     * @param application Application Name
     */
-    getApplicationContexts(domain: string, application: string, extraHttpRequestParams?: any): Observable<ServiceContextList>;
+    getApplicationContexts(domain: string, application: string, extraHttpRequestParams?: any): Observable<Array<ServiceContext>>;
 
     /**
     * Retrieves a Service Context
@@ -67,7 +66,7 @@ export interface ContextsServiceInterface {
     * Retrieves all Service Contexts
     * Retrieves all Service Contexts
     */
-    getContexts(extraHttpRequestParams?: any): Observable<ServiceContextList>;
+    getContexts(extraHttpRequestParams?: any): Observable<Array<ServiceContext>>;
 
     /**
     * Updates a Service Context

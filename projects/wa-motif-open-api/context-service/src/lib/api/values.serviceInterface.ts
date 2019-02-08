@@ -58,6 +58,15 @@ export interface ValuesServiceInterface {
     getValue(domain: string, application: string, context: string, attribute: string, extraHttpRequestParams?: any): Observable<ServiceContextValue>;
 
     /**
+    * Retrieves Service Context Values
+    * Retrieves Service Context Values
+    * @param domain Domain Name
+    * @param application Application Name
+    * @param context Context Name
+    */
+    getValues(domain: string, application: string, context: string, extraHttpRequestParams?: any): Observable<Array<ServiceContextValue>>;
+
+    /**
     * Updates a Service Context Value
     * Updates a Service Context Value
     * @param domain Domain Name
