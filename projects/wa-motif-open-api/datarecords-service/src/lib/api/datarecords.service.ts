@@ -19,7 +19,6 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { DatarecordList } from '../model/datarecordList';
-import { DatarecordTypesList } from '../model/datarecordTypesList';
 import { ErrorVipera } from '../model/errorVipera';
 
 import { WC_API_BASE_PATH } from 'web-console-core'
@@ -32,7 +31,7 @@ import { DatarecordsServiceInterface }                            from './datare
 })
 export class DatarecordsService implements DatarecordsServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -69,18 +68,18 @@ export class DatarecordsService implements DatarecordsServiceInterface {
      * @param hashedSession Hashed session (SHA512)
      * @param usersId User natural ID
      * @param operations Operations list
-     * @param fromDate From date (2016-08-30 17:12:46)
-     * @param toDate To date (2016-08-30 17:12:46)
+     * @param fromDate From date (2016-08-30 17:12:46Z)
+     * @param toDate To date (2016-08-30 17:12:46Z)
      * @param resultCode Result code
      * @param anyError Default value is false
      * @param singleCsv Default value is true
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public exportDatarecords(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: string, toDate?: string, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
-    public exportDatarecords(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: string, toDate?: string, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
-    public exportDatarecords(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: string, toDate?: string, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
-    public exportDatarecords(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: string, toDate?: string, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public exportDatarecords(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: Date, toDate?: Date, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
+    public exportDatarecords(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: Date, toDate?: Date, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
+    public exportDatarecords(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: Date, toDate?: Date, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
+    public exportDatarecords(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: Date, toDate?: Date, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (type === null || type === undefined) {
             throw new Error('Required parameter type was null or undefined when calling exportDatarecords.');
         }
@@ -98,10 +97,10 @@ export class DatarecordsService implements DatarecordsServiceInterface {
             })
         }
         if (fromDate !== undefined && fromDate !== null) {
-            queryParameters = queryParameters.set('fromDate', <any>fromDate);
+            queryParameters = queryParameters.set('fromDate', <any>fromDate.toISOString());
         }
         if (toDate !== undefined && toDate !== null) {
-            queryParameters = queryParameters.set('toDate', <any>toDate);
+            queryParameters = queryParameters.set('toDate', <any>toDate.toISOString());
         }
         if (resultCode !== undefined && resultCode !== null) {
             queryParameters = queryParameters.set('resultCode', <any>resultCode);
@@ -159,28 +158,28 @@ export class DatarecordsService implements DatarecordsServiceInterface {
      * Get datarecords by type
      * Get datarecords by type
      * @param type Datarecords type (PERFORMANCE, TRANSACTION, DIAGNOSTIC, SECURITY...)
-     * @param fromDate From date (2016-08-30 17:12:46)
-     * @param toDate To date (2016-08-30 17:12:46)
+     * @param fromDate From date (2016-08-30 17:12:46Z)
+     * @param toDate To date (2016-08-30 17:12:46Z)
      * @param page Page (omit to retrieve all records at once)
      * @param pageSize Page size
      * @param sort Sorting fields
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDatarecords(type: string, fromDate?: string, toDate?: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<DatarecordList>;
-    public getDatarecords(type: string, fromDate?: string, toDate?: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DatarecordList>>;
-    public getDatarecords(type: string, fromDate?: string, toDate?: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DatarecordList>>;
-    public getDatarecords(type: string, fromDate?: string, toDate?: string, page?: number, pageSize?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDatarecords(type: string, fromDate?: Date, toDate?: Date, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<DatarecordList>;
+    public getDatarecords(type: string, fromDate?: Date, toDate?: Date, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DatarecordList>>;
+    public getDatarecords(type: string, fromDate?: Date, toDate?: Date, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DatarecordList>>;
+    public getDatarecords(type: string, fromDate?: Date, toDate?: Date, page?: number, pageSize?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (type === null || type === undefined) {
             throw new Error('Required parameter type was null or undefined when calling getDatarecords.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (fromDate !== undefined && fromDate !== null) {
-            queryParameters = queryParameters.set('fromDate', <any>fromDate);
+            queryParameters = queryParameters.set('fromDate', <any>fromDate.toISOString());
         }
         if (toDate !== undefined && toDate !== null) {
-            queryParameters = queryParameters.set('toDate', <any>toDate);
+            queryParameters = queryParameters.set('toDate', <any>toDate.toISOString());
         }
         if (page !== undefined && page !== null) {
             queryParameters = queryParameters.set('page', <any>page);
@@ -238,9 +237,9 @@ export class DatarecordsService implements DatarecordsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDatarecordsTypes(observe?: 'body', reportProgress?: boolean): Observable<DatarecordTypesList>;
-    public getDatarecordsTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DatarecordTypesList>>;
-    public getDatarecordsTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DatarecordTypesList>>;
+    public getDatarecordsTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getDatarecordsTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getDatarecordsTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
     public getDatarecordsTypes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -272,7 +271,7 @@ export class DatarecordsService implements DatarecordsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<DatarecordTypesList>(`${this.configuration.basePath}/datarecords/types`,
+        return this.httpClient.get<Array<string>>(`${this.configuration.basePath}/datarecords/types`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -289,18 +288,18 @@ export class DatarecordsService implements DatarecordsServiceInterface {
      * @param hashedSession Hashed session (SHA512)
      * @param usersId User natural ID
      * @param operations Operations list
-     * @param fromDate From date (2016-08-30 17:12:46)
-     * @param toDate To date (2016-08-30 17:12:46)
+     * @param fromDate From date (2016-08-30 17:12:46Z)
+     * @param toDate To date (2016-08-30 17:12:46Z)
      * @param resultCode Result code
      * @param anyError Default value is false
      * @param singleCsv Default value is true
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public verifyDatarecordsExport(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: string, toDate?: string, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public verifyDatarecordsExport(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: string, toDate?: string, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public verifyDatarecordsExport(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: string, toDate?: string, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public verifyDatarecordsExport(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: string, toDate?: string, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public verifyDatarecordsExport(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: Date, toDate?: Date, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public verifyDatarecordsExport(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: Date, toDate?: Date, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public verifyDatarecordsExport(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: Date, toDate?: Date, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public verifyDatarecordsExport(type: string, hashedSession?: string, usersId?: number, operations?: Array<string>, fromDate?: Date, toDate?: Date, resultCode?: string, anyError?: boolean, singleCsv?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (type === null || type === undefined) {
             throw new Error('Required parameter type was null or undefined when calling verifyDatarecordsExport.');
         }
@@ -318,10 +317,10 @@ export class DatarecordsService implements DatarecordsServiceInterface {
             })
         }
         if (fromDate !== undefined && fromDate !== null) {
-            queryParameters = queryParameters.set('fromDate', <any>fromDate);
+            queryParameters = queryParameters.set('fromDate', <any>fromDate.toISOString());
         }
         if (toDate !== undefined && toDate !== null) {
-            queryParameters = queryParameters.set('toDate', <any>toDate);
+            queryParameters = queryParameters.set('toDate', <any>toDate.toISOString());
         }
         if (resultCode !== undefined && resultCode !== null) {
             queryParameters = queryParameters.set('resultCode', <any>resultCode);

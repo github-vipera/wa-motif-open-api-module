@@ -40,6 +40,7 @@
         "angular-utils-cli": "^1.0.1",
         "core-js": "^2.5.4",
         "lodash": "^4.17.11",
+        "moment": "^2.24.0",
         "ngx-logger": "^3.3.9",
         "ngx-toastr": "^9.1.1",
         "rxjs": "^6.3.3",
