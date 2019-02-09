@@ -9,8 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Bundle } from './bundle';
 
 
-export interface BundleList extends Array<Bundle> { 
+export interface WebContentContextCreate { 
+    context?: string;
+    httpPath?: string;
 }

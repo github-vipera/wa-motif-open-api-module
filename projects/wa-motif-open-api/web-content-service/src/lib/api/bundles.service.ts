@@ -19,23 +19,21 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Bundle } from '../model/bundle';
-import { BundleList } from '../model/bundleList';
 import { BundleStatus } from '../model/bundleStatus';
-import { BundleStatusList } from '../model/bundleStatusList';
 import { BundleUpdate } from '../model/bundleUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
 import { WC_API_BASE_PATH } from 'web-console-core'
 import { Configuration }                                     from '../configuration';
-import { WebcontentServiceInterface }                            from './webcontent.serviceInterface';
+import { BundlesServiceInterface }                            from './bundles.serviceInterface';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebcontentService implements WebcontentServiceInterface {
+export class BundlesService implements BundlesServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -249,9 +247,9 @@ export class WebcontentService implements WebcontentServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getBundlesList(observe?: 'body', reportProgress?: boolean): Observable<BundleList>;
-    public getBundlesList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BundleList>>;
-    public getBundlesList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BundleList>>;
+    public getBundlesList(observe?: 'body', reportProgress?: boolean): Observable<Array<Bundle>>;
+    public getBundlesList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Bundle>>>;
+    public getBundlesList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Bundle>>>;
     public getBundlesList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -269,7 +267,7 @@ export class WebcontentService implements WebcontentServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<BundleList>(`${this.configuration.basePath}/webcontent/bundles`,
+        return this.httpClient.get<Array<Bundle>>(`${this.configuration.basePath}/webcontent/bundles`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -285,9 +283,9 @@ export class WebcontentService implements WebcontentServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getBundlesStatusList(observe?: 'body', reportProgress?: boolean): Observable<BundleStatusList>;
-    public getBundlesStatusList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BundleStatusList>>;
-    public getBundlesStatusList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BundleStatusList>>;
+    public getBundlesStatusList(observe?: 'body', reportProgress?: boolean): Observable<Array<BundleStatus>>;
+    public getBundlesStatusList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BundleStatus>>>;
+    public getBundlesStatusList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BundleStatus>>>;
     public getBundlesStatusList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -305,7 +303,7 @@ export class WebcontentService implements WebcontentServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<BundleStatusList>(`${this.configuration.basePath}/webcontent/bundles/status`,
+        return this.httpClient.get<Array<BundleStatus>>(`${this.configuration.basePath}/webcontent/bundles/status`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

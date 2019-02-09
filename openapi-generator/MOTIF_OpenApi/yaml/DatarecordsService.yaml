@@ -9,9 +9,9 @@ info:
     name: Vipera Motif commercial license
     url: 'http://www.vipera.com'
 servers:
-  - url: '/rest/v2'
   - url: 'http://localhost:8080/rest/v2'
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+  - url: '/rest/v2'
 tags:
   - name: datarecords
     description: Datarecords Service related
@@ -103,20 +103,22 @@ components:
           type: string
     fromDateQueryParam:
       name: fromDate
-      description: From date (2016-08-30 17:12:46)
+      description: From date (2016-08-30 17:12:46Z)
       in: query
       required: false
       schema:
         type: string
-        example: '2016-08-30 17:12:46'
+        format: date-time
+        example: '2016-08-30 17:12:46Z'
     toDateQueryParam:
       name: toDate
-      description: To date (2016-08-30 17:12:46)
+      description: To date (2016-08-30 17:12:46Z)
       in: query
       required: false
       schema:
         type: string
-        example: '2016-08-30 17:12:46'
+        format: date-time
+        example: '2016-08-30 17:12:46Z'
     resultCodeQueryParam:
       name: resultCode
       description: Result code

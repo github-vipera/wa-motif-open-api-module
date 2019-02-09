@@ -9,15 +9,32 @@ info:
     name: Vipera Motif commercial license
     url: 'http://www.vipera.com'
 servers:
-  - url: '/rest/v2'
   - url: 'http://localhost:8080/rest/v2'
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+  - url: '/rest/v2'
 tags:
-  - name: webcontent
-    description: Web Content Service related
+  - name: context
+    description: Web Content context related
+  - name: bundle
+    description: Web Content bundle related
 components:
   
   schemas:
+    WebContentContextCreate:
+      type: object
+      properties:
+        context:
+          type: string
+          example: 'testContext'
+        httpPath:
+          type: string
+          example: '/testpath'
+    WebContentContextUpdate:
+      type: object
+      properties:
+        httpPath:
+          type: string
+          example: '/testpath'
     BundleUpload:
       type: object
       required:
@@ -95,12 +112,143 @@ components:
       schema:
         type: string
         example: '1.0.0'
+    contextNamePathParam:
+      name: contextName
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 'openapi'
 paths:
+  /webcontent/domains/{domain}/applications/{application}/contexts:
+    post:
+      operationId: createContext
+      tags:
+        - contexts
+      description: Creates a Web Content Context
+      summary: Creates a Web Content Context
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebContentContextCreate'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContext'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: getContexts
+      tags:
+        - contexts
+      description: Retrieves Web Content Contexts list
+      summary: Retrieves Web Content Contexts list
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextList'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /webcontent/domains/{domain}/applications/{application}/contexts/{contextName}:
+    get:
+      operationId: getContext
+      tags:
+        - contexts
+      description: Retrieves Web Content Context
+      summary: Retrieves Web Content Context
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+        - $ref: '#/components/parameters/contextNamePathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './Z_Globals.yaml#/components/schemas/ServiceContext'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    put:
+      operationId: updateContext
+      tags:
+        - contexts
+      description: Update a Web Content Context
+      summary: Update a Web Content Context
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+        - $ref: '#/components/parameters/contextNamePathParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebContentContextUpdate'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: deleteContext
+      tags:
+        - contexts
+      description: Deletes a Web Content Context
+      summary: Deletes a Web Content Context
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'             
+        - $ref: '#/components/parameters/contextNamePathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
   /webcontent/bundles:
     put:
       operationId: uploadBundle
       tags:
-        - webcontent
+        - bundles
       description: Uploads a Web Content Bundle
       summary: Uploads a Web Content Bundle
       security:
@@ -121,7 +269,7 @@ paths:
     get:
       operationId: getBundlesList
       tags:
-        - webcontent
+        - bundles
       description: Retrieves Web Content Bundles Info
       summary: Retrieves Web Content Bundles Info
       security:
@@ -143,7 +291,7 @@ paths:
     get:
       operationId: downloadBundle
       tags:
-        - webcontent
+        - bundles
       description: Downloads a Web Content Bundle
       summary: Downloads a Web Content Bundle
       security:
@@ -167,7 +315,7 @@ paths:
     put:
       operationId: updateBundle
       tags:
-        - webcontent
+        - bundles
       description: Update a Web Content Bundle
       summary: Update a Web Content Bundle
       security:
@@ -191,7 +339,7 @@ paths:
     delete:
       operationId: deleteBundle
       tags:
-        - webcontent
+        - bundles
       description: Delete a Web Content Bundle
       summary: Delete a Web Content Bundle
       security:
@@ -212,7 +360,7 @@ paths:
     get:
       operationId: getBundlesStatusList
       tags:
-        - webcontent
+        - bundles
       description: Retrieves Web Content Bundles Status
       summary: Retrieves Web Content Bundles Status
       security:
@@ -234,7 +382,7 @@ paths:
     get:
       operationId: getBundleStatus
       tags:
-        - webcontent
+        - bundles
       description: Retrieves a Web Content Bundle Status
       summary: Retrieves a Web Content Bundle Status
       security:
@@ -259,7 +407,7 @@ paths:
     get:
       operationId: getBundle
       tags:
-        - webcontent
+        - bundles
       description: Retrieves a Web Content Bundle Info
       summary: Retrieves a Web Content Bundle Info
       security:
@@ -284,7 +432,7 @@ paths:
     post:
       operationId: publishBundle
       tags:
-        - webcontent
+        - bundles
       description: Publish a Web Content Bundle
       summary: Publish a Web Content Bundle
       security:
@@ -305,7 +453,7 @@ paths:
     post:
       operationId: unpublishBundle
       tags:
-        - webcontent
+        - bundles
       description: Unpublish a Web Content Bundle
       summary: Unpublish a Web Content Bundle
       security:

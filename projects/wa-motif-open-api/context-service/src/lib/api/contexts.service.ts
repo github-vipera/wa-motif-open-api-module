@@ -21,7 +21,6 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { ServiceContext } from '../model/serviceContext';
 import { ServiceContextCreate } from '../model/serviceContextCreate';
-import { ServiceContextList } from '../model/serviceContextList';
 import { ServiceContextUpdate } from '../model/serviceContextUpdate';
 
 import { WC_API_BASE_PATH } from 'web-console-core'
@@ -199,9 +198,9 @@ export class ContextsService implements ContextsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getApplicationContexts(domain: string, application: string, observe?: 'body', reportProgress?: boolean): Observable<ServiceContextList>;
-    public getApplicationContexts(domain: string, application: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ServiceContextList>>;
-    public getApplicationContexts(domain: string, application: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ServiceContextList>>;
+    public getApplicationContexts(domain: string, application: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ServiceContext>>;
+    public getApplicationContexts(domain: string, application: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServiceContext>>>;
+    public getApplicationContexts(domain: string, application: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServiceContext>>>;
     public getApplicationContexts(domain: string, application: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getApplicationContexts.');
@@ -239,7 +238,7 @@ export class ContextsService implements ContextsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ServiceContextList>(`${this.configuration.basePath}/contextservice/domains/${encodeURIComponent(String(domain))}/applications/${encodeURIComponent(String(application))}/contexts`,
+        return this.httpClient.get<Array<ServiceContext>>(`${this.configuration.basePath}/contextservice/domains/${encodeURIComponent(String(domain))}/applications/${encodeURIComponent(String(application))}/contexts`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -317,9 +316,9 @@ export class ContextsService implements ContextsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getContexts(observe?: 'body', reportProgress?: boolean): Observable<ServiceContextList>;
-    public getContexts(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ServiceContextList>>;
-    public getContexts(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ServiceContextList>>;
+    public getContexts(observe?: 'body', reportProgress?: boolean): Observable<Array<ServiceContext>>;
+    public getContexts(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServiceContext>>>;
+    public getContexts(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServiceContext>>>;
     public getContexts(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -351,7 +350,7 @@ export class ContextsService implements ContextsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ServiceContextList>(`${this.configuration.basePath}/contextservice/contexts`,
+        return this.httpClient.get<Array<ServiceContext>>(`${this.configuration.basePath}/contextservice/contexts`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

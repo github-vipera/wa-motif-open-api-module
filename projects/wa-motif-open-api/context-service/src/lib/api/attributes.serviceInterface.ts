@@ -16,7 +16,6 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { ServiceContextAttribute } from '../model/serviceContextAttribute';
 import { ServiceContextAttributeCreate } from '../model/serviceContextAttributeCreate';
-import { ServiceContextAttributeList } from '../model/serviceContextAttributeList';
 import { ServiceContextAttributeUpdate } from '../model/serviceContextAttributeUpdate';
 
 
@@ -53,7 +52,7 @@ export interface AttributesServiceInterface {
     * Retrieves all Service Context Attributes
     * Retrieves all Service Context Attributes
     */
-    getAttributes(extraHttpRequestParams?: any): Observable<ServiceContextAttributeList>;
+    getAttributes(extraHttpRequestParams?: any): Observable<Array<ServiceContextAttribute>>;
 
     /**
     * Updates a Service Context Attribute

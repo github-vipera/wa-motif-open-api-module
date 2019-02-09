@@ -12,18 +12,18 @@ import { DatarecordsService } from './api/datarecords.service';
   providers: [
     DatarecordsService ]
 })
-export class DatarecordsServiceModule {
+export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
         return {
-            ngModule: DatarecordsServiceModule,
+            ngModule: ApiModule,
             providers: [ { provide: Configuration, useFactory: configurationFactory } ]
         };
     }
 
-    constructor( @Optional() @SkipSelf() parentModule: DatarecordsServiceModule,
+    constructor( @Optional() @SkipSelf() parentModule: ApiModule,
                  @Optional() http: HttpClient) {
         if (parentModule) {
-            throw new Error('DatarecordsServiceModule is already loaded. Import in your base AppModule only.');
+            throw new Error('ApiModule is already loaded. Import in your base AppModule only.');
         }
         if (!http) {
             throw new Error('You need to import the HttpClientModule in your AppModule! \n' +

@@ -10,13 +10,14 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2/'
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
 components:
   securitySchemes:
     vipera_oauth2:
       type: oauth2
       flows:
         password:
-          tokenUrl: 'http://localhost:8080/oauth2/token'
+          tokenUrl: '/oauth2/token'
           scopes:
             'all:all': complete access
     vipera_basic:
@@ -123,13 +124,13 @@ components:
           type: string
           example: Value
     DomainData:
-        type: object
-        required:
-          - description
-        properties:
-          description:
-            type: string
-            example: Default Domain
+      type: object
+      required:
+        - description
+      properties:
+        description:
+          type: string
+          example: Default Domain
     Domain:
       type: object
       allOf:
@@ -222,25 +223,94 @@ components:
           type: boolean
           example: false
     Channel:
-        type: object
-        required:
-          - name
-        properties:
-          name:
-            type: string
-            example: JSON
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: JSON
     Credentials:
-        type: object
-        required:
-          - password
-          - passwordVerify
-        properties:
-          password:
-            type: string
-            example: Password
-          passwordVerify:
-            type: string
-            example: Password
+      type: object
+      required:
+        - password
+        - passwordVerify
+      properties:
+        password:
+          type: string
+          example: Password
+        passwordVerify:
+          type: string
+          example: Password
+            
+    ServiceContextValue:
+      type: object
+      required:
+        - value
+        - attribute
+      properties:
+        value:
+          type: string
+          example: myValue
+        attribute:  
+           $ref: '#/components/schemas/ServiceContextAttribute' 
+
+    ServiceContextValueList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceContextValue'      
+            
+    ServiceContextAttribute:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+          example: MyAttributeName     
+        type:
+          type: string
+          example: Boolean   
+
+    ServiceContextAttributeList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceContextAttribute' 
+    
+    ServiceContext:
+      type: object
+      required:
+        - name
+        - channel
+        - domain
+        - application
+      properties:
+        name:
+          type: string
+          example: TestContext
+        channel:
+          type: string
+          example: REST
+        enabled:
+          type: boolean
+          example: true  
+        domain:
+          type: string
+          example: Default
+        application:
+          type: string
+          example: vipera
+        valuesList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceContextValue' 
+
+    ServiceContextList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceContext'      
+
     ErrorVipera:
       type: object
       description: Specific platform error from Vipera MOTIF

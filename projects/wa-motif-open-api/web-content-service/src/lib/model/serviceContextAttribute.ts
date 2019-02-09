@@ -9,8 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BundleStatus } from './bundleStatus';
 
 
-export interface BundleStatusList extends Array<BundleStatus> { 
+export interface ServiceContextAttribute { 
+    name: string;
+    type: string;
 }

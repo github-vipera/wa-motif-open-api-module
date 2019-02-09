@@ -14,6 +14,12 @@ export function failLogin(error: any) {
     fail(text);
 }
 
+export function failTestWithMessage(testName: string, message: string) {
+    let text: string = "Test " + testName + " failed: " + message;
+    console.log(text);
+    fail(text);
+}
+
 export function failTestWithError(testName: string, error: any) {
     let text: string = "Test " + testName + " failed: " + error.message;
     console.log(text);

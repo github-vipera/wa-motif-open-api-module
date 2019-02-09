@@ -1,6 +1,6 @@
 {
     "name": "@wa-motif-open-api/plugin-auth-service",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "scripts": {
         "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
     },

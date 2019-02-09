@@ -3,14 +3,16 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { WebcontentService } from './api/webcontent.service';
+import { BundlesService } from './api/bundles.service';
+import { ContextsService } from './api/contexts.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
   providers: [
-    WebcontentService ]
+    BundlesService,
+    ContextsService ]
 })
 export class WebContentServiceModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {

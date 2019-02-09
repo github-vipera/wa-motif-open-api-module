@@ -13,5 +13,5 @@ import { SharedUserData } from './sharedUserData';
 import { UserKey } from './userKey';
 
 
-export interface ClientUser extends UserKey { 
+export interface ClientUser extends UserKey, SharedUserData { 
 }
