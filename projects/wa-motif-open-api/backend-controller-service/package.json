@@ -1,6 +1,6 @@
 {
     "name": "@wa-motif-open-api/backend-controller-service",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "scripts": {
         "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
     },
