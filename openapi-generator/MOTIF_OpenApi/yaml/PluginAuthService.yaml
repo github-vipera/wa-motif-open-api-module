@@ -81,12 +81,6 @@ components:
             vipserial:
               type: string
               example: 'vipserial'
-            pwd:
-              type: string
-              example: 'viperapass'
-            vpwd:
-              type: string
-              example: 'viperapass'
     UserPasswordChange:
       type: object
       allOf:

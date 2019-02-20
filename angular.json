@@ -1064,6 +1064,11 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api/e2e-encryption-service/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api/e2e-encryption-service/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/wa-motif-open-api/e2e-encryption-service/ng-package.prod.json"
+            }
           }
         },
         "test": {
@@ -1099,6 +1104,11 @@
           "options": {
             "tsConfig": "projects/wa-motif-open-api/session-service/tsconfig.lib.json",
             "project": "projects/wa-motif-open-api/session-service/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/wa-motif-open-api/session-service/ng-package.prod.json"
+            }
           }
         },
         "test": {

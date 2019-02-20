@@ -21,6 +21,4 @@ export interface UserActivation extends UserPasswordVerification {
     asset?: string;
     assetver?: string;
     vipserial?: string;
-    pwd?: string;
-    vpwd?: string;
 }
