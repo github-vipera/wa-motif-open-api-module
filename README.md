@@ -51,6 +51,7 @@ java -jar ./openapi-generator/openapi-generator-cli.jar generate -i ./path_to_fi
 ```
 
 The tool will generate all the sources in the folder `./swagger_generator/output/sources`.
+
 **Note**: before launching the above command, you must ensure that the folder `./swagger_generator/output/sources` is empty or nonexistent.
 
 A set of source files like these will be generated:
@@ -114,6 +115,46 @@ You can check if all the changes are ok trying to run a build as follows:
 
 ```bash
 ng build @wa-motif-open-api/my-new-service
+```
+
+### Production Configuration
+
+To be able to produce a production artifact you need to ensure that 2 files exist in your project root:
+- `ng-package.json`, which should look like this:
+```json
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/wa-motif-open-api/session-service",
+  "deleteDestPath": false,
+  "lib": {
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+      "web-console-core": "WebConsoleCore"  
+    }
+  }
+}
+```
+- `ng-package.prod.json`, which should look like this:
+```json
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/wa-motif-open-api/session-service",
+  "lib": {
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+      "web-console-core": "WebConsoleCore"  
+    }
+  }
+}
+```
+
+Moreover you need to open the `angular.json` file in `wa-motif-open-api-module` project root, find your newly created service and add this snippet to the `build` section:
+```json
+"configurations": {
+  "production": {
+    "project": "projects/wa-motif-open-api/session-service/ng-package.prod.json"
+  }
+}
 ```
 
 ## How To Test your API library project
