@@ -15,7 +15,6 @@ import { Observable }                                        from 'rxjs';
 
 import { Channel } from '../model/channel';
 import { ChannelCreate } from '../model/channelCreate';
-import { ChannelsList } from '../model/channelsList';
 import { ErrorVipera } from '../model/errorVipera';
 
 
@@ -52,6 +51,6 @@ export interface ChannelsServiceInterface {
     * Retrieves channels list
     * Retrieves channels list
     */
-    getChannelsList(extraHttpRequestParams?: any): Observable<ChannelsList>;
+    getChannelsList(extraHttpRequestParams?: any): Observable<Array<Channel>>;
 
 }

@@ -1,0 +1,146 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Security Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+    description: Local server
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
+tags:
+  - name: session
+    description: Session Manager Service
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:           
+    Session:
+      type: object
+      required:
+        - id
+        - lastAccess
+        - secure
+        - channel
+        - domain
+        - application
+        - user
+        - lastRequestId
+        - expiry
+        - clientIp
+        - shared
+      properties:
+        id:
+          type: string
+          description: Session ID
+          example: 3h3hgf234gf23hg4f23h4hg23f4h23gf4h2
+        lastAccess:
+          type: string
+          format: 'date-time'
+          example: '2016-08-30 17:12:46.542Z'
+        secure:
+          type: boolean
+          description: Whether this session is secure
+          example: true
+        channel:
+          type: string
+          description: Channel
+          example: JSON
+        domain:
+          type: string
+          description: Domain
+          example: Default
+        application:
+          type: string
+          description: Application
+          example: Vipera
+        user:
+          type: string
+          description: User
+          example: joe
+        lastRequestId:
+          type: integer
+          description: Last request ID
+          example: 123
+        expiry:
+          type: string
+          description: Expiry
+          example: 5h
+        clientIp:
+          type: string
+          description: Client IP
+          example: 8.8.8.8
+        shared:
+          type: boolean
+          description: Whether this session is shared between multiple users
+          example: false
+        
+paths:
+  /sessions/current:
+    post:
+      operationId: openCurrentUserSession
+      tags:
+        - session
+      description: Open current user session
+      summary: Open current user session
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '201':
+          description: Session created
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Session'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    get:
+      operationId: checkCurrentUserSession
+      tags:
+        - session
+      description: Check current user session
+      summary: Check current user session
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK Response
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Session'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: closeCurrentUserSession
+      tags:
+        - session
+      description: Close current user session
+      summary: Close current user session
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+  

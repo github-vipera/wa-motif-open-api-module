@@ -20,7 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
 import { Property } from '../model/property';
-import { ServiceList } from '../model/serviceList';
+import { Service } from '../model/service';
 
 import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
@@ -132,9 +132,9 @@ export class ApplicationsService implements ApplicationsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getServiceList(domain: string, application: string, observe?: 'body', reportProgress?: boolean): Observable<ServiceList>;
-    public getServiceList(domain: string, application: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ServiceList>>;
-    public getServiceList(domain: string, application: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ServiceList>>;
+    public getServiceList(domain: string, application: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Service>>;
+    public getServiceList(domain: string, application: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Service>>>;
+    public getServiceList(domain: string, application: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Service>>>;
     public getServiceList(domain: string, application: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getServiceList.');
@@ -172,7 +172,7 @@ export class ApplicationsService implements ApplicationsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ServiceList>(`${this.configuration.basePath}/catalog/domains/${encodeURIComponent(String(domain))}/applications/${encodeURIComponent(String(application))}/services`,
+        return this.httpClient.get<Array<Service>>(`${this.configuration.basePath}/catalog/domains/${encodeURIComponent(String(domain))}/applications/${encodeURIComponent(String(application))}/services`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

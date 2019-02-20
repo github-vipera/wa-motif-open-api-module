@@ -10,6 +10,9 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
 tags:
   - name: counters
     description: Counters related
@@ -26,11 +29,6 @@ components:
     vipera_cookie:
       $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
   schemas:
-    CounterInfoEntityList:
-      type: array
-      items:
-          $ref: '#/components/schemas/CounterInfoEntity' 
-          
     CounterInfoEntity:
       allOf:
         - $ref: '#/components/schemas/CounterInfo'
@@ -114,11 +112,6 @@ components:
         fnParams:
           type: string
           example: '{ "period": "D", "type": 1 }'
-                  
-    CountersEntityList:
-        type: array
-        items:
-            $ref: '#/components/schemas/CounterEntity' 
             
     CounterEntity:
         type: object
@@ -148,12 +141,7 @@ components:
             type: string
             example: '2017-10-24 13:12:46.543Z'
             format: 'date-time'
-
-    ThresholdInfoEntityList:
-        type: array
-        items:
-            $ref: '#/components/schemas/ThresholdInfoEntity'
-            
+                        
     ThresholdInfoEntity:
       allOf:
         - $ref: '#/components/schemas/ThresholdInfo'
@@ -238,6 +226,15 @@ components:
             type: number
             format: double
             example: '112.5'
+    
+    ConfigurationUpload:
+        type: object
+        required:
+         - file
+        properties:
+          file:
+            type: string
+            format: binary
             
   parameters:
     counterInfoPathParam:
@@ -303,8 +300,65 @@ components:
       example: TEST
       schema:
         type: string
-        
+    counterInfoNameDownloadQueryParam:
+      name: counterNames
+      description: Counter Info Names
+      required : false
+      in: query
+      example: counterNames=testCounter,testCounter2
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: false
 paths:
+  /counterthreshold/counters/infos/xml:
+        put:
+          operationId: uploadXml
+          tags:
+            - counters
+          description: Uploads XML counter info file
+          summary: Uploads XML counter info file
+          security:
+            - vipera_oauth2:
+              - 'all:all'
+            - vipera_basic: []
+            - vipera_cookie: []
+          requestBody:
+            content:
+              multipart/form-data:
+                schema:
+                  $ref: '#/components/schemas/ConfigurationUpload'
+          responses:
+            '204':
+              $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+            default:
+              $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+        get:
+          operationId: downloadXml
+          tags:
+            - counters
+          description: Downloads XML counter info file
+          summary: Downloads XML counter info file
+          security:
+            - vipera_oauth2:
+              - 'all:all'
+            - vipera_basic: []
+            - vipera_cookie: []  
+          parameters:
+            - $ref: '#/components/parameters/counterInfoNameDownloadQueryParam'
+          responses:
+            '200':
+              description: OK
+              content:
+                application/zip:
+                  schema:
+                    type: string
+                    format: binary
+            default:
+              $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
   /counterthreshold/counters/infos:
     post:
       operationId: createCounterInfo
@@ -349,7 +403,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CounterInfoEntityList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/CounterInfoEntity' 
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     
@@ -480,7 +536,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ThresholdInfoEntityList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ThresholdInfoEntity'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -518,7 +576,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CountersEntityList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/CounterEntity' 
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   

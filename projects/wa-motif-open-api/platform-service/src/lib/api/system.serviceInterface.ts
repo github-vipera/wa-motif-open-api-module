@@ -14,14 +14,11 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { SystemCategoriesList } from '../model/systemCategoriesList';
 import { SystemCategory } from '../model/systemCategory';
 import { SystemCategoryCreate } from '../model/systemCategoryCreate';
-import { SystemCategoryData } from '../model/systemCategoryData';
 import { SystemMessage } from '../model/systemMessage';
 import { SystemMessageCreate } from '../model/systemMessageCreate';
 import { SystemMessageUpdate } from '../model/systemMessageUpdate';
-import { SystemMessagesList } from '../model/systemMessagesList';
 
 
 import { Configuration }                                     from '../configuration';
@@ -71,7 +68,7 @@ export interface SystemServiceInterface {
     * Retrieves system categories list
     * @param domain Domain Name
     */
-    getSystemCategories(domain: string, extraHttpRequestParams?: any): Observable<SystemCategoriesList>;
+    getSystemCategories(domain: string, extraHttpRequestParams?: any): Observable<Array<SystemCategory>>;
 
     /**
     * Retrieves a system category
@@ -88,7 +85,7 @@ export interface SystemServiceInterface {
     * @param category System Category Name
     * @param locale Locale Name
     */
-    getSystemMessage(domain: string, category: string, locale: string, extraHttpRequestParams?: any): Observable<SystemMessagesList>;
+    getSystemMessage(domain: string, category: string, locale: string, extraHttpRequestParams?: any): Observable<Array<SystemMessage>>;
 
     /**
     * Retrieves system messages
@@ -96,7 +93,7 @@ export interface SystemServiceInterface {
     * @param domain Domain Name
     * @param category System Category Name
     */
-    getSystemMessages(domain: string, category: string, extraHttpRequestParams?: any): Observable<SystemMessagesList>;
+    getSystemMessages(domain: string, category: string, extraHttpRequestParams?: any): Observable<Array<SystemMessage>>;
 
     /**
     * Updates a system message

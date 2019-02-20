@@ -19,7 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { LicenseList } from '../model/licenseList';
+import { License } from '../model/license';
 
 import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
@@ -125,9 +125,9 @@ export class LicenseService implements LicenseServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listLicenses(observe?: 'body', reportProgress?: boolean): Observable<LicenseList>;
-    public listLicenses(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LicenseList>>;
-    public listLicenses(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LicenseList>>;
+    public listLicenses(observe?: 'body', reportProgress?: boolean): Observable<Array<License>>;
+    public listLicenses(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<License>>>;
+    public listLicenses(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<License>>>;
     public listLicenses(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -159,7 +159,7 @@ export class LicenseService implements LicenseServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<LicenseList>(`${this.configuration.basePath}/licenses`,
+        return this.httpClient.get<Array<License>>(`${this.configuration.basePath}/licenses`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

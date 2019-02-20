@@ -10,12 +10,13 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
-  - url: '/rest/v2'
+    description: Development server
 tags:
-  - name: context
+  - name: contexts
     description: Web Content context related
-  - name: bundle
+  - name: bundles
     description: Web Content bundle related
 components:
   
@@ -58,10 +59,6 @@ components:
         application:
           type: string
           example: 'vipera'
-    BundleStatusList:
-      type: array
-      items:
-        $ref: '#/components/schemas/BundleStatus' 
     BundleStatus:
       type: object
       properties:
@@ -80,11 +77,6 @@ components:
         instance:
           type: string
           example: Node1  
-
-    BundleList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Bundle' 
     Bundle:
       type: object
       properties:
@@ -169,7 +161,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './Z_Globals.yaml#/components/schemas/ServiceContextList'
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/ServiceContext'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -266,6 +260,8 @@ paths:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /webcontent/bundles/info:
     get:
       operationId: getBundlesList
       tags:
@@ -283,7 +279,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BundleList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bundle' 
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -356,53 +354,6 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
-  /webcontent/bundles/status:
-    get:
-      operationId: getBundlesStatusList
-      tags:
-        - bundles
-      description: Retrieves Web Content Bundles Status
-      summary: Retrieves Web Content Bundles Status
-      security:
-        - vipera_oauth2:
-          - 'all:all'
-        - vipera_basic: []
-        - vipera_cookie: []
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BundleStatusList'
-        default:
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
-
-  /webcontent/bundles/{bundleName}/versions/{bundleVersion}/status:
-    get:
-      operationId: getBundleStatus
-      tags:
-        - bundles
-      description: Retrieves a Web Content Bundle Status
-      summary: Retrieves a Web Content Bundle Status
-      security:
-        - vipera_oauth2:
-          - 'all:all'
-        - vipera_basic: []
-        - vipera_cookie: []
-      parameters:
-        - $ref: '#/components/parameters/bundleNamePathParam'
-        - $ref: '#/components/parameters/bundleVersionPathParam'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BundleStatus'
-        default:
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
-          
   /webcontent/bundles/{bundleName}/versions/{bundleVersion}/info:
     get:
       operationId: getBundle
@@ -424,7 +375,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Bundle'
+                $ref: '#/components/schemas/BundleStatus'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 

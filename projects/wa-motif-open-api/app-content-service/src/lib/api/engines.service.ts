@@ -20,14 +20,13 @@ import { Observable }                                        from 'rxjs';
 
 import { AppCheckRequest } from '../model/appCheckRequest';
 import { AppCheckResponse } from '../model/appCheckResponse';
-import { ApplicationVersionList } from '../model/applicationVersionList';
+import { ApplicationVersion } from '../model/applicationVersion';
 import { Engine } from '../model/engine';
 import { EngineCreate } from '../model/engineCreate';
-import { EngineList } from '../model/engineList';
 import { EngineUpdate } from '../model/engineUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { EnginesServiceInterface }                            from './engines.serviceInterface';
 
@@ -370,9 +369,9 @@ export class EnginesService implements EnginesServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEngines(domain: string, observe?: 'body', reportProgress?: boolean): Observable<EngineList>;
-    public getEngines(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EngineList>>;
-    public getEngines(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EngineList>>;
+    public getEngines(domain: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Engine>>;
+    public getEngines(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Engine>>>;
+    public getEngines(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Engine>>>;
     public getEngines(domain: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getEngines.');
@@ -407,7 +406,7 @@ export class EnginesService implements EnginesServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<EngineList>(`${this.configuration.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines`,
+        return this.httpClient.get<Array<Engine>>(`${this.configuration.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -482,9 +481,9 @@ export class EnginesService implements EnginesServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTrackedEnginesVersions(domain: string, observe?: 'body', reportProgress?: boolean): Observable<ApplicationVersionList>;
-    public getTrackedEnginesVersions(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ApplicationVersionList>>;
-    public getTrackedEnginesVersions(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ApplicationVersionList>>;
+    public getTrackedEnginesVersions(domain: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ApplicationVersion>>;
+    public getTrackedEnginesVersions(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ApplicationVersion>>>;
+    public getTrackedEnginesVersions(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ApplicationVersion>>>;
     public getTrackedEnginesVersions(domain: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getTrackedEnginesVersions.');
@@ -519,7 +518,7 @@ export class EnginesService implements EnginesServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ApplicationVersionList>(`${this.configuration.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines/tracking/versions`,
+        return this.httpClient.get<Array<ApplicationVersion>>(`${this.configuration.basePath}/appcont/domains/${encodeURIComponent(String(domain))}/engines/tracking/versions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

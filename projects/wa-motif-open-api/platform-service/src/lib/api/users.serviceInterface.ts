@@ -13,7 +13,6 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
-import { Credentials } from '../model/credentials';
 import { CredentialsCreate } from '../model/credentialsCreate';
 import { CredentialsUpdate } from '../model/credentialsUpdate';
 import { ErrorVipera } from '../model/errorVipera';
@@ -21,7 +20,6 @@ import { User } from '../model/user';
 import { UserCreate } from '../model/userCreate';
 import { UserUpdate } from '../model/userUpdate';
 import { UsersCount } from '../model/usersCount';
-import { UsersList } from '../model/usersList';
 
 
 import { Configuration }                                     from '../configuration';
@@ -84,7 +82,7 @@ export interface UsersServiceInterface {
     * @param pageSize Page size
     * @param sort Sorting fields
     */
-    getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, extraHttpRequestParams?: any): Observable<UsersList>;
+    getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, extraHttpRequestParams?: any): Observable<Array<User>>;
 
     /**
     * Updates an user

@@ -14,7 +14,7 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { PluginList } from '../model/pluginList';
+import { Plugin } from '../model/plugin';
 import { PluginUninstall } from '../model/pluginUninstall';
 
 
@@ -32,7 +32,7 @@ export interface RegistryServiceInterface {
     * @param all Indicates whether you want to get all plugins or not
     * @param status The status of the plugins
     */
-    getPlugins(all?: boolean, status?: string, extraHttpRequestParams?: any): Observable<PluginList>;
+    getPlugins(all?: boolean, status?: string, extraHttpRequestParams?: any): Observable<Array<Plugin>>;
 
     /**
     * Uploads a Plugin and install it

@@ -21,7 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { HealthReport } from '../model/healthReport';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { SystemServiceInterface }                            from './system.serviceInterface';
 
@@ -31,7 +31,7 @@ import { SystemServiceInterface }                            from './system.serv
 })
 export class SystemService implements SystemServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

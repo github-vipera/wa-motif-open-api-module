@@ -15,10 +15,9 @@ import { Observable }                                        from 'rxjs';
 
 import { CounterInfo } from '../model/counterInfo';
 import { CounterInfoEntity } from '../model/counterInfoEntity';
-import { CounterInfoEntityList } from '../model/counterInfoEntityList';
 import { CounterInfoUpdatableFields } from '../model/counterInfoUpdatableFields';
 import { ErrorVipera } from '../model/errorVipera';
-import { ThresholdInfoEntityList } from '../model/thresholdInfoEntityList';
+import { ThresholdInfoEntity } from '../model/thresholdInfoEntity';
 
 
 import { Configuration }                                     from '../configuration';
@@ -51,6 +50,13 @@ export interface CountersServiceInterface {
     disableCounterInfo(counterInfo: string, extraHttpRequestParams?: any): Observable<any>;
 
     /**
+    * Downloads XML counter info file
+    * Downloads XML counter info file
+    * @param counterNames Counter Info Names
+    */
+    downloadXml(counterNames?: Array<string>, extraHttpRequestParams?: any): Observable<Blob>;
+
+    /**
     * Enables Counter Info
     * Enables Counter Info
     * @param counterInfo Counter Info name
@@ -68,14 +74,14 @@ export interface CountersServiceInterface {
     * Retrieves Counter Info List
     * Retrieves Counter Info List
     */
-    getCounterInfoList(extraHttpRequestParams?: any): Observable<CounterInfoEntityList>;
+    getCounterInfoList(extraHttpRequestParams?: any): Observable<Array<CounterInfoEntity>>;
 
     /**
     * Retrieves Threshold Info List
     * Retrieves Threshold Info List
     * @param counterInfo Counter Info name
     */
-    getThresholdInfoList(counterInfo: string, extraHttpRequestParams?: any): Observable<ThresholdInfoEntityList>;
+    getThresholdInfoList(counterInfo: string, extraHttpRequestParams?: any): Observable<Array<ThresholdInfoEntity>>;
 
     /**
     * Updates Counter Info
@@ -84,5 +90,12 @@ export interface CountersServiceInterface {
     * @param counterInfoUpdatableFields 
     */
     updateCounterInfo(counterInfo: string, counterInfoUpdatableFields?: CounterInfoUpdatableFields, extraHttpRequestParams?: any): Observable<any>;
+
+    /**
+    * Uploads XML counter info file
+    * Uploads XML counter info file
+    * @param file 
+    */
+    uploadXml(file: Blob, extraHttpRequestParams?: any): Observable<any>;
 
 }

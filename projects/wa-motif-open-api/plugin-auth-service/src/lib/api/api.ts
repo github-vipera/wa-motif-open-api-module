@@ -1,4 +1,7 @@
-export * from './performance.service';
-import { PerformanceService } from './performance.service';
-export * from './performance.serviceInterface'
-export const APIS = [PerformanceService];
+export * from './auth.service';
+import { AuthService } from './auth.service';
+export * from './auth.serviceInterface'
+export * from './myself.service';
+import { MyselfService } from './myself.service';
+export * from './myself.serviceInterface'
+export const APIS = [AuthService, MyselfService];

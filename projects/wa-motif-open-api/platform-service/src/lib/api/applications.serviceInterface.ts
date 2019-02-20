@@ -16,7 +16,6 @@ import { Observable }                                        from 'rxjs';
 import { Application } from '../model/application';
 import { ApplicationCreate } from '../model/applicationCreate';
 import { ApplicationUpdate } from '../model/applicationUpdate';
-import { ApplicationsList } from '../model/applicationsList';
 import { ErrorVipera } from '../model/errorVipera';
 
 
@@ -57,7 +56,7 @@ export interface ApplicationsServiceInterface {
     * Retrieves applications
     * @param domain Domain Name
     */
-    getApplications(domain: string, extraHttpRequestParams?: any): Observable<ApplicationsList>;
+    getApplications(domain: string, extraHttpRequestParams?: any): Observable<Array<Application>>;
 
     /**
     * Updates an application

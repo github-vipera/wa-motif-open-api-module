@@ -14,8 +14,8 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { OsgiBundleDirectoryList } from '../model/osgiBundleDirectoryList';
-import { OsgiBundleList } from '../model/osgiBundleList';
+import { OsgiBundle } from '../model/osgiBundle';
+import { OsgiBundleDirectory } from '../model/osgiBundleDirectory';
 
 
 import { Configuration }                                     from '../configuration';
@@ -46,13 +46,13 @@ export interface DirectoriesServiceInterface {
     * Lists the OSGi bundles in a directory
     * @param directory Directory relative path
     */
-    listBundles(directory: string, extraHttpRequestParams?: any): Observable<OsgiBundleList>;
+    listBundles(directory: string, extraHttpRequestParams?: any): Observable<Array<OsgiBundle>>;
 
     /**
     * Lists the OSGi bundle directories
     * Lists the OSGi bundle directories
     */
-    listDirectories(extraHttpRequestParams?: any): Observable<OsgiBundleDirectoryList>;
+    listDirectories(extraHttpRequestParams?: any): Observable<Array<OsgiBundleDirectory>>;
 
     /**
     * Scans a directory and installs/updates/deletes bundles

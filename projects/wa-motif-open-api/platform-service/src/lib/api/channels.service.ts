@@ -20,10 +20,9 @@ import { Observable }                                        from 'rxjs';
 
 import { Channel } from '../model/channel';
 import { ChannelCreate } from '../model/channelCreate';
-import { ChannelsList } from '../model/channelsList';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { ChannelsServiceInterface }                            from './channels.serviceInterface';
 
@@ -234,9 +233,9 @@ export class ChannelsService implements ChannelsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChannelsList(observe?: 'body', reportProgress?: boolean): Observable<ChannelsList>;
-    public getChannelsList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ChannelsList>>;
-    public getChannelsList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ChannelsList>>;
+    public getChannelsList(observe?: 'body', reportProgress?: boolean): Observable<Array<Channel>>;
+    public getChannelsList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Channel>>>;
+    public getChannelsList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Channel>>>;
     public getChannelsList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -268,7 +267,7 @@ export class ChannelsService implements ChannelsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ChannelsList>(`${this.configuration.basePath}/platform/channels`,
+        return this.httpClient.get<Array<Channel>>(`${this.configuration.basePath}/platform/channels`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

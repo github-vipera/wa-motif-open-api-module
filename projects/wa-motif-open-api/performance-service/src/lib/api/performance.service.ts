@@ -21,9 +21,8 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { PerfTimeSerie } from '../model/perfTimeSerie';
 import { PerfTimeSerieAdd } from '../model/perfTimeSerieAdd';
-import { PerfTimeSeriesList } from '../model/perfTimeSeriesList';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { PerformanceServiceInterface }                            from './performance.serviceInterface';
 
@@ -33,7 +32,7 @@ import { PerformanceServiceInterface }                            from './perfor
 })
 export class PerformanceService implements PerformanceServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -284,9 +283,9 @@ export class PerformanceService implements PerformanceServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPerfTimeSeries(observe?: 'body', reportProgress?: boolean): Observable<PerfTimeSeriesList>;
-    public getPerfTimeSeries(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PerfTimeSeriesList>>;
-    public getPerfTimeSeries(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PerfTimeSeriesList>>;
+    public getPerfTimeSeries(observe?: 'body', reportProgress?: boolean): Observable<Array<PerfTimeSerie>>;
+    public getPerfTimeSeries(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PerfTimeSerie>>>;
+    public getPerfTimeSeries(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PerfTimeSerie>>>;
     public getPerfTimeSeries(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -318,7 +317,7 @@ export class PerformanceService implements PerformanceServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<PerfTimeSeriesList>(`${this.configuration.basePath}/performance/series`,
+        return this.httpClient.get<Array<PerfTimeSerie>>(`${this.configuration.basePath}/performance/series`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

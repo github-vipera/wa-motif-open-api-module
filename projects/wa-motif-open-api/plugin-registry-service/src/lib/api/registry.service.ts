@@ -19,10 +19,10 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { PluginList } from '../model/pluginList';
+import { Plugin } from '../model/plugin';
 import { PluginUninstall } from '../model/pluginUninstall';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { RegistryServiceInterface }                            from './registry.serviceInterface';
 
@@ -32,7 +32,7 @@ import { RegistryServiceInterface }                            from './registry.
 })
 export class RegistryService implements RegistryServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -70,9 +70,9 @@ export class RegistryService implements RegistryServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPlugins(all?: boolean, status?: string, observe?: 'body', reportProgress?: boolean): Observable<PluginList>;
-    public getPlugins(all?: boolean, status?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PluginList>>;
-    public getPlugins(all?: boolean, status?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PluginList>>;
+    public getPlugins(all?: boolean, status?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Plugin>>;
+    public getPlugins(all?: boolean, status?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Plugin>>>;
+    public getPlugins(all?: boolean, status?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Plugin>>>;
     public getPlugins(all?: boolean, status?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -112,7 +112,7 @@ export class RegistryService implements RegistryServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<PluginList>(`${this.configuration.basePath}/registry/plugins`,
+        return this.httpClient.get<Array<Plugin>>(`${this.configuration.basePath}/registry/plugins`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

@@ -10,6 +10,9 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
 tags:
   - name: security
     description: Security Service
@@ -200,21 +203,4 @@ paths:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'          
-  /security/sessions/current/logout:
-    post:
-      operationId: logoutCurrentUser
-      tags:
-        - security
-      description: Logout current user
-      summary: Logout current user
-      security:
-        - vipera_oauth2:
-          - 'all:all'
-        - vipera_basic: []
-        - vipera_cookie: []
-      responses:
-        '204':
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
-        default:
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   

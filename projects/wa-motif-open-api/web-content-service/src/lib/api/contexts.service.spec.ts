@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { ContextsService } from './contexts.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { AuthService, WebConsoleConfig } from 'web-console-core'
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core'
 import * as _ from 'lodash';
 
 import { failLogin, failTestWithError, b64toFile, blobToB64, failTestWithMessage } from '../../../../test-helper';
@@ -10,7 +10,7 @@ import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.ser
 import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 import { UsersService, UserCreate } from 'projects/wa-motif-open-api/platform-service/src/lib';
-import { WebContentContextCreate } from '@wa-motif-open-api/web-content-service/lib/model/webContentContextCreate';
+import { WebContentContextCreate } from '../model/models';
 import { WebContentContextUpdate } from '../model/models';
 
 describe('ContextsService', () => {
@@ -25,15 +25,17 @@ describe('ContextsService', () => {
     beforeAll(() => {
         TestBed.configureTestingModule({
             providers: [
+                NGXLogger,
                 ContextsService,
                 { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
                 { provide: WebConsoleConfig, useValue: new WebConsoleConfig('', '') }
             ],
-            imports: [HttpClientModule]
+            imports: [HttpClientModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})]
         });
 
         const httpClient = TestBed.get(HttpClient);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        const logger: NGXLogger = TestBed.get(NGXLogger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new ContextsService(httpClient, TEST_BASE_PATH, null);
 

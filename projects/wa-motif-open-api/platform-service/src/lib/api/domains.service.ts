@@ -20,12 +20,10 @@ import { Observable }                                        from 'rxjs';
 
 import { Domain } from '../model/domain';
 import { DomainCreate } from '../model/domainCreate';
-import { DomainData } from '../model/domainData';
 import { DomainUpdate } from '../model/domainUpdate';
-import { DomainsList } from '../model/domainsList';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { DomainsServiceInterface }                            from './domains.serviceInterface';
 
@@ -236,9 +234,9 @@ export class DomainsService implements DomainsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDomains(observe?: 'body', reportProgress?: boolean): Observable<DomainsList>;
-    public getDomains(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DomainsList>>;
-    public getDomains(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DomainsList>>;
+    public getDomains(observe?: 'body', reportProgress?: boolean): Observable<Array<Domain>>;
+    public getDomains(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Domain>>>;
+    public getDomains(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Domain>>>;
     public getDomains(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -270,7 +268,7 @@ export class DomainsService implements DomainsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<DomainsList>(`${this.configuration.basePath}/platform/domains`,
+        return this.httpClient.get<Array<Domain>>(`${this.configuration.basePath}/platform/domains`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -18,16 +18,15 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ClientToken } from '../model/clientToken';
 import { ClientUser } from '../model/clientUser';
 import { ClientUserCreate } from '../model/clientUserCreate';
 import { ClientUserUpdate } from '../model/clientUserUpdate';
-import { ClientUsersList } from '../model/clientUsersList';
-import { Credentials } from '../model/credentials';
 import { CredentialsCreate } from '../model/credentialsCreate';
 import { CredentialsUpdate } from '../model/credentialsUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { ClientsServiceInterface }                            from './clients.serviceInterface';
 
@@ -252,6 +251,64 @@ export class ClientsService implements ClientsServiceInterface {
     }
 
     /**
+     * Get Client Token
+     * Get Client Token
+     * @param domain Domain Name
+     * @param application Application Name
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClientToken(domain: string, application: string, observe?: 'body', reportProgress?: boolean): Observable<ClientToken>;
+    public getClientToken(domain: string, application: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClientToken>>;
+    public getClientToken(domain: string, application: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClientToken>>;
+    public getClientToken(domain: string, application: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling getClientToken.');
+        }
+        if (application === null || application === undefined) {
+            throw new Error('Required parameter application was null or undefined when calling getClientToken.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<ClientToken>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/applications/${encodeURIComponent(String(application))}/clientToken`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Retrieves client user
      * Retrieves client user
      * @param domain Domain Name
@@ -316,9 +373,9 @@ export class ClientsService implements ClientsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClientUsersList(domain: string, observe?: 'body', reportProgress?: boolean): Observable<ClientUsersList>;
-    public getClientUsersList(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClientUsersList>>;
-    public getClientUsersList(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClientUsersList>>;
+    public getClientUsersList(domain: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ClientUser>>;
+    public getClientUsersList(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ClientUser>>>;
+    public getClientUsersList(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ClientUser>>>;
     public getClientUsersList(domain: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getClientUsersList.');
@@ -353,7 +410,7 @@ export class ClientsService implements ClientsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ClientUsersList>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/clients`,
+        return this.httpClient.get<Array<ClientUser>>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/clients`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

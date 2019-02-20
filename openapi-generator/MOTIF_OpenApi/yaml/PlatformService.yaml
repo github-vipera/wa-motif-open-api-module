@@ -10,6 +10,10 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
+
 tags:
   - name: locales
     description: Locales
@@ -62,10 +66,6 @@ components:
         description:
           type: string
           example: Italian
-    LocalesList:
-      type: array
-      items: 
-        $ref: '#/components/schemas/Locale'
     SystemCategoryData:
       type: object
       required:
@@ -82,10 +82,6 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/SystemCategoryData'
-    SystemCategoriesList:
-      type: array
-      items: 
-        $ref: '#/components/schemas/SystemCategory'
     SystemMessage:
       type: object
       required:
@@ -110,10 +106,6 @@ components:
           message:
             type: string
             example: 'TestMessage'
-    SystemMessagesList:
-      type: array
-      items: 
-        $ref: '#/components/schemas/SystemMessage'
     DomainCreate:
       type: object
       allOf:
@@ -122,10 +114,6 @@ components:
       type: object
       allOf:
         - $ref: './Z_Globals.yaml#/components/schemas/DomainData'
-    DomainsList:
-      type: array
-      items:
-        $ref: './Z_Globals.yaml#/components/schemas/Domain'
     ApplicationCreate:
       type: object
       properties:
@@ -149,10 +137,6 @@ components:
             items: {
               $ref: './Z_Globals.yaml#/components/schemas/Property'
             }
-    ApplicationsList:
-      type: array
-      items:
-        $ref: './Z_Globals.yaml#/components/schemas/Application'
     AppInstance:
       type: object
       required:
@@ -205,18 +189,10 @@ components:
         state:
           type: string
           example: ACTIVE
-    AppInstancesList:
-      type: array
-      items:
-        $ref: '#/components/schemas/AppInstance'
     ChannelCreate:
       type: object
       allOf:
         - $ref: './Z_Globals.yaml#/components/schemas/Channel'
-    ChannelsList:
-      type: array
-      items:
-        $ref: './Z_Globals.yaml#/components/schemas/Channel'
     UserCreate:
       type: object
       allOf:
@@ -241,10 +217,6 @@ components:
             email:
               type: string
               example: test@vipera.com
-    UsersList:
-      type: array
-      items:
-        $ref: './Z_Globals.yaml#/components/schemas/User'
     UsersCount:
       type: object
       properties:
@@ -272,10 +244,6 @@ components:
         lastName:
           type: string
           example: Doe
-    AdminUsersList:
-      type: array
-      items:
-        $ref: './Z_Globals.yaml#/components/schemas/AdminUser'
     ClientUserCreate:
       type: object
       properties:
@@ -291,10 +259,6 @@ components:
         email:
           type: string
           example: test@vipera.com
-    ClientUsersList:
-      type: array
-      items:
-        $ref: './Z_Globals.yaml#/components/schemas/ClientUser'
     CredentialsCreate:
       type: object
       allOf:
@@ -330,6 +294,14 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/PerfTimeSerie'
+    ClientToken:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb20iOiJEZWZhdWx0IiwiYXBwIjoidmlwZXJhIiwiaWF0IjoxNTE2MjM5MDIyfQ.fFWkbzn-M-vkzM4cHA-W8rqdlwL5kIBsovgPzRxZJqk
   parameters:
     localePathParam:
       name: locale
@@ -411,7 +383,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LocalesList'
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Locale'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/locales/{locale}:
@@ -525,7 +499,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SystemCategoriesList'
+                type: array
+                items: 
+                  $ref: '#/components/schemas/SystemCategory'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/domains/{domain}/system/categories/{category}:
@@ -620,7 +596,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SystemMessagesList'
+                type: array
+                items: 
+                  $ref: '#/components/schemas/SystemMessage'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/domains/{domain}/system/categories/{category}/messages/{locale}:
@@ -670,7 +648,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SystemMessagesList'
+                type: array
+                items: 
+                  $ref: '#/components/schemas/SystemMessage'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     delete:
@@ -736,7 +716,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DomainsList'
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/Domain'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/domains/{domain}:
@@ -848,7 +830,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationsList'
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/Application'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/domains/{domain}/applications/{application}:
@@ -939,7 +923,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppInstancesList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppInstance'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/appinstances/domains/{domain}/users/{userId}/block:
@@ -1105,7 +1091,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChannelsList'
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/Channel'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/channels/{channel}:
@@ -1211,7 +1199,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsersList'
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/User'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/domains/{domain}/users/state/{state}/count:
@@ -1401,7 +1391,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AdminUsersList'
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/AdminUser'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/domains/{domain}/admins/{userId}:
@@ -1567,7 +1559,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClientUsersList'
+                type: array
+                items:
+                  $ref: './Z_Globals.yaml#/components/schemas/ClientUser'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /platform/domains/{domain}/client/{userId}:
@@ -1686,4 +1680,27 @@ paths:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
-          
+  /platform/domains/{domain}/applications/{application}/clientToken:
+    get:
+      operationId: getClientToken
+      tags:
+        - clients
+      description: Get Client Token
+      summary: Get Client Token
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/domainPathParam'
+        - $ref: './Z_Globals.yaml#/components/parameters/applicationPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientToken'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

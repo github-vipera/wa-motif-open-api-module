@@ -23,7 +23,7 @@ import { ServiceContextAttribute } from '../model/serviceContextAttribute';
 import { ServiceContextAttributeCreate } from '../model/serviceContextAttributeCreate';
 import { ServiceContextAttributeUpdate } from '../model/serviceContextAttributeUpdate';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { AttributesServiceInterface }                            from './attributes.serviceInterface';
 

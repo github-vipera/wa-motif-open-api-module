@@ -13,7 +13,7 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
-import { AppInstancesList } from '../model/appInstancesList';
+import { AppInstance } from '../model/appInstance';
 import { ErrorVipera } from '../model/errorVipera';
 
 
@@ -55,7 +55,7 @@ export interface AppinstancesServiceInterface {
     * @param domain Domain Name
     * @param userId User Id
     */
-    getUserAppInstances(domain: string, userId: string, extraHttpRequestParams?: any): Observable<AppInstancesList>;
+    getUserAppInstances(domain: string, userId: string, extraHttpRequestParams?: any): Observable<Array<AppInstance>>;
 
     /**
     * Unblocks app instance by serial

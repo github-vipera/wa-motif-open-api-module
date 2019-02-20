@@ -17,7 +17,6 @@ import { ErrorVipera } from '../model/errorVipera';
 import { Locale } from '../model/locale';
 import { LocaleCreate } from '../model/localeCreate';
 import { LocaleUpdate } from '../model/localeUpdate';
-import { LocalesList } from '../model/localesList';
 
 
 import { Configuration }                                     from '../configuration';
@@ -53,7 +52,7 @@ export interface LocalesServiceInterface {
     * Retrieves locales list
     * Retrieves locales list
     */
-    getLocalesList(extraHttpRequestParams?: any): Observable<LocalesList>;
+    getLocalesList(extraHttpRequestParams?: any): Observable<Array<Locale>>;
 
     /**
     * Updates a locale

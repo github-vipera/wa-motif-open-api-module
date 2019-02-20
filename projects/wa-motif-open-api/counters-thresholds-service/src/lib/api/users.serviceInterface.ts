@@ -13,7 +13,7 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
-import { CountersEntityList } from '../model/countersEntityList';
+import { CounterEntity } from '../model/counterEntity';
 import { ErrorVipera } from '../model/errorVipera';
 import { Variation } from '../model/variation';
 
@@ -36,7 +36,7 @@ export interface UsersServiceInterface {
     * @param pageSize Page size
     * @param sort Sorting fields
     */
-    getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, extraHttpRequestParams?: any): Observable<CountersEntityList>;
+    getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, extraHttpRequestParams?: any): Observable<Array<CounterEntity>>;
 
     /**
     * Updates User Counter Value

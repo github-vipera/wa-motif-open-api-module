@@ -23,7 +23,7 @@ import { ServiceContext } from '../model/serviceContext';
 import { ServiceContextCreate } from '../model/serviceContextCreate';
 import { ServiceContextUpdate } from '../model/serviceContextUpdate';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { ContextsServiceInterface }                            from './contexts.serviceInterface';
 

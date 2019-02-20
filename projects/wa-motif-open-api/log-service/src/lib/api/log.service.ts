@@ -23,7 +23,7 @@ import { LogLevel } from '../model/logLevel';
 import { LogLevelUpdate } from '../model/logLevelUpdate';
 import { LogTail } from '../model/logTail';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { LogServiceInterface }                            from './log.serviceInterface';
 
@@ -33,7 +33,7 @@ import { LogServiceInterface }                            from './log.serviceInt
 })
 export class LogService implements LogServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

@@ -19,14 +19,12 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { ServiceList } from '../model/serviceList';
-import { Setting } from '../model/setting';
+import { Service } from '../model/service';
 import { SettingCreate } from '../model/settingCreate';
 import { SettingEntity } from '../model/settingEntity';
-import { SettingList } from '../model/settingList';
 import { SettingUpdate } from '../model/settingUpdate';
 
-import { WC_API_BASE_PATH }                                 from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { SettingsServiceInterface }                            from './settings.serviceInterface';
 
@@ -41,6 +39,7 @@ export class SettingsService implements SettingsServiceInterface {
     public configuration = new Configuration();
 
     constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+
         if (configuration) {
             this.configuration = configuration;
             this.configuration.basePath = configuration.basePath || basePath || this.basePath;
@@ -244,9 +243,9 @@ export class SettingsService implements SettingsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getServices(observe?: 'body', reportProgress?: boolean): Observable<ServiceList>;
-    public getServices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ServiceList>>;
-    public getServices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ServiceList>>;
+    public getServices(observe?: 'body', reportProgress?: boolean): Observable<Array<Service>>;
+    public getServices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Service>>>;
+    public getServices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Service>>>;
     public getServices(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -278,7 +277,7 @@ export class SettingsService implements SettingsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ServiceList>(`${this.configuration.basePath}/cfg/settings/services`,
+        return this.httpClient.get<Array<Service>>(`${this.configuration.basePath}/cfg/settings/services`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -353,9 +352,9 @@ export class SettingsService implements SettingsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSettings(service: string, observe?: 'body', reportProgress?: boolean): Observable<SettingList>;
-    public getSettings(service: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SettingList>>;
-    public getSettings(service: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SettingList>>;
+    public getSettings(service: string, observe?: 'body', reportProgress?: boolean): Observable<Array<SettingEntity>>;
+    public getSettings(service: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SettingEntity>>>;
+    public getSettings(service: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SettingEntity>>>;
     public getSettings(service: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (service === null || service === undefined) {
             throw new Error('Required parameter service was null or undefined when calling getSettings.');
@@ -390,7 +389,7 @@ export class SettingsService implements SettingsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<SettingList>(`${this.configuration.basePath}/cfg/settings/services/${encodeURIComponent(String(service))}`,
+        return this.httpClient.get<Array<SettingEntity>>(`${this.configuration.basePath}/cfg/settings/services/${encodeURIComponent(String(service))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

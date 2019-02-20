@@ -21,13 +21,11 @@ import { Observable }                                        from 'rxjs';
 import { AdminUser } from '../model/adminUser';
 import { AdminUserCreate } from '../model/adminUserCreate';
 import { AdminUserUpdate } from '../model/adminUserUpdate';
-import { AdminUsersList } from '../model/adminUsersList';
-import { Credentials } from '../model/credentials';
 import { CredentialsCreate } from '../model/credentialsCreate';
 import { CredentialsUpdate } from '../model/credentialsUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { AdminsServiceInterface }                            from './admins.serviceInterface';
 
@@ -316,9 +314,9 @@ export class AdminsService implements AdminsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAdminUsersList(domain: string, observe?: 'body', reportProgress?: boolean): Observable<AdminUsersList>;
-    public getAdminUsersList(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AdminUsersList>>;
-    public getAdminUsersList(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AdminUsersList>>;
+    public getAdminUsersList(domain: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AdminUser>>;
+    public getAdminUsersList(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AdminUser>>>;
+    public getAdminUsersList(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AdminUser>>>;
     public getAdminUsersList(domain: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getAdminUsersList.');
@@ -353,7 +351,7 @@ export class AdminsService implements AdminsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<AdminUsersList>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/admins`,
+        return this.httpClient.get<Array<AdminUser>>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/admins`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

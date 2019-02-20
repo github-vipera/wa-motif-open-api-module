@@ -10,6 +10,9 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
 tags:
   - name: oauth2
     description: OAuth2 Service related
@@ -40,14 +43,6 @@ components:
           type: string
           description : ACCESS_TOKEN or REFRESH_TOKEN (if not set default is ACCESS_TOKEN)
           example: ACCESS_TOKEN    
-    RefreshTokenList:
-      type: array
-      items:
-        $ref: '#/components/schemas/RefreshToken'
-    AccessTokenList:
-      type: array
-      items:
-        $ref: '#/components/schemas/AccessToken'
     AccessToken:
       type: object
       allOf:
@@ -182,7 +177,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RefreshTokenList'  
+                type: array
+                items:
+                  $ref: '#/components/schemas/RefreshToken'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -206,7 +203,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccessTokenList'  
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccessToken'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
           
@@ -231,7 +230,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RefreshTokenList'  
+                type: array
+                items:
+                  $ref: '#/components/schemas/RefreshToken'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   

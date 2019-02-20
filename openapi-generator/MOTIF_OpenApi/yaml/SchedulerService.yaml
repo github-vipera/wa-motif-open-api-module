@@ -9,9 +9,10 @@ info:
     name: Vipera Motif commercial license
     url: 'http://www.vipera.com'
 servers:
-  - url: '/rest/v2'
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
 tags:
   - name: scheduler
     description: Scheduler Service related
@@ -24,11 +25,6 @@ components:
     vipera_cookie:
       $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
   schemas:           
-    ScheduledTaskEntityList:
-      type: array
-      items:
-          $ref: '#/components/schemas/ScheduledTaskEntity'      
-     
     ScheduledTaskEntity:
       allOf:
         - $ref: '#/components/schemas/ScheduledTask'
@@ -109,12 +105,6 @@ components:
           type: string
           description: Failure policy (supported values are LOG_ONLY, MAIL_OUT)
           example: LOG_ONLY  
-    
-    ScheduledTaskExecutionEntityList:
-      type: array
-      items:
-          $ref: '#/components/schemas/ScheduledTaskExecutionEntity'      
-     
     ScheduledTaskExecutionEntity:
       type: object
       properties:
@@ -209,7 +199,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScheduledTaskEntityList'
+                type: array
+                items:
+                    $ref: '#/components/schemas/ScheduledTaskEntity'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError' 
 
@@ -347,6 +339,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScheduledTaskExecutionEntityList'
+                type: array
+                items:
+                    $ref: '#/components/schemas/ScheduledTaskExecutionEntity'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'             

@@ -21,10 +21,9 @@ import { Observable }                                        from 'rxjs';
 import { Application } from '../model/application';
 import { ApplicationCreate } from '../model/applicationCreate';
 import { ApplicationUpdate } from '../model/applicationUpdate';
-import { ApplicationsList } from '../model/applicationsList';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { ApplicationsServiceInterface }                            from './applications.serviceInterface';
 
@@ -248,9 +247,9 @@ export class ApplicationsService implements ApplicationsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getApplications(domain: string, observe?: 'body', reportProgress?: boolean): Observable<ApplicationsList>;
-    public getApplications(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ApplicationsList>>;
-    public getApplications(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ApplicationsList>>;
+    public getApplications(domain: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Application>>;
+    public getApplications(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Application>>>;
+    public getApplications(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Application>>>;
     public getApplications(domain: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getApplications.');
@@ -279,7 +278,7 @@ export class ApplicationsService implements ApplicationsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ApplicationsList>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/applications`,
+        return this.httpClient.get<Array<Application>>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/applications`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

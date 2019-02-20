@@ -20,9 +20,8 @@ import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
 import { Tag } from '../model/tag';
-import { TagList } from '../model/tagList';
 
-import { WC_API_BASE_PATH }                                 from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { ConfigurationsServiceInterface }                            from './configurations.serviceInterface';
 
@@ -37,6 +36,7 @@ export class ConfigurationsService implements ConfigurationsServiceInterface {
     public configuration = new Configuration();
 
     constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+
         if (configuration) {
             this.configuration = configuration;
             this.configuration.basePath = configuration.basePath || basePath || this.basePath;
@@ -229,9 +229,9 @@ export class ConfigurationsService implements ConfigurationsServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTags(observe?: 'body', reportProgress?: boolean): Observable<TagList>;
-    public getTags(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TagList>>;
-    public getTags(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TagList>>;
+    public getTags(observe?: 'body', reportProgress?: boolean): Observable<Array<Tag>>;
+    public getTags(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Tag>>>;
+    public getTags(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Tag>>>;
     public getTags(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -263,7 +263,7 @@ export class ConfigurationsService implements ConfigurationsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<TagList>(`${this.configuration.basePath}/cfg/configurations/tags`,
+        return this.httpClient.get<Array<Tag>>(`${this.configuration.basePath}/cfg/configurations/tags`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

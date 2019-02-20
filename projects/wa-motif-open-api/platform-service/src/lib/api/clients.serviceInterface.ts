@@ -13,11 +13,10 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
+import { ClientToken } from '../model/clientToken';
 import { ClientUser } from '../model/clientUser';
 import { ClientUserCreate } from '../model/clientUserCreate';
 import { ClientUserUpdate } from '../model/clientUserUpdate';
-import { ClientUsersList } from '../model/clientUsersList';
-import { Credentials } from '../model/credentials';
 import { CredentialsCreate } from '../model/credentialsCreate';
 import { CredentialsUpdate } from '../model/credentialsUpdate';
 import { ErrorVipera } from '../model/errorVipera';
@@ -57,6 +56,14 @@ export interface ClientsServiceInterface {
     deleteClientUser(domain: string, userId: string, extraHttpRequestParams?: any): Observable<any>;
 
     /**
+    * Get Client Token
+    * Get Client Token
+    * @param domain Domain Name
+    * @param application Application Name
+    */
+    getClientToken(domain: string, application: string, extraHttpRequestParams?: any): Observable<ClientToken>;
+
+    /**
     * Retrieves client user
     * Retrieves client user
     * @param domain Domain Name
@@ -69,7 +76,7 @@ export interface ClientsServiceInterface {
     * Retrieves client users list
     * @param domain Domain Name
     */
-    getClientUsersList(domain: string, extraHttpRequestParams?: any): Observable<ClientUsersList>;
+    getClientUsersList(domain: string, extraHttpRequestParams?: any): Observable<Array<ClientUser>>;
 
     /**
     * Updates a client user

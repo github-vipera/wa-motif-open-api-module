@@ -1,5 +1,6 @@
+export * from './baseUser';
+export * from './commonUser';
 export * from './errorVipera';
-export * from './sharedUserData';
 export * from './user';
 export * from './userActualData';
 export * from './userCreate';
