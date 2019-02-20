@@ -18,10 +18,10 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { AppInstancesList } from '../model/appInstancesList';
+import { AppInstance } from '../model/appInstance';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { AppinstancesServiceInterface }                            from './appinstances.serviceInterface';
 
@@ -246,9 +246,9 @@ export class AppinstancesService implements AppinstancesServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserAppInstances(domain: string, userId: string, observe?: 'body', reportProgress?: boolean): Observable<AppInstancesList>;
-    public getUserAppInstances(domain: string, userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AppInstancesList>>;
-    public getUserAppInstances(domain: string, userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AppInstancesList>>;
+    public getUserAppInstances(domain: string, userId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AppInstance>>;
+    public getUserAppInstances(domain: string, userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AppInstance>>>;
+    public getUserAppInstances(domain: string, userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AppInstance>>>;
     public getUserAppInstances(domain: string, userId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getUserAppInstances.');
@@ -286,7 +286,7 @@ export class AppinstancesService implements AppinstancesServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<AppInstancesList>(`${this.configuration.basePath}/platform/appinstances/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}`,
+        return this.httpClient.get<Array<AppInstance>>(`${this.configuration.basePath}/platform/appinstances/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

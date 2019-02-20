@@ -22,10 +22,9 @@ import { ErrorVipera } from '../model/errorVipera';
 import { ScheduledTask } from '../model/scheduledTask';
 import { ScheduledTaskCreate } from '../model/scheduledTaskCreate';
 import { ScheduledTaskEntity } from '../model/scheduledTaskEntity';
-import { ScheduledTaskEntityList } from '../model/scheduledTaskEntityList';
-import { ScheduledTaskExecutionEntityList } from '../model/scheduledTaskExecutionEntityList';
+import { ScheduledTaskExecutionEntity } from '../model/scheduledTaskExecutionEntity';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { SchedulerServiceInterface }                            from './scheduler.serviceInterface';
 
@@ -35,7 +34,7 @@ import { SchedulerServiceInterface }                            from './schedule
 })
 export class SchedulerService implements SchedulerServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -339,9 +338,9 @@ export class SchedulerService implements SchedulerServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<ScheduledTaskExecutionEntityList>;
-    public getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ScheduledTaskExecutionEntityList>>;
-    public getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ScheduledTaskExecutionEntityList>>;
+    public getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ScheduledTaskExecutionEntity>>;
+    public getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ScheduledTaskExecutionEntity>>>;
+    public getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ScheduledTaskExecutionEntity>>>;
     public getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (task === null || task === undefined) {
             throw new Error('Required parameter task was null or undefined when calling getTaskExecutionsList.');
@@ -390,7 +389,7 @@ export class SchedulerService implements SchedulerServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ScheduledTaskExecutionEntityList>(`${this.configuration.basePath}/scheduler/tasks/${encodeURIComponent(String(task))}/executions`,
+        return this.httpClient.get<Array<ScheduledTaskExecutionEntity>>(`${this.configuration.basePath}/scheduler/tasks/${encodeURIComponent(String(task))}/executions`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -407,9 +406,9 @@ export class SchedulerService implements SchedulerServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTaskList(observe?: 'body', reportProgress?: boolean): Observable<ScheduledTaskEntityList>;
-    public getTaskList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ScheduledTaskEntityList>>;
-    public getTaskList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ScheduledTaskEntityList>>;
+    public getTaskList(observe?: 'body', reportProgress?: boolean): Observable<Array<ScheduledTaskEntity>>;
+    public getTaskList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ScheduledTaskEntity>>>;
+    public getTaskList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ScheduledTaskEntity>>>;
     public getTaskList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -441,7 +440,7 @@ export class SchedulerService implements SchedulerServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ScheduledTaskEntityList>(`${this.configuration.basePath}/scheduler/tasks`,
+        return this.httpClient.get<Array<ScheduledTaskEntity>>(`${this.configuration.basePath}/scheduler/tasks`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -15,7 +15,6 @@ import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
 import { Tag } from '../model/tag';
-import { TagList } from '../model/tagList';
 
 
 import { Configuration }                                     from '../configuration';
@@ -50,7 +49,7 @@ export interface ConfigurationsServiceInterface {
     * Retrieves Available Tags
     * Retrieves Available Tags
     */
-    getTags(extraHttpRequestParams?: any): Observable<TagList>;
+    getTags(extraHttpRequestParams?: any): Observable<Array<Tag>>;
 
     /**
     * Restores a version tag

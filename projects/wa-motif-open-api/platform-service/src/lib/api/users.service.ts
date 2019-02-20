@@ -18,7 +18,6 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { Credentials } from '../model/credentials';
 import { CredentialsCreate } from '../model/credentialsCreate';
 import { CredentialsUpdate } from '../model/credentialsUpdate';
 import { ErrorVipera } from '../model/errorVipera';
@@ -26,9 +25,8 @@ import { User } from '../model/user';
 import { UserCreate } from '../model/userCreate';
 import { UserUpdate } from '../model/userUpdate';
 import { UsersCount } from '../model/usersCount';
-import { UsersList } from '../model/usersList';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { UsersServiceInterface }                            from './users.serviceInterface';
 
@@ -381,9 +379,9 @@ export class UsersService implements UsersServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<UsersList>;
-    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UsersList>>;
-    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UsersList>>;
+    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
+    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
+    public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
     public getUsersList(domain: string, userId?: string, userIdInt?: string, state?: string, page?: number, pageSize?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getUsersList.');
@@ -438,7 +436,7 @@ export class UsersService implements UsersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<UsersList>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users`,
+        return this.httpClient.get<Array<User>>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/users`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

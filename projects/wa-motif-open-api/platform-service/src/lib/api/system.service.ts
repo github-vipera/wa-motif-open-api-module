@@ -19,16 +19,13 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { SystemCategoriesList } from '../model/systemCategoriesList';
 import { SystemCategory } from '../model/systemCategory';
 import { SystemCategoryCreate } from '../model/systemCategoryCreate';
-import { SystemCategoryData } from '../model/systemCategoryData';
 import { SystemMessage } from '../model/systemMessage';
 import { SystemMessageCreate } from '../model/systemMessageCreate';
 import { SystemMessageUpdate } from '../model/systemMessageUpdate';
-import { SystemMessagesList } from '../model/systemMessagesList';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { SystemServiceInterface }                            from './system.serviceInterface';
 
@@ -321,9 +318,9 @@ export class SystemService implements SystemServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSystemCategories(domain: string, observe?: 'body', reportProgress?: boolean): Observable<SystemCategoriesList>;
-    public getSystemCategories(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SystemCategoriesList>>;
-    public getSystemCategories(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SystemCategoriesList>>;
+    public getSystemCategories(domain: string, observe?: 'body', reportProgress?: boolean): Observable<Array<SystemCategory>>;
+    public getSystemCategories(domain: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SystemCategory>>>;
+    public getSystemCategories(domain: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SystemCategory>>>;
     public getSystemCategories(domain: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getSystemCategories.');
@@ -358,7 +355,7 @@ export class SystemService implements SystemServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<SystemCategoriesList>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/system/categories`,
+        return this.httpClient.get<Array<SystemCategory>>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/system/categories`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -435,9 +432,9 @@ export class SystemService implements SystemServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSystemMessage(domain: string, category: string, locale: string, observe?: 'body', reportProgress?: boolean): Observable<SystemMessagesList>;
-    public getSystemMessage(domain: string, category: string, locale: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SystemMessagesList>>;
-    public getSystemMessage(domain: string, category: string, locale: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SystemMessagesList>>;
+    public getSystemMessage(domain: string, category: string, locale: string, observe?: 'body', reportProgress?: boolean): Observable<Array<SystemMessage>>;
+    public getSystemMessage(domain: string, category: string, locale: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SystemMessage>>>;
+    public getSystemMessage(domain: string, category: string, locale: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SystemMessage>>>;
     public getSystemMessage(domain: string, category: string, locale: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getSystemMessage.');
@@ -478,7 +475,7 @@ export class SystemService implements SystemServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<SystemMessagesList>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/system/categories/${encodeURIComponent(String(category))}/messages/${encodeURIComponent(String(locale))}`,
+        return this.httpClient.get<Array<SystemMessage>>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/system/categories/${encodeURIComponent(String(category))}/messages/${encodeURIComponent(String(locale))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -496,9 +493,9 @@ export class SystemService implements SystemServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSystemMessages(domain: string, category: string, observe?: 'body', reportProgress?: boolean): Observable<SystemMessagesList>;
-    public getSystemMessages(domain: string, category: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SystemMessagesList>>;
-    public getSystemMessages(domain: string, category: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SystemMessagesList>>;
+    public getSystemMessages(domain: string, category: string, observe?: 'body', reportProgress?: boolean): Observable<Array<SystemMessage>>;
+    public getSystemMessages(domain: string, category: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SystemMessage>>>;
+    public getSystemMessages(domain: string, category: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SystemMessage>>>;
     public getSystemMessages(domain: string, category: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getSystemMessages.');
@@ -536,7 +533,7 @@ export class SystemService implements SystemServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<SystemMessagesList>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/system/categories/${encodeURIComponent(String(category))}/messages`,
+        return this.httpClient.get<Array<SystemMessage>>(`${this.configuration.basePath}/platform/domains/${encodeURIComponent(String(domain))}/system/categories/${encodeURIComponent(String(category))}/messages`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

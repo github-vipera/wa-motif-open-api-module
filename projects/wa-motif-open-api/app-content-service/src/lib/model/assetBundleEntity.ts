@@ -36,7 +36,7 @@ export interface AssetBundleEntity extends AssetBundleUpdate {
     /**
      * Original bundle ZIP data
      */
-    zipData?: Blob;
+    zipData?: string;
     /**
      * Original bundle ZIP file name
      */

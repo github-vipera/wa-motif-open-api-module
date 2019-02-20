@@ -23,7 +23,7 @@ import { BundleStatus } from '../model/bundleStatus';
 import { BundleUpdate } from '../model/bundleUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { BundlesServiceInterface }                            from './bundles.serviceInterface';
 
@@ -161,9 +161,9 @@ export class BundlesService implements BundlesServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getBundle(bundleName: string, bundleVersion: string, observe?: 'body', reportProgress?: boolean): Observable<Bundle>;
-    public getBundle(bundleName: string, bundleVersion: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Bundle>>;
-    public getBundle(bundleName: string, bundleVersion: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Bundle>>;
+    public getBundle(bundleName: string, bundleVersion: string, observe?: 'body', reportProgress?: boolean): Observable<BundleStatus>;
+    public getBundle(bundleName: string, bundleVersion: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BundleStatus>>;
+    public getBundle(bundleName: string, bundleVersion: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BundleStatus>>;
     public getBundle(bundleName: string, bundleVersion: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (bundleName === null || bundleName === undefined) {
             throw new Error('Required parameter bundleName was null or undefined when calling getBundle.');
@@ -187,51 +187,7 @@ export class BundlesService implements BundlesServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Bundle>(`${this.configuration.basePath}/webcontent/bundles/${encodeURIComponent(String(bundleName))}/versions/${encodeURIComponent(String(bundleVersion))}/info`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Retrieves a Web Content Bundle Status
-     * Retrieves a Web Content Bundle Status
-     * @param bundleName 
-     * @param bundleVersion 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getBundleStatus(bundleName: string, bundleVersion: string, observe?: 'body', reportProgress?: boolean): Observable<BundleStatus>;
-    public getBundleStatus(bundleName: string, bundleVersion: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BundleStatus>>;
-    public getBundleStatus(bundleName: string, bundleVersion: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BundleStatus>>;
-    public getBundleStatus(bundleName: string, bundleVersion: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (bundleName === null || bundleName === undefined) {
-            throw new Error('Required parameter bundleName was null or undefined when calling getBundleStatus.');
-        }
-        if (bundleVersion === null || bundleVersion === undefined) {
-            throw new Error('Required parameter bundleVersion was null or undefined when calling getBundleStatus.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected !== undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<BundleStatus>(`${this.configuration.basePath}/webcontent/bundles/${encodeURIComponent(String(bundleName))}/versions/${encodeURIComponent(String(bundleVersion))}/status`,
+        return this.httpClient.get<BundleStatus>(`${this.configuration.basePath}/webcontent/bundles/${encodeURIComponent(String(bundleName))}/versions/${encodeURIComponent(String(bundleVersion))}/info`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -267,43 +223,7 @@ export class BundlesService implements BundlesServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<Bundle>>(`${this.configuration.basePath}/webcontent/bundles`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Retrieves Web Content Bundles Status
-     * Retrieves Web Content Bundles Status
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getBundlesStatusList(observe?: 'body', reportProgress?: boolean): Observable<Array<BundleStatus>>;
-    public getBundlesStatusList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BundleStatus>>>;
-    public getBundlesStatusList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BundleStatus>>>;
-    public getBundlesStatusList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected !== undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<Array<BundleStatus>>(`${this.configuration.basePath}/webcontent/bundles/status`,
+        return this.httpClient.get<Array<Bundle>>(`${this.configuration.basePath}/webcontent/bundles/info`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

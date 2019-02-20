@@ -15,9 +15,7 @@ import { Observable }                                        from 'rxjs';
 
 import { Domain } from '../model/domain';
 import { DomainCreate } from '../model/domainCreate';
-import { DomainData } from '../model/domainData';
 import { DomainUpdate } from '../model/domainUpdate';
-import { DomainsList } from '../model/domainsList';
 import { ErrorVipera } from '../model/errorVipera';
 
 
@@ -54,7 +52,7 @@ export interface DomainsServiceInterface {
     * Retrieves domains
     * Retrieves domains
     */
-    getDomains(extraHttpRequestParams?: any): Observable<DomainsList>;
+    getDomains(extraHttpRequestParams?: any): Observable<Array<Domain>>;
 
     /**
     * Updates a domain

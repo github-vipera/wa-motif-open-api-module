@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { OtpService } from './otp.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { AuthService, WebConsoleConfig } from 'web-console-core'
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core'
 import * as _ from 'lodash';
 
 import { failLogin, failTestWithError, b64toFile, blobToB64 } from '../../../../test-helper';
@@ -23,15 +23,17 @@ describe('OtpService', () => {
     beforeAll(() => {
         TestBed.configureTestingModule({
             providers: [
+                NGXLogger,
                 OtpService,
                 { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
                 { provide: WebConsoleConfig, useValue: new WebConsoleConfig('', '') }
             ],
-            imports: [HttpClientModule]
+            imports: [HttpClientModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})]
         });
 
         const httpClient = TestBed.get(HttpClient);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        const logger: NGXLogger = TestBed.get(NGXLogger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         usersService = new UsersService(httpClient, TEST_BASE_PATH, null);
         service = new OtpService(httpClient, TEST_BASE_PATH, null);

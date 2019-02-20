@@ -14,7 +14,7 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { LicenseList } from '../model/licenseList';
+import { License } from '../model/license';
 
 
 import { Configuration }                                     from '../configuration';
@@ -37,7 +37,7 @@ export interface LicenseServiceInterface {
     * Returns all licenses
     * Returns all licenses
     */
-    listLicenses(extraHttpRequestParams?: any): Observable<LicenseList>;
+    listLicenses(extraHttpRequestParams?: any): Observable<Array<License>>;
 
     /**
     * Uploads license onto server

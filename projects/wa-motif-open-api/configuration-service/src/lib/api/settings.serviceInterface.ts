@@ -14,11 +14,9 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { ServiceList } from '../model/serviceList';
-import { Setting } from '../model/setting';
+import { Service } from '../model/service';
 import { SettingCreate } from '../model/settingCreate';
 import { SettingEntity } from '../model/settingEntity';
-import { SettingList } from '../model/settingList';
 import { SettingUpdate } from '../model/settingUpdate';
 
 
@@ -57,7 +55,7 @@ export interface SettingsServiceInterface {
     * Retrieves Configurable Services
     * Retrieves Configurable Services
     */
-    getServices(extraHttpRequestParams?: any): Observable<ServiceList>;
+    getServices(extraHttpRequestParams?: any): Observable<Array<Service>>;
 
     /**
     * Retrieves Configuration Setting
@@ -72,7 +70,7 @@ export interface SettingsServiceInterface {
     * Retrieves Configuration Settings
     * @param service 
     */
-    getSettings(service: string, extraHttpRequestParams?: any): Observable<SettingList>;
+    getSettings(service: string, extraHttpRequestParams?: any): Observable<Array<SettingEntity>>;
 
     /**
     * Updates Configuration Setting

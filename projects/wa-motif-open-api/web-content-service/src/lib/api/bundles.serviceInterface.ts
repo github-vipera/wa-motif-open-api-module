@@ -49,27 +49,13 @@ export interface BundlesServiceInterface {
     * @param bundleName 
     * @param bundleVersion 
     */
-    getBundle(bundleName: string, bundleVersion: string, extraHttpRequestParams?: any): Observable<Bundle>;
-
-    /**
-    * Retrieves a Web Content Bundle Status
-    * Retrieves a Web Content Bundle Status
-    * @param bundleName 
-    * @param bundleVersion 
-    */
-    getBundleStatus(bundleName: string, bundleVersion: string, extraHttpRequestParams?: any): Observable<BundleStatus>;
+    getBundle(bundleName: string, bundleVersion: string, extraHttpRequestParams?: any): Observable<BundleStatus>;
 
     /**
     * Retrieves Web Content Bundles Info
     * Retrieves Web Content Bundles Info
     */
     getBundlesList(extraHttpRequestParams?: any): Observable<Array<Bundle>>;
-
-    /**
-    * Retrieves Web Content Bundles Status
-    * Retrieves Web Content Bundles Status
-    */
-    getBundlesStatusList(extraHttpRequestParams?: any): Observable<Array<BundleStatus>>;
 
     /**
     * Publish a Web Content Bundle

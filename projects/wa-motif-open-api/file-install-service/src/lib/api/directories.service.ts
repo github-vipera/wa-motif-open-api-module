@@ -19,10 +19,10 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
-import { OsgiBundleDirectoryList } from '../model/osgiBundleDirectoryList';
-import { OsgiBundleList } from '../model/osgiBundleList';
+import { OsgiBundle } from '../model/osgiBundle';
+import { OsgiBundleDirectory } from '../model/osgiBundleDirectory';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { DirectoriesServiceInterface }                            from './directories.serviceInterface';
 
@@ -32,7 +32,7 @@ import { DirectoriesServiceInterface }                            from './direct
 })
 export class DirectoriesService implements DirectoriesServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -153,9 +153,9 @@ export class DirectoriesService implements DirectoriesServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listBundles(directory: string, observe?: 'body', reportProgress?: boolean): Observable<OsgiBundleList>;
-    public listBundles(directory: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OsgiBundleList>>;
-    public listBundles(directory: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OsgiBundleList>>;
+    public listBundles(directory: string, observe?: 'body', reportProgress?: boolean): Observable<Array<OsgiBundle>>;
+    public listBundles(directory: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OsgiBundle>>>;
+    public listBundles(directory: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OsgiBundle>>>;
     public listBundles(directory: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (directory === null || directory === undefined) {
             throw new Error('Required parameter directory was null or undefined when calling listBundles.');
@@ -176,7 +176,7 @@ export class DirectoriesService implements DirectoriesServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<OsgiBundleList>(`${this.configuration.basePath}/fileinstall/directories/${encodeURIComponent(String(directory))}/bundles`,
+        return this.httpClient.get<Array<OsgiBundle>>(`${this.configuration.basePath}/fileinstall/directories/${encodeURIComponent(String(directory))}/bundles`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -192,9 +192,9 @@ export class DirectoriesService implements DirectoriesServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listDirectories(observe?: 'body', reportProgress?: boolean): Observable<OsgiBundleDirectoryList>;
-    public listDirectories(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OsgiBundleDirectoryList>>;
-    public listDirectories(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OsgiBundleDirectoryList>>;
+    public listDirectories(observe?: 'body', reportProgress?: boolean): Observable<Array<OsgiBundleDirectory>>;
+    public listDirectories(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OsgiBundleDirectory>>>;
+    public listDirectories(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OsgiBundleDirectory>>>;
     public listDirectories(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -212,7 +212,7 @@ export class DirectoriesService implements DirectoriesServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<OsgiBundleDirectoryList>(`${this.configuration.basePath}/fileinstall/directories`,
+        return this.httpClient.get<Array<OsgiBundleDirectory>>(`${this.configuration.basePath}/fileinstall/directories`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

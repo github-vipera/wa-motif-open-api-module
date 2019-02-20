@@ -23,7 +23,7 @@ export class OAuth2ServiceModule {
     constructor( @Optional() @SkipSelf() parentModule: OAuth2ServiceModule,
                  @Optional() http: HttpClient) {
         if (parentModule) {
-            throw new Error('ApiModule is already loaded. Import in your base AppModule only.');
+            throw new Error('OAuth2ServiceModule is already loaded. Import in your base AppModule only.');
         }
         if (!http) {
             throw new Error('You need to import the HttpClientModule in your AppModule! \n' +

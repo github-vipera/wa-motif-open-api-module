@@ -16,8 +16,6 @@ import { Observable }                                        from 'rxjs';
 import { AdminUser } from '../model/adminUser';
 import { AdminUserCreate } from '../model/adminUserCreate';
 import { AdminUserUpdate } from '../model/adminUserUpdate';
-import { AdminUsersList } from '../model/adminUsersList';
-import { Credentials } from '../model/credentials';
 import { CredentialsCreate } from '../model/credentialsCreate';
 import { CredentialsUpdate } from '../model/credentialsUpdate';
 import { ErrorVipera } from '../model/errorVipera';
@@ -69,7 +67,7 @@ export interface AdminsServiceInterface {
     * Retrieves admin users list
     * @param domain Domain Name
     */
-    getAdminUsersList(domain: string, extraHttpRequestParams?: any): Observable<AdminUsersList>;
+    getAdminUsersList(domain: string, extraHttpRequestParams?: any): Observable<Array<AdminUser>>;
 
     /**
     * Updates an admin user

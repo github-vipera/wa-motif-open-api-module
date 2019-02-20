@@ -9,9 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SharedUserData } from './sharedUserData';
-import { UserKey } from './userKey';
+import { BaseUser } from './baseUser';
 
 
-export interface ClientUser extends UserKey, SharedUserData { 
+export interface ClientUser extends BaseUser { 
 }

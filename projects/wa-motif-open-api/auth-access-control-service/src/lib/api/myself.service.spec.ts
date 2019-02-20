@@ -4,7 +4,7 @@ import { MyselfService } from './myself.service';
 import { RolesService } from './roles.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { AuthService, WebConsoleConfig } from 'web-console-core'
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core'
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables'
 import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
@@ -21,15 +21,17 @@ describe('MyselfService', () => {
     beforeAll(() => {
         TestBed.configureTestingModule({
             providers: [
+                NGXLogger,
                 ActionsService,
                 { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
                 { provide: WebConsoleConfig, useValue: new WebConsoleConfig('', '') }
             ],
-            imports: [HttpClientModule]
+            imports: [HttpClientModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})]
         });
 
         const httpClient = TestBed.get(HttpClient);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        const logger: NGXLogger = TestBed.get(NGXLogger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new MyselfService(httpClient, TEST_BASE_PATH, new Configuration());
 

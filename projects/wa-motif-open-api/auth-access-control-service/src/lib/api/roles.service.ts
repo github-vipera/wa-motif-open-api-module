@@ -29,10 +29,9 @@ import { RoleCreate } from '../model/roleCreate';
 import { RoleUpdate } from '../model/roleUpdate';
 import { User } from '../model/user';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { RolesServiceInterface }                            from './roles.serviceInterface';
-import { WC_API_BASE_PATH }                                 from 'web-console-core'
 
 
 @Injectable({

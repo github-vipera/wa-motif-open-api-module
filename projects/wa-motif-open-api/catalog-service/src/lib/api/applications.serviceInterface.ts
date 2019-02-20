@@ -15,7 +15,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
 import { Property } from '../model/property';
-import { ServiceList } from '../model/serviceList';
+import { Service } from '../model/service';
 
 
 import { Configuration }                                     from '../configuration';
@@ -41,6 +41,6 @@ export interface ApplicationsServiceInterface {
     * @param domain Domain Name
     * @param application Application Name
     */
-    getServiceList(domain: string, application: string, extraHttpRequestParams?: any): Observable<ServiceList>;
+    getServiceList(domain: string, application: string, extraHttpRequestParams?: any): Observable<Array<Service>>;
 
 }

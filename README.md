@@ -133,15 +133,17 @@ describe('DomainsService', () => {
     beforeAll(() => {
         TestBed.configureTestingModule({
             providers: [
+                NGXLogger,
                 DomainsService,
                 { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
                 { provide: WebConsoleConfig, useValue: new WebConsoleConfig('', '') }
             ],
-            imports: [HttpClientModule]
+            imports: [HttpClientModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})]
         });
 
         const httpClient = TestBed.get(HttpClient);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        const logger: NGXLogger = TestBed.get(NGXLogger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new DomainsService(httpClient, TEST_BASE_PATH, new Configuration());
 

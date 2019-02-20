@@ -20,7 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { BundlesServiceInterface }                            from './bundles.serviceInterface';
 
@@ -30,7 +30,7 @@ import { BundlesServiceInterface }                            from './bundles.se
 })
 export class BundlesService implements BundlesServiceInterface {
 
-    protected basePath = 'http://localhost/rest/v2';
+    protected basePath = 'http://localhost:8080/rest/v2';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

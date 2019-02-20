@@ -3,14 +3,16 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { PerformanceService } from './api/performance.service';
+import { AuthService } from './api/auth.service';
+import { MyselfService } from './api/myself.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
   providers: [
-    PerformanceService ]
+    AuthService,
+    MyselfService ]
 })
 export class PluginAuthServiceModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {

@@ -166,6 +166,18 @@
       ],
       "@wa-motif-open-api/web-content-service/*": [
         "dist/wa-motif-open-api/web-content-service/*"
+      ],
+      "@wa-motif-open-api/e2e-encryption-service": [
+        "dist/wa-motif-open-api/e2e-encryption-service"
+      ],
+      "@wa-motif-open-api/e2e-encryption-service/*": [
+        "dist/wa-motif-open-api/e2e-encryption-service/*"
+      ],
+      "@wa-motif-open-api/session-service": [
+        "dist/wa-motif-open-api/session-service"
+      ],
+      "@wa-motif-open-api/session-service/*": [
+        "dist/wa-motif-open-api/session-service/*"
       ]
     }
   }

@@ -23,10 +23,9 @@ import { EntitlementResult } from '../model/entitlementResult';
 import { ErrorVipera } from '../model/errorVipera';
 import { Permission } from '../model/permission';
 
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { MyselfServiceInterface }                            from './myself.serviceInterface';
-import { WC_API_BASE_PATH }                                 from 'web-console-core'
 
 
 @Injectable({

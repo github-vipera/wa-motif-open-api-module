@@ -16,7 +16,7 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { Otp } from '../model/otp';
 import { OtpCreate } from '../model/otpCreate';
-import { OtpList } from '../model/otpList';
+import { OtpEntity } from '../model/otpEntity';
 
 
 import { Configuration }                                     from '../configuration';
@@ -49,6 +49,6 @@ export interface OtpServiceInterface {
     * @param domain Domain Name
     * @param userId User Id
     */
-    getOtpList(domain: string, userId: string, extraHttpRequestParams?: any): Observable<OtpList>;
+    getOtpList(domain: string, userId: string, extraHttpRequestParams?: any): Observable<Array<OtpEntity>>;
 
 }

@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { UsersService } from './users.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { AuthService, WebConsoleConfig } from 'web-console-core'
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core'
 import * as _ from 'lodash';
 
 import { failLogin, failTestWithError, b64toFile, blobToB64, failTestWithMessage } from '../../../../test-helper';
@@ -26,15 +26,17 @@ describe('UsersService', () => {
     beforeAll(() => {
         TestBed.configureTestingModule({
             providers: [
+                NGXLogger,
                 UsersService,
                 { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
                 { provide: WebConsoleConfig, useValue: new WebConsoleConfig('', '') }
             ],
-            imports: [HttpClientModule]
+            imports: [HttpClientModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG})]
         });
 
         const httpClient = TestBed.get(HttpClient);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null);
+        const logger: NGXLogger = TestBed.get(NGXLogger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new UsersService(httpClient, TEST_BASE_PATH, null);
 
@@ -62,7 +64,6 @@ describe('UsersService', () => {
             () => {
                 service.getUserCounters('Default', 'test').subscribe(value => {
                      expect(value).toBeDefined();
-                    let c:string = value[0].lastCountDate;
                 }, error => {
                     failTestWithError('should verify datarecords export', error);
                 })

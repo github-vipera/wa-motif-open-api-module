@@ -15,10 +15,9 @@ import { Observable }                                        from 'rxjs';
 
 import { AppCheckRequest } from '../model/appCheckRequest';
 import { AppCheckResponse } from '../model/appCheckResponse';
-import { ApplicationVersionList } from '../model/applicationVersionList';
+import { ApplicationVersion } from '../model/applicationVersion';
 import { Engine } from '../model/engine';
 import { EngineCreate } from '../model/engineCreate';
-import { EngineList } from '../model/engineList';
 import { EngineUpdate } from '../model/engineUpdate';
 import { ErrorVipera } from '../model/errorVipera';
 
@@ -76,7 +75,7 @@ export interface EnginesServiceInterface {
     * Looks up all dynamic engine configurations for a given domain
     * @param domain Domain Name
     */
-    getEngines(domain: string, extraHttpRequestParams?: any): Observable<EngineList>;
+    getEngines(domain: string, extraHttpRequestParams?: any): Observable<Array<Engine>>;
 
     /**
     * Retrieve tracked engine versions
@@ -91,7 +90,7 @@ export interface EnginesServiceInterface {
     * Lists all tracked engines versions
     * @param domain Domain Name
     */
-    getTrackedEnginesVersions(domain: string, extraHttpRequestParams?: any): Observable<ApplicationVersionList>;
+    getTrackedEnginesVersions(domain: string, extraHttpRequestParams?: any): Observable<Array<ApplicationVersion>>;
 
     /**
     * Updates a registered dynamic engine configuration

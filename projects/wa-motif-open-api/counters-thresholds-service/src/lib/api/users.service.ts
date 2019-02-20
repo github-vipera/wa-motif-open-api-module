@@ -18,11 +18,11 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { CountersEntityList } from '../model/countersEntityList';
+import { CounterEntity } from '../model/counterEntity';
 import { ErrorVipera } from '../model/errorVipera';
 import { Variation } from '../model/variation';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { UsersServiceInterface }                            from './users.serviceInterface';
 
@@ -74,9 +74,9 @@ export class UsersService implements UsersServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<CountersEntityList>;
-    public getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CountersEntityList>>;
-    public getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CountersEntityList>>;
+    public getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<CounterEntity>>;
+    public getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CounterEntity>>>;
+    public getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CounterEntity>>>;
     public getUserCounters(domain: string, userId: string, counterInfo?: string, page?: number, pageSize?: number, sort?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getUserCounters.');
@@ -128,7 +128,7 @@ export class UsersService implements UsersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<CountersEntityList>(`${this.configuration.basePath}/counterthreshold/domain/${encodeURIComponent(String(domain))}/user/${encodeURIComponent(String(userId))}/counters`,
+        return this.httpClient.get<Array<CounterEntity>>(`${this.configuration.basePath}/counterthreshold/domain/${encodeURIComponent(String(domain))}/user/${encodeURIComponent(String(userId))}/counters`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

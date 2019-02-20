@@ -21,7 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { DatarecordList } from '../model/datarecordList';
 import { ErrorVipera } from '../model/errorVipera';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { DatarecordsServiceInterface }                            from './datarecords.serviceInterface';
 

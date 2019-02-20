@@ -20,12 +20,11 @@ import { Observable }                                        from 'rxjs';
 
 import { CounterInfo } from '../model/counterInfo';
 import { CounterInfoEntity } from '../model/counterInfoEntity';
-import { CounterInfoEntityList } from '../model/counterInfoEntityList';
 import { CounterInfoUpdatableFields } from '../model/counterInfoUpdatableFields';
 import { ErrorVipera } from '../model/errorVipera';
-import { ThresholdInfoEntityList } from '../model/thresholdInfoEntityList';
+import { ThresholdInfoEntity } from '../model/thresholdInfoEntity';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { CountersServiceInterface }                            from './counters.serviceInterface';
 
@@ -232,6 +231,65 @@ export class CountersService implements CountersServiceInterface {
     }
 
     /**
+     * Downloads XML counter info file
+     * Downloads XML counter info file
+     * @param counterNames Counter Info Names
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public downloadXml(counterNames?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Blob>;
+    public downloadXml(counterNames?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Blob>>;
+    public downloadXml(counterNames?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Blob>>;
+    public downloadXml(counterNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (counterNames) {
+            queryParameters = queryParameters.set('counterNames', counterNames.join(COLLECTION_FORMATS['csv']));
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/zip',
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get(`${this.configuration.basePath}/counterthreshold/counters/infos/xml`,
+            {
+                params: queryParameters,
+                responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Enables Counter Info
      * Enables Counter Info
      * @param counterInfo Counter Info name
@@ -346,9 +404,9 @@ export class CountersService implements CountersServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCounterInfoList(observe?: 'body', reportProgress?: boolean): Observable<CounterInfoEntityList>;
-    public getCounterInfoList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CounterInfoEntityList>>;
-    public getCounterInfoList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CounterInfoEntityList>>;
+    public getCounterInfoList(observe?: 'body', reportProgress?: boolean): Observable<Array<CounterInfoEntity>>;
+    public getCounterInfoList(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<CounterInfoEntity>>>;
+    public getCounterInfoList(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<CounterInfoEntity>>>;
     public getCounterInfoList(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -380,7 +438,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<CounterInfoEntityList>(`${this.configuration.basePath}/counterthreshold/counters/infos`,
+        return this.httpClient.get<Array<CounterInfoEntity>>(`${this.configuration.basePath}/counterthreshold/counters/infos`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -397,9 +455,9 @@ export class CountersService implements CountersServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getThresholdInfoList(counterInfo: string, observe?: 'body', reportProgress?: boolean): Observable<ThresholdInfoEntityList>;
-    public getThresholdInfoList(counterInfo: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ThresholdInfoEntityList>>;
-    public getThresholdInfoList(counterInfo: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ThresholdInfoEntityList>>;
+    public getThresholdInfoList(counterInfo: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ThresholdInfoEntity>>;
+    public getThresholdInfoList(counterInfo: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ThresholdInfoEntity>>>;
+    public getThresholdInfoList(counterInfo: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ThresholdInfoEntity>>>;
     public getThresholdInfoList(counterInfo: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (counterInfo === null || counterInfo === undefined) {
             throw new Error('Required parameter counterInfo was null or undefined when calling getThresholdInfoList.');
@@ -434,7 +492,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ThresholdInfoEntityList>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}/thresholds`,
+        return this.httpClient.get<Array<ThresholdInfoEntity>>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}/thresholds`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -496,6 +554,80 @@ export class CountersService implements CountersServiceInterface {
 
         return this.httpClient.put<any>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}`,
             counterInfoUpdatableFields,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Uploads XML counter info file
+     * Uploads XML counter info file
+     * @param file 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public uploadXml(file: Blob, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public uploadXml(file: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public uploadXml(file: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public uploadXml(file: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (file === null || file === undefined) {
+            throw new Error('Required parameter file was null or undefined when calling uploadXml.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any; };
+        let useForm = false;
+        let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        }
+
+        if (file !== undefined) {
+            formParams = formParams.append('file', <any>file) || formParams;
+        }
+
+        return this.httpClient.put<any>(`${this.configuration.basePath}/counterthreshold/counters/infos/xml`,
+            convertFormParamsToString ? formParams.toString() : formParams,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

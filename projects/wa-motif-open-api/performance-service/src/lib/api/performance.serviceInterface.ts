@@ -16,7 +16,6 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { PerfTimeSerie } from '../model/perfTimeSerie';
 import { PerfTimeSerieAdd } from '../model/perfTimeSerieAdd';
-import { PerfTimeSeriesList } from '../model/perfTimeSeriesList';
 
 
 import { Configuration }                                     from '../configuration';
@@ -58,7 +57,7 @@ export interface PerformanceServiceInterface {
     * Retrieves performance time series
     * Retrieves performance time series
     */
-    getPerfTimeSeries(extraHttpRequestParams?: any): Observable<PerfTimeSeriesList>;
+    getPerfTimeSeries(extraHttpRequestParams?: any): Observable<Array<PerfTimeSerie>>;
 
     /**
     * Retrieves performance time series names

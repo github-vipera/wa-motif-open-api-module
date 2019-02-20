@@ -23,7 +23,7 @@ import { ServiceContextValue } from '../model/serviceContextValue';
 import { Value } from '../model/value';
 import { ValueCreate } from '../model/valueCreate';
 
-import { WC_API_BASE_PATH } from 'web-console-core'
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { ValuesServiceInterface }                            from './values.serviceInterface';
 

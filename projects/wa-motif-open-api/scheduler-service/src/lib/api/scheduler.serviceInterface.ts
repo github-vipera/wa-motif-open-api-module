@@ -17,8 +17,7 @@ import { ErrorVipera } from '../model/errorVipera';
 import { ScheduledTask } from '../model/scheduledTask';
 import { ScheduledTaskCreate } from '../model/scheduledTaskCreate';
 import { ScheduledTaskEntity } from '../model/scheduledTaskEntity';
-import { ScheduledTaskEntityList } from '../model/scheduledTaskEntityList';
-import { ScheduledTaskExecutionEntityList } from '../model/scheduledTaskExecutionEntityList';
+import { ScheduledTaskExecutionEntity } from '../model/scheduledTaskExecutionEntity';
 
 
 import { Configuration }                                     from '../configuration';
@@ -73,13 +72,13 @@ export interface SchedulerServiceInterface {
     * @param pageSize Page size
     * @param sort Sorting fields
     */
-    getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, extraHttpRequestParams?: any): Observable<ScheduledTaskExecutionEntityList>;
+    getTaskExecutionsList(task: string, taskExecResultCode?: string, page?: number, pageSize?: number, sort?: string, extraHttpRequestParams?: any): Observable<Array<ScheduledTaskExecutionEntity>>;
 
     /**
     * Retrieves a list of scheduled tasks
     * Retrieves a list of scheduled tasks
     */
-    getTaskList(extraHttpRequestParams?: any): Observable<ScheduledTaskEntityList>;
+    getTaskList(extraHttpRequestParams?: any): Observable<Array<ScheduledTaskEntity>>;
 
     /**
     * Updates an already scheduled task

@@ -21,11 +21,11 @@ import { Observable }                                        from 'rxjs';
 import { ErrorVipera } from '../model/errorVipera';
 import { Otp } from '../model/otp';
 import { OtpCreate } from '../model/otpCreate';
-import { OtpList } from '../model/otpList';
+import { OtpEntity } from '../model/otpEntity';
 
+import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { OtpServiceInterface }                            from './otp.serviceInterface';
-import { WC_API_BASE_PATH } from 'web-console-core'
 
 
 @Injectable({
@@ -190,9 +190,9 @@ export class OtpService implements OtpServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOtpList(domain: string, userId: string, observe?: 'body', reportProgress?: boolean): Observable<OtpList>;
-    public getOtpList(domain: string, userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OtpList>>;
-    public getOtpList(domain: string, userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OtpList>>;
+    public getOtpList(domain: string, userId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<OtpEntity>>;
+    public getOtpList(domain: string, userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OtpEntity>>>;
+    public getOtpList(domain: string, userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OtpEntity>>>;
     public getOtpList(domain: string, userId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
             throw new Error('Required parameter domain was null or undefined when calling getOtpList.');
@@ -230,7 +230,7 @@ export class OtpService implements OtpServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<OtpList>(`${this.configuration.basePath}/otp/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}`,
+        return this.httpClient.get<Array<OtpEntity>>(`${this.configuration.basePath}/otp/domains/${encodeURIComponent(String(domain))}/users/${encodeURIComponent(String(userId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
