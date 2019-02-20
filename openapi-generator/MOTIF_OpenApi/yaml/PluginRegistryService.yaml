@@ -9,10 +9,10 @@ info:
     name: Vipera Motif commercial license
     url: 'http://www.vipera.com'
 servers:
-  - url: '/rest/v2'
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
-    description: Local machine
+    description: Development server
 tags:
   - name: registry
     description: The Plugin Registry Service provides a centralized directory service whereby platform plugins can be discovered and loaded.
@@ -25,10 +25,6 @@ components:
     vipera_cookie:
       $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
   schemas:
-    PluginList:
-      type: array
-      items:
-          $ref: '#/components/schemas/Plugin' 
     Plugin:
       type: object
       required:
@@ -109,7 +105,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PluginList'
+                type: array
+                items:
+                    $ref: '#/components/schemas/Plugin' 
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /registry/plugins/install:

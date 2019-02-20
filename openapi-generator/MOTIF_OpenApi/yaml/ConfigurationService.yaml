@@ -10,6 +10,9 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
 tags:
   - name: configurations
     description: Configurations related
@@ -44,16 +47,6 @@ components:
         name:
           type: string
           example: TestService  
-          
-    ServiceList:
-      type: array
-      items:
-          $ref: '#/components/schemas/Service'
-    
-    SettingList:
-      type: array
-      items:
-          $ref: '#/components/schemas/SettingEntity' 
           
     SettingEntity:
       type: object
@@ -124,11 +117,6 @@ components:
         tag:
           type: string
           example: TestTag  
-          
-    TagList:
-      type: array
-      items:
-          $ref: '#/components/schemas/Tag'
           
   parameters:
     tagPathParam:
@@ -248,7 +236,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
@@ -272,7 +262,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SettingList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/SettingEntity'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     delete:
@@ -452,7 +444,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
  

@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif End 2 End Encryption Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+    description: Local server
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
+tags:
+  - name: e2e
+    description: EndToEnd Encryption Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:
+    HandshakeRequest:
+      type: object
+      required:
+        - kpid
+        - ehkalgo
+        - ehkencoded
+        - e2ealgo
+      properties:
+        kpid:
+          type: string
+          description : key pair id to which the public key belongs
+          example: 4b88e7ceea3a497487e390cd23946457
+        ehkalgo:
+          type: string
+          example: 'AES'
+        ehkencoded:
+          type: string
+          description: Base64 encoded crypted handshake key
+        ehktransformation:
+          type: string
+          description: Padding used during encryption
+        e2ealgo:
+          type: string
+          description: E2E decrypt/encrypt keys algorithm
+    HandshakeResponse:
+      type: object
+      required:
+        - rkenckey
+        - rkalgo
+        - rkformat
+        - rkparamspec
+        - rkpadding
+        - rrkenckey
+        - rrkalgo
+        - rrkformat
+        - rrkparamspec
+        - rrkpadding
+        - convid
+      properties:
+        rkenckey:
+          type: string
+          description : Base64 encoded crypted request key
+        rkalgo:
+          type: string
+          description : Request key encryption algorithm
+        rkformat:
+          type: string
+          description: Request key encryption format
+        rkparamspec:
+          type: string
+          description: Request key encryption param specs
+        rkpadding:
+          type: string
+          description: Request key encryption padding
+        rrkenckey:
+          type: string
+          description : Base64 encoded crypted reply key
+        rrkalgo:
+          type: string
+          description : Reply key encryption algorithm
+        rrkformat:
+          type: string
+          description: Reply key encryption format
+        rrkparamspec:
+          type: string
+          description: Reply key encryption param specs
+        rrkpadding:
+          type: string
+          description: Reply key encryption padding
+        convid:
+          type: string
+          description: E2E conversation ID
+    PublicKeyCertificate:
+      type: object
+      required:
+        - pubcertbytes
+        - pubcertalgo
+        - pubcertformat
+        - kpid
+      properties:
+        pubcertbytes:
+          type: string
+          description: Base64 encoded public key certificate
+          example: MIIBIjANBgkqhkiG9w0BA....
+        pubcertalgo:
+          type: string
+          example: 'RSA'      
+        pubcertformat:
+          type: string
+          description: Public key certificate original format
+          example: X.509
+        kpid:
+          type: string
+          description : key pair id to which the public key belongs
+          example: 4b88e7ceea3a497487e390cd23946457
+    ConversationIdStatus:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: 'ACTIVE'
+  parameters:
+    cidPathParam:
+      name: cid
+      description: ConversationId
+      in: path
+      required: true
+      schema:
+        type: string
+paths:
+  /e2e/pkcertificate:
+    get:
+      operationId: getPublicKeyCertificate
+      tags:
+        - e2e
+      description: Get E2E Public Key Certificate
+      summary: Get E2E Public Key Certificate
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyCertificate'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /e2e/handshake:
+    post:
+      operationId: performHandshake
+      tags:
+        - e2e
+      description: Performs an Handshake
+      summary: Performs an Handshake
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandshakeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandshakeResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /e2e/convid/{cid}:
+    get:
+      operationId: getConversationIdStatus
+      tags:
+        - e2e
+      description: Get Conversation ID status
+      summary: Get Conversation ID status
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/cidPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationIdStatus'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

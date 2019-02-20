@@ -9,8 +9,10 @@ info:
     name: Vipera Motif commercial license
     url: 'http://www.vipera.com'
 servers:
-  - url: 'http://localhost:8080/rest/v2/'
+  - url: 'http://localhost:8080/rest/v2'
+    description: Local server
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
 components:
   securitySchemes:
     vipera_oauth2:
@@ -57,6 +59,18 @@ components:
         userId:
           type: string
           example: joe
+    UserSharedDataKey:
+      type: object
+      required:
+        - domain
+        - userId
+      properties:
+        domain:
+          type: string
+          example: Default
+        userId:
+          type: string
+          example: joe
     UserData:
       type: object
       properties:
@@ -69,36 +83,49 @@ components:
         serial:
           type: string
           example: 12345678
-    SharedUserData:
-      type: object
-      properties:
-        locale:
-          type: string
-          example: IT
-        state:
-          type: string
-          example: ACTIVE
-        prevState:
-          type: string
-          example: PREACTIVE
-        email:
-          type: string
-          example: test@vipera.com
-        created:
-          type: string
-          format: date-time
-        lastLogin:
-          type: string
-          format: date-time
+    CommonUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseUser'
+        - type: object
+          properties:
+            userIdInt:
+              type: string
+              example: 123456
+            msisdn:
+              type: string
+              example: 555123456
+            serial:
+              type: string
+              example: 12345678
+    BaseUser:
+      allOf:
+        - $ref: '#/components/schemas/UserKey'
+        - type: object
+          properties:
+            locale:
+              type: string
+              example: IT
+            state:
+              type: string
+              example: ACTIVE
+            prevState:
+              type: string
+              example: PREACTIVE
+            email:
+              type: string
+              example: test@vipera.com
+            created:
+              type: string
+              format: date-time
+            lastLogin:
+              type: string
+              format: date-time
     User:
       allOf:
-        - $ref: '#/components/schemas/UserKey'
-        - $ref: '#/components/schemas/UserData'
-        - $ref: '#/components/schemas/SharedUserData'
+        - $ref: '#/components/schemas/CommonUser'
     AdminUser:
       allOf:
-        - $ref: '#/components/schemas/UserKey'
-        - $ref: '#/components/schemas/SharedUserData'
+        - $ref: '#/components/schemas/BaseUser'
         - type: object
           properties:
             firstName:
@@ -109,8 +136,7 @@ components:
               example: Doe
     ClientUser:
       allOf:
-        - $ref: '#/components/schemas/UserKey'
-        - $ref: '#/components/schemas/SharedUserData'
+        - $ref: '#/components/schemas/BaseUser'
     Property:
       type: object
       required:
@@ -254,12 +280,6 @@ components:
           example: myValue
         attribute:  
            $ref: '#/components/schemas/ServiceContextAttribute' 
-
-    ServiceContextValueList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ServiceContextValue'      
-            
     ServiceContextAttribute:
       type: object
       required:
@@ -272,11 +292,6 @@ components:
         type:
           type: string
           example: Boolean   
-
-    ServiceContextAttributeList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ServiceContextAttribute' 
     
     ServiceContext:
       type: object
@@ -305,12 +320,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ServiceContextValue' 
-
-    ServiceContextList:
-      type: array
-      items:
-        $ref: '#/components/schemas/ServiceContext'      
-
     ErrorVipera:
       type: object
       description: Specific platform error from Vipera MOTIF

@@ -9,9 +9,10 @@ info:
     name: Vipera Motif commercial license
     url: 'http://www.vipera.com'
 servers:
-  - url: '/rest/v2'
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
 tags:
   - name: bundles
     description: Bundles related
@@ -38,12 +39,6 @@ components:
           description: Delete other plugin versions
           type: boolean
           example: false
-          
-    OsgiBundleList:
-      type: array
-      items:
-          $ref: '#/components/schemas/OsgiBundle' 
-          
     OsgiBundle:
       type: object
       required:
@@ -58,12 +53,6 @@ components:
           type: string
           description: Plugin jar installation directory
           example: plugins   
-          
-    OsgiBundleDirectoryList:
-      type: array
-      items:
-          $ref: '#/components/schemas/OsgiBundleDirectory' 
-          
     OsgiBundleDirectory:
       type: object
       required:
@@ -140,7 +129,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OsgiBundleList'
+                type: array
+                items:
+                    $ref: '#/components/schemas/OsgiBundle' 
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     delete:
@@ -221,6 +212,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OsgiBundleDirectoryList'
+                type: array
+                items:
+                    $ref: '#/components/schemas/OsgiBundleDirectory' 
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

@@ -10,8 +10,9 @@ info:
     url: 'http://www.vipera.com'
 servers:
   - url: 'http://localhost:8080/rest/v2'
+    description: Local server
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
-  - url: '/rest/v2'
+    description: Development server
 tags:
   - name: otp
     description: OTP Service related
@@ -77,10 +78,6 @@ components:
         failures:
           type: integer
           example: '1'
-    OtpList:
-      type: array
-      items:
-        $ref: '#/components/schemas/OtpEntity'
   parameters:
     otpIdPathParam:
       name: otpId
@@ -141,7 +138,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OtpList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/OtpEntity'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /otp/{otpId}:

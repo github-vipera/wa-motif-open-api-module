@@ -14,8 +14,8 @@ servers:
   - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
     description: Development server
 tags:
-  - name: security
-    description: Security Service
+  - name: session
+    description: Session Manager Service
 components:
   securitySchemes:
     vipera_oauth2:
@@ -84,123 +84,63 @@ components:
           type: boolean
           description: Whether this session is shared between multiple users
           example: false
-  parameters:
-    sessionPathParam:
-      name: session
-      required: true
-      in: path
-      description: Session
-      schema:
-        type: string
-        example: 3h3hgf234gf23hg4f23h4hg23f4h23gf4h2
-    sessionQueryParam:
-      name: session
-      required: false
-      in: query
-      description: Session
-      schema:
-        type: string
-        example: 3h3hgf234gf23hg4f23h4hg23f4h23gf4h2
-    channelQueryParam:
-      name: channel
-      required: false
-      in: query
-      description: Channel
-      schema:
-        type: string
-        example: REST
-    domainQueryParam:
-      name: domain
-      required: false
-      in: query
-      description: Domain
-      schema:
-        type: string
-        example: Default
-    applicationQueryParam:
-      name: application
-      required: false
-      in: query
-      description: Application
-      schema:
-        type: string
-        example: Vipera
-    clientIpQueryParam:
-      name: clientIp
-      required: false
-      in: query
-      description: Client IP
-      schema:
-        type: string
-        example: 10.0.0.1
-    userQueryParam:
-      name: user
-      required: false
-      in: query
-      description: User
-      schema:
-        type: string
-        example: joe
         
 paths:
-  /security/sessions:
-    get:
-      operationId: getSessions
+  /sessions/current:
+    post:
+      operationId: openCurrentUserSession
       tags:
-        - security
-      description: Retrieve open sessions
-      summary: Retrieve open sessions
+        - session
+      description: Open current user session
+      summary: Open current user session
       security:
         - vipera_oauth2:
           - 'all:all'
         - vipera_basic: []
         - vipera_cookie: []
-      parameters:
-        - $ref: '#/components/parameters/sessionQueryParam'
-        - $ref: '#/components/parameters/channelQueryParam'
-        - $ref: '#/components/parameters/domainQueryParam'
-        - $ref: '#/components/parameters/applicationQueryParam'
-        - $ref: '#/components/parameters/clientIpQueryParam'
-        - $ref: '#/components/parameters/userQueryParam'
-        - $ref: './Z_Globals.yaml#/components/parameters/pageQueryParam'
-        - $ref: './Z_Globals.yaml#/components/parameters/pageSizeQueryParam'
       responses:
-        '200':
-          description: OK
-          headers:
-            x-page:
-              $ref: './Z_Globals.yaml#/components/headers/x-page'
-            x-page-size:
-              $ref: './Z_Globals.yaml#/components/headers/x-page-size'
-            x-total-pages:
-              $ref: './Z_Globals.yaml#/components/headers/x-total-pages'
-            x-total-records:
-              $ref: './Z_Globals.yaml#/components/headers/x-total-records'
+        '201':
+          description: Session created
           content:
             application/json:
               schema:
-                type: array
-                items:
                   $ref: '#/components/schemas/Session'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
-  /security/sessions/{session}:
-    delete:
-      operationId: closeSession
+    get:
+      operationId: checkCurrentUserSession
       tags:
-        - security
-      description: Close session
-      summary: Close session
+        - session
+      description: Check current user session
+      summary: Check current user session
       security:
         - vipera_oauth2:
           - 'all:all'
         - vipera_basic: []
         - vipera_cookie: []
-      parameters:
-        - $ref: '#/components/parameters/sessionPathParam'
+      responses:
+        '200':
+          description: OK Response
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Session'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+    delete:
+      operationId: closeCurrentUserSession
+      tags:
+        - session
+      description: Close current user session
+      summary: Close current user session
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
       responses:
         '204':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'          
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   
