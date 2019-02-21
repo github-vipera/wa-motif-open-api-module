@@ -13,7 +13,6 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
-import { Bundle } from '../model/bundle';
 import { BundleStatus } from '../model/bundleStatus';
 import { BundleUpdate } from '../model/bundleUpdate';
 import { ErrorVipera } from '../model/errorVipera';
@@ -55,7 +54,7 @@ export interface BundlesServiceInterface {
     * Retrieves Web Content Bundles Info
     * Retrieves Web Content Bundles Info
     */
-    getBundlesList(extraHttpRequestParams?: any): Observable<Array<Bundle>>;
+    getBundlesList(extraHttpRequestParams?: any): Observable<Array<BundleStatus>>;
 
     /**
     * Publish a Web Content Bundle
