@@ -281,7 +281,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Bundle' 
+                  $ref: '#/components/schemas/BundleStatus' 
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
