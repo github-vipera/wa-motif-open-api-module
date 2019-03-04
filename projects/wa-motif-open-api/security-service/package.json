@@ -1,6 +1,6 @@
 {
     "name": "@wa-motif-open-api/security-service",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "scripts": {
         "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
     },
