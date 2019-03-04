@@ -87,7 +87,7 @@ export class UsersService implements UsersServiceInterface {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (counterInfo !== undefined && counterInfo !== null) {
-            queryParameters = queryParameters.set('counterInfo', <any>counterInfo);
+            queryParameters = queryParameters.set('counterInfo:like', <any>counterInfo);
         }
         if (page !== undefined && page !== null) {
             queryParameters = queryParameters.set('page', <any>page);
