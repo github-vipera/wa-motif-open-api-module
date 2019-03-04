@@ -176,10 +176,10 @@ export class DatarecordsService implements DatarecordsServiceInterface {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (fromDate !== undefined && fromDate !== null) {
-            queryParameters = queryParameters.set('fromDate', <any>fromDate.toISOString());
+            queryParameters = queryParameters.set('fromDate:gte', <any>fromDate.toISOString());
         }
         if (toDate !== undefined && toDate !== null) {
-            queryParameters = queryParameters.set('toDate', <any>toDate.toISOString());
+            queryParameters = queryParameters.set('toDate:lte', <any>toDate.toISOString());
         }
         if (page !== undefined && page !== null) {
             queryParameters = queryParameters.set('page', <any>page);

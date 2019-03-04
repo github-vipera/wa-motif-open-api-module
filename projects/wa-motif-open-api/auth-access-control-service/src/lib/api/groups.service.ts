@@ -564,10 +564,10 @@ export class GroupsService implements GroupsServiceInterface {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (userId !== undefined && userId !== null) {
-            queryParameters = queryParameters.set('userId', <any>userId);
+            queryParameters = queryParameters.set('userId:like', <any>userId);
         }
         if (userIdInt !== undefined && userIdInt !== null) {
-            queryParameters = queryParameters.set('userIdInt', <any>userIdInt);
+            queryParameters = queryParameters.set('userIdInt:like', <any>userIdInt);
         }
         if (page !== undefined && page !== null) {
             queryParameters = queryParameters.set('page', <any>page);
