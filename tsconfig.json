@@ -178,6 +178,12 @@
       ],
       "@wa-motif-open-api/session-service/*": [
         "dist/wa-motif-open-api/session-service/*"
+      ],
+      "@wa-motif-open-api/rest-context-service": [
+        "dist/wa-motif-open-api/rest-context-service"
+      ],
+      "@wa-motif-open-api/rest-context-service/*": [
+        "dist/wa-motif-open-api/rest-context-service/*"
       ]
     }
   }
