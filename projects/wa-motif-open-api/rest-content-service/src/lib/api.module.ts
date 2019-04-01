@@ -12,18 +12,18 @@ import { ContextsService } from './api/contexts.service';
   providers: [
     ContextsService ]
 })
-export class RestContextServiceModule {
+export class RestContentServiceModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
         return {
-            ngModule: RestContextServiceModule,
+            ngModule: RestContentServiceModule,
             providers: [ { provide: Configuration, useFactory: configurationFactory } ]
         };
     }
 
-    constructor( @Optional() @SkipSelf() parentModule: RestContextServiceModule,
+    constructor( @Optional() @SkipSelf() parentModule: RestContentServiceModule,
                  @Optional() http: HttpClient) {
         if (parentModule) {
-            throw new Error('RestContextServiceModule is already loaded. Import in your base AppModule only.');
+            throw new Error('RestContentServiceModule is already loaded. Import in your base AppModule only.');
         }
         if (!http) {
             throw new Error('You need to import the HttpClientModule in your AppModule! \n' +
