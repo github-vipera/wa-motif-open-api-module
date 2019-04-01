@@ -313,7 +313,7 @@ components:
       style: form
       explode: false
 paths:
-  /counterthreshold/counters/infos/xml:
+  /countersthresholds/counters/infos/xml:
         put:
           operationId: uploadXml
           tags:
@@ -359,7 +359,7 @@ paths:
             default:
               $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
-  /counterthreshold/counters/infos:
+  /countersthresholds/counters/infos:
     post:
       operationId: createCounterInfo
       tags:
@@ -409,7 +409,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
     
-  /counterthreshold/counters/infos/{counterInfo}:
+  /countersthresholds/counters/infos/{counterInfo}:
     put:   
       operationId: updateCounterInfo
       tags:
@@ -476,7 +476,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   
-  /counterthreshold/counters/infos/{counterInfo}/enable:
+  /countersthresholds/counters/infos/{counterInfo}/enable:
     post:   
       operationId: enableCounterInfo
       tags:
@@ -495,9 +495,7 @@ paths:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
- 
-  /counterthreshold/counters/infos/{counterInfo}/disable:
-    post:   
+    delete:   
       operationId: disableCounterInfo
       tags:
         - counters
@@ -516,7 +514,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
                    
-  /counterthreshold/counters/infos/{counterInfo}/thresholds:
+  /countersthresholds/counters/infos/{counterInfo}/thresholds:
     get:
       operationId: getThresholdInfoList
       tags:
@@ -542,7 +540,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
-  /counterthreshold/domain/{domain}/user/{userId}/counters:
+  /countersthresholds/domain/{domain}/user/{userId}/counters:
     get:
       operationId: getUserCounters
       tags:
@@ -582,7 +580,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   
-  /counterthreshold/domain/{domain}/user/{userId}/counters/{counterInfo}:
+  /countersthresholds/domain/{domain}/user/{userId}/counters/{counterInfo}:
     put:
       operationId: updateUserCounter
       tags:
@@ -609,7 +607,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   
-  /counterthreshold/thresholds:
+  /countersthresholds/thresholds:
     post:
       operationId: createThresholdInfo
       tags:
@@ -636,7 +634,7 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
-  /counterthreshold/thresholds/{threshold}:
+  /countersthresholds/thresholds/{threshold}:
     delete:
       operationId: deleteThresholdInfo
       tags:

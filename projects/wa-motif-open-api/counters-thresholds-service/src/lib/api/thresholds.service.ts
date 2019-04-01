@@ -108,7 +108,7 @@ export class ThresholdsService implements ThresholdsServiceInterface {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<ThresholdInfoEntity>(`${this.configuration.basePath}/counterthreshold/thresholds`,
+        return this.httpClient.post<ThresholdInfoEntity>(`${this.configuration.basePath}/countersthresholds/thresholds`,
             thresholdInfo,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -163,7 +163,7 @@ export class ThresholdsService implements ThresholdsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.delete<any>(`${this.configuration.basePath}/counterthreshold/thresholds/${encodeURIComponent(String(threshold))}`,
+        return this.httpClient.delete<any>(`${this.configuration.basePath}/countersthresholds/thresholds/${encodeURIComponent(String(threshold))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -217,7 +217,7 @@ export class ThresholdsService implements ThresholdsServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<ThresholdInfoEntity>(`${this.configuration.basePath}/counterthreshold/thresholds/${encodeURIComponent(String(threshold))}`,
+        return this.httpClient.get<ThresholdInfoEntity>(`${this.configuration.basePath}/countersthresholds/thresholds/${encodeURIComponent(String(threshold))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -277,7 +277,7 @@ export class ThresholdsService implements ThresholdsServiceInterface {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<any>(`${this.configuration.basePath}/counterthreshold/thresholds/${encodeURIComponent(String(threshold))}`,
+        return this.httpClient.put<any>(`${this.configuration.basePath}/countersthresholds/thresholds/${encodeURIComponent(String(threshold))}`,
             thresholdInfo,
             {
                 withCredentials: this.configuration.withCredentials,

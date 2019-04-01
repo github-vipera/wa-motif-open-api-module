@@ -110,7 +110,7 @@ export class CountersService implements CountersServiceInterface {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<CounterInfoEntity>(`${this.configuration.basePath}/counterthreshold/counters/infos`,
+        return this.httpClient.post<CounterInfoEntity>(`${this.configuration.basePath}/countersthresholds/counters/infos`,
             counterInfo,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -165,7 +165,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.delete<any>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}`,
+        return this.httpClient.delete<any>(`${this.configuration.basePath}/countersthresholds/counters/infos/${encodeURIComponent(String(counterInfo))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -219,8 +219,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.post<any>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}/disable`,
-            null,
+        return this.httpClient.delete<any>(`${this.configuration.basePath}/countersthresholds/counters/infos/${encodeURIComponent(String(counterInfo))}/enable`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -277,7 +276,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get(`${this.configuration.basePath}/counterthreshold/counters/infos/xml`,
+        return this.httpClient.get(`${this.configuration.basePath}/countersthresholds/counters/infos/xml`,
             {
                 params: queryParameters,
                 responseType: "blob",
@@ -333,7 +332,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.post<any>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}/enable`,
+        return this.httpClient.post<any>(`${this.configuration.basePath}/countersthresholds/counters/infos/${encodeURIComponent(String(counterInfo))}/enable`,
             null,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -388,7 +387,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<CounterInfoEntity>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}`,
+        return this.httpClient.get<CounterInfoEntity>(`${this.configuration.basePath}/countersthresholds/counters/infos/${encodeURIComponent(String(counterInfo))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -438,7 +437,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<CounterInfoEntity>>(`${this.configuration.basePath}/counterthreshold/counters/infos`,
+        return this.httpClient.get<Array<CounterInfoEntity>>(`${this.configuration.basePath}/countersthresholds/counters/infos`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -492,7 +491,7 @@ export class CountersService implements CountersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<ThresholdInfoEntity>>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}/thresholds`,
+        return this.httpClient.get<Array<ThresholdInfoEntity>>(`${this.configuration.basePath}/countersthresholds/counters/infos/${encodeURIComponent(String(counterInfo))}/thresholds`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -552,7 +551,7 @@ export class CountersService implements CountersServiceInterface {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<any>(`${this.configuration.basePath}/counterthreshold/counters/infos/${encodeURIComponent(String(counterInfo))}`,
+        return this.httpClient.put<any>(`${this.configuration.basePath}/countersthresholds/counters/infos/${encodeURIComponent(String(counterInfo))}`,
             counterInfoUpdatableFields,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -626,7 +625,7 @@ export class CountersService implements CountersServiceInterface {
             formParams = formParams.append('file', <any>file) || formParams;
         }
 
-        return this.httpClient.put<any>(`${this.configuration.basePath}/counterthreshold/counters/infos/xml`,
+        return this.httpClient.put<any>(`${this.configuration.basePath}/countersthresholds/counters/infos/xml`,
             convertFormParamsToString ? formParams.toString() : formParams,
             {
                 withCredentials: this.configuration.withCredentials,
