@@ -10,9 +10,11 @@
  * Do not edit the class manually.
  */
 import { ServiceContextAttribute } from './serviceContextAttribute';
+import { ServiceContextValueProperty } from './serviceContextValueProperty';
 
 
 export interface ServiceContextValue { 
     value: string;
     attribute: ServiceContextAttribute;
+    properties?: Array<ServiceContextValueProperty>;
 }

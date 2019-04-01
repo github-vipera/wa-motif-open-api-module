@@ -191,6 +191,131 @@ export class ContextsService implements ContextsServiceInterface {
     }
 
     /**
+     * Disables a Service Context
+     * Disables a Service Context
+     * @param domain Domain Name
+     * @param application Application Name
+     * @param context Context Name
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public disableContext(domain: string, application: string, context: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public disableContext(domain: string, application: string, context: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public disableContext(domain: string, application: string, context: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public disableContext(domain: string, application: string, context: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling disableContext.');
+        }
+        if (application === null || application === undefined) {
+            throw new Error('Required parameter application was null or undefined when calling disableContext.');
+        }
+        if (context === null || context === undefined) {
+            throw new Error('Required parameter context was null or undefined when calling disableContext.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<any>(`${this.configuration.basePath}/contextservice/domains/${encodeURIComponent(String(domain))}/applications/${encodeURIComponent(String(application))}/contexts/${encodeURIComponent(String(context))}/enable`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Enables a Service Context
+     * Enables a Service Context
+     * @param domain Domain Name
+     * @param application Application Name
+     * @param context Context Name
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public enableContext(domain: string, application: string, context: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public enableContext(domain: string, application: string, context: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public enableContext(domain: string, application: string, context: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public enableContext(domain: string, application: string, context: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (domain === null || domain === undefined) {
+            throw new Error('Required parameter domain was null or undefined when calling enableContext.');
+        }
+        if (application === null || application === undefined) {
+            throw new Error('Required parameter application was null or undefined when calling enableContext.');
+        }
+        if (context === null || context === undefined) {
+            throw new Error('Required parameter context was null or undefined when calling enableContext.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.post<any>(`${this.configuration.basePath}/contextservice/domains/${encodeURIComponent(String(domain))}/applications/${encodeURIComponent(String(application))}/contexts/${encodeURIComponent(String(context))}/enable`,
+            null,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Retrieves all Service Contexts given an application
      * Retrieves all Service Contexts given an application
      * @param domain Domain Name

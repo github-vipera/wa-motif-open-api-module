@@ -287,9 +287,7 @@ paths:
             $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'    
           default:
             $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'  
-            
-  /scheduler/tasks/{task}/disable:
-      post:
+      delete:
         operationId: disableTask
         tags:
           - scheduler

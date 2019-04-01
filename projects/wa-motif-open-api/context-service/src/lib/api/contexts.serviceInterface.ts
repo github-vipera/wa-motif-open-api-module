@@ -46,6 +46,24 @@ export interface ContextsServiceInterface {
     deleteContext(domain: string, application: string, context: string, extraHttpRequestParams?: any): Observable<any>;
 
     /**
+    * Disables a Service Context
+    * Disables a Service Context
+    * @param domain Domain Name
+    * @param application Application Name
+    * @param context Context Name
+    */
+    disableContext(domain: string, application: string, context: string, extraHttpRequestParams?: any): Observable<any>;
+
+    /**
+    * Enables a Service Context
+    * Enables a Service Context
+    * @param domain Domain Name
+    * @param application Application Name
+    * @param context Context Name
+    */
+    enableContext(domain: string, application: string, context: string, extraHttpRequestParams?: any): Observable<any>;
+
+    /**
     * Retrieves all Service Contexts given an application
     * Retrieves all Service Contexts given an application
     * @param domain Domain Name

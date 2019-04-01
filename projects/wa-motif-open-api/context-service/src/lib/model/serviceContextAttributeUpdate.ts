@@ -12,6 +12,5 @@
 
 
 export interface ServiceContextAttributeUpdate { 
-    newName?: string;
     newType?: string;
 }

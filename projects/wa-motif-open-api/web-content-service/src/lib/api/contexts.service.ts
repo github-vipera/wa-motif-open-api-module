@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
 import { ServiceContext } from '../model/serviceContext';
+import { ServiceContextAttribute } from '../model/serviceContextAttribute';
 import { WebContentContextCreate } from '../model/webContentContextCreate';
 import { WebContentContextUpdate } from '../model/webContentContextUpdate';
 
@@ -245,6 +246,42 @@ export class ContextsService implements ContextsServiceInterface {
         ];
 
         return this.httpClient.get<Array<ServiceContext>>(`${this.configuration.basePath}/webcontent/domains/${encodeURIComponent(String(domain))}/applications/${encodeURIComponent(String(application))}/contexts`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Retrieves Web Content Context supported attributes
+     * Retrieves Web Content Context supported attributes
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSupportedAttributes(observe?: 'body', reportProgress?: boolean): Observable<Array<ServiceContextAttribute>>;
+    public getSupportedAttributes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServiceContextAttribute>>>;
+    public getSupportedAttributes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServiceContextAttribute>>>;
+    public getSupportedAttributes(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<ServiceContextAttribute>>(`${this.configuration.basePath}/webcontent/contexts/attributes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

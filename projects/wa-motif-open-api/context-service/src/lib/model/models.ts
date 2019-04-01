@@ -6,5 +6,6 @@ export * from './serviceContextAttributeUpdate';
 export * from './serviceContextCreate';
 export * from './serviceContextUpdate';
 export * from './serviceContextValue';
+export * from './serviceContextValueProperty';
 export * from './value';
 export * from './valueCreate';

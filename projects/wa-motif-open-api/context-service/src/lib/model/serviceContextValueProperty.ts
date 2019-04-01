@@ -11,8 +11,7 @@
  */
 
 
-export interface ServiceContextUpdate { 
-    newChannel?: string;
-    newCategoryName?: string;
-    enabled?: boolean;
+export interface ServiceContextValueProperty { 
+    key: string;
+    value: string;
 }
