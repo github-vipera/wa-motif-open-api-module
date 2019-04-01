@@ -15,6 +15,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
 import { ServiceContext } from '../model/serviceContext';
+import { ServiceContextAttribute } from '../model/serviceContextAttribute';
 import { WebContentContextCreate } from '../model/webContentContextCreate';
 import { WebContentContextUpdate } from '../model/webContentContextUpdate';
 
@@ -61,6 +62,12 @@ export interface ContextsServiceInterface {
     * @param application Application Name
     */
     getContexts(domain: string, application: string, extraHttpRequestParams?: any): Observable<Array<ServiceContext>>;
+
+    /**
+    * Retrieves Web Content Context supported attributes
+    * Retrieves Web Content Context supported attributes
+    */
+    getSupportedAttributes(extraHttpRequestParams?: any): Observable<Array<ServiceContextAttribute>>;
 
     /**
     * Update a Web Content Context

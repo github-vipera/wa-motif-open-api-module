@@ -7,5 +7,6 @@ export * from './errorVipera';
 export * from './serviceContext';
 export * from './serviceContextAttribute';
 export * from './serviceContextValue';
+export * from './serviceContextValueProperty';
 export * from './webContentContextCreate';
 export * from './webContentContextUpdate';

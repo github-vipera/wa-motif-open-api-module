@@ -213,8 +213,7 @@ export class SchedulerService implements SchedulerServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.post<any>(`${this.configuration.basePath}/scheduler/tasks/${encodeURIComponent(String(task))}/disable`,
-            null,
+        return this.httpClient.delete<any>(`${this.configuration.basePath}/scheduler/tasks/${encodeURIComponent(String(task))}/enable`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

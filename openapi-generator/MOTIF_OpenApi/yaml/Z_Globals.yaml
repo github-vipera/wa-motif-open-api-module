@@ -269,6 +269,18 @@ components:
           type: string
           example: Password
             
+    ServiceContextValueProperty:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+          example: inherited
+        value:
+          type: string
+          example: 'true'
     ServiceContextValue:
       type: object
       required:
@@ -279,7 +291,11 @@ components:
           type: string
           example: myValue
         attribute:  
-           $ref: '#/components/schemas/ServiceContextAttribute' 
+           $ref: '#/components/schemas/ServiceContextAttribute'
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceContextValueProperty' 
     ServiceContextAttribute:
       type: object
       required:

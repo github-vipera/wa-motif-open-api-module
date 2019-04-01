@@ -128,7 +128,7 @@ export class UsersService implements UsersServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<CounterEntity>>(`${this.configuration.basePath}/counterthreshold/domain/${encodeURIComponent(String(domain))}/user/${encodeURIComponent(String(userId))}/counters`,
+        return this.httpClient.get<Array<CounterEntity>>(`${this.configuration.basePath}/countersthresholds/domain/${encodeURIComponent(String(domain))}/user/${encodeURIComponent(String(userId))}/counters`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -197,7 +197,7 @@ export class UsersService implements UsersServiceInterface {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<any>(`${this.configuration.basePath}/counterthreshold/domain/${encodeURIComponent(String(domain))}/user/${encodeURIComponent(String(userId))}/counters/${encodeURIComponent(String(counterInfo))}`,
+        return this.httpClient.put<any>(`${this.configuration.basePath}/countersthresholds/domain/${encodeURIComponent(String(domain))}/user/${encodeURIComponent(String(userId))}/counters/${encodeURIComponent(String(counterInfo))}`,
             variation,
             {
                 withCredentials: this.configuration.withCredentials,

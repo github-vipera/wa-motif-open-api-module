@@ -4,3 +4,4 @@ export * from './restContextUpdate';
 export * from './serviceContext';
 export * from './serviceContextAttribute';
 export * from './serviceContextValue';
+export * from './serviceContextValueProperty';
