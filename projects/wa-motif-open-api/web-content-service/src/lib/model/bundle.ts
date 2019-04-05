@@ -15,4 +15,6 @@ export interface Bundle {
     name?: string;
     version?: string;
     context?: string;
+    domain?: string;
+    application?: string;
 }
