@@ -89,6 +89,12 @@ components:
         context:
           type: string
           example: '/webconsole'
+        domain:
+          type: string
+          example: 'Default'
+        application:
+          type: string
+          example: 'vipera'
   parameters:
     bundleNamePathParam:
       name: bundleName
