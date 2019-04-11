@@ -1,0 +1,302 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0
+  title: Motif Info Service API
+  contact:
+    name: Vipera Plc
+    email: info@vipera.com
+  license:
+    name: Vipera Motif commercial license
+    url: 'http://www.vipera.com'
+servers:
+  - url: 'http://localhost:8080/rest/v2'
+    description: Local server
+  - url: 'http://ec2-34-209-90-152.us-west-2.compute.amazonaws.com:8080/rest/v2'
+    description: Development server
+tags:
+  - name: info
+    description: Info Service related
+components:
+  securitySchemes:
+    vipera_oauth2:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_oauth2'
+    vipera_basic:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_basic'
+    vipera_cookie:
+      $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
+  schemas:           
+    ServerInfo:
+      type: object
+      required:
+        - ip
+        - motifVersion
+        - os
+        - startTime
+        - instanceName
+      properties:
+        ip:
+          type: string
+          description: Server IP
+          example: 127.0.0.1 
+        motifVersion:
+          type: string
+          description: Server version
+          example: 2.1.0
+        os:  
+          type: string
+          description: Server Operating System
+          example: Windows Server 2003
+        startTime:
+          type: integer
+          format: int64
+          description: Server start timestamp
+        instanceName:
+          type: string
+          description: Server instance name
+          example: ViperaOSGi-1
+    DiskInfo:
+      type: object
+      required:
+        - name
+        - total
+        - used
+      properties:
+        name:
+          type: string
+          description: Name
+          example: /opt
+        total:
+          type: string
+          description: Total space
+          example: 250G
+        used:
+          type: string
+          description: Used space
+          example: 120G
+    MemoryInfo:
+      type: object
+      required:
+        - heapTotal
+        - heapUsed
+      properties:
+        heapTotal:
+          type: string
+          description: Heap total
+        heapUsed:
+          type: string
+          description: Heap used
+    ServerStatus:
+      type: object
+      required:
+        - cpuUsage
+        - diskUsage
+        - memoryUsage
+      properties:
+        cpuUsage:
+          type: string
+          description: Cpu usage percentage
+          example: 50%
+        diskUsage:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiskInfo'
+        memoryUsage:
+          $ref: '#/components/schemas/MemoryInfo'
+    UsersInfo:
+      type: object
+      required:
+        - total
+        - active
+        - preactive
+        - blocked
+      properties:
+        total:
+          type: integer
+          description: Total users
+          example: 100
+        active:
+          type: integer
+          description: Active users
+          example: 85
+        preactive:  
+          type: integer
+          description: Preactive users
+          example: 10
+        blocked:
+          type: integer
+          description: Blocked users
+          example: 5
+    SessionsInfo:
+      type: object
+      required:
+        - active
+      properties:
+        active:
+          type: integer
+          description: Active sessions
+          example: 100
+    OAuth2Info:
+      type: object
+      required:
+        - refreshTokens
+        - accessTokens
+      properties:
+        refreshTokens:
+          type: integer
+          description: Refresh tokens
+          example: 50
+        accessTokens:
+          type: integer
+          description: Access tokens
+          example: 80
+    ChannelInfo:
+      type: object
+      required:
+        - name
+        - requests
+      properties:
+        name:
+          type: string
+          description: Name
+          example: 50
+        requests:
+          type: integer
+          description: Total requests
+          example: 1840
+        
+paths:
+  /info/server:
+    get:
+      operationId: getServerInfo
+      tags:
+        - info
+      description: Retrieves information about server
+      summary: Retrieves information about server
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerInfo'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError' 
+
+  /info/realtime/status:
+    get:
+      operationId: getServerStatus
+      tags:
+        - info
+      description: Retrieves realtime server status
+      summary: Retrieves realtime server status
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerStatus'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /info/realtime/users:
+    get:
+      operationId: getUsersInfo
+      tags:
+        - info
+      description: Retrieves users info
+      summary: Retrieves users info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersInfo'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /info/realtime/sessions:
+    get:
+      operationId: getSessionsInfo
+      tags:
+        - info
+      description: Retrieves users info
+      summary: Retrieves users info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionsInfo'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /info/realtime/oauth2:
+    get:
+      operationId: getOAuth2Info
+      tags:
+        - info
+      description: Retrieves OAuth2 info
+      summary: Retrieves OAuth2 info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Info'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /info/realtime/channel/{channel}:
+    get:
+      operationId: getChannelInfo
+      tags:
+        - info
+      description: Retrieves channel info
+      summary: Retrieves channel info
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: './Z_Globals.yaml#/components/parameters/channelPathParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelInfo'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

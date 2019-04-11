@@ -184,6 +184,12 @@
       ],
       "@wa-motif-open-api/rest-content-service/*": [
         "dist/wa-motif-open-api/rest-content-service/*"
+      ],
+      "@wa-motif-open-api/info-service": [
+        "dist/wa-motif-open-api/info-service"
+      ],
+      "@wa-motif-open-api/info-service/*": [
+        "dist/wa-motif-open-api/info-service/*"
       ]
     }
   }
