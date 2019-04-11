@@ -1172,6 +1172,46 @@
           }
         }
       }
+    },
+    "@wa-motif-open-api/info-service": {
+      "root": "projects/wa-motif-open-api/info-service",
+      "sourceRoot": "projects/wa-motif-open-api/info-service/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wa-motif-open-api/info-service/tsconfig.lib.json",
+            "project": "projects/wa-motif-open-api/info-service/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/wa-motif-open-api/info-service/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wa-motif-open-api/info-service/src/test.ts",
+            "tsConfig": "projects/wa-motif-open-api/info-service/tsconfig.spec.json",
+            "karmaConfig": "projects/wa-motif-open-api/info-service/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wa-motif-open-api/info-service/tsconfig.lib.json",
+              "projects/wa-motif-open-api/info-service/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "my-web-admin"
