@@ -1,6 +1,6 @@
 {
     "name": "@wa-motif-open-api/counters-thresholds-service",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "scripts": {
         "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
     },
