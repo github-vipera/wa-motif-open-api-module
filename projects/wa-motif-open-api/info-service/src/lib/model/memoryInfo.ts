@@ -13,11 +13,15 @@
 
 export interface MemoryInfo { 
     /**
-     * Heap total
+     * Heap max in megabytes
      */
-    heapTotal: string;
+    heapMax: number;
     /**
-     * Heap used
+     * Heap total in megabytes
      */
-    heapUsed: string;
+    heapTotal: number;
+    /**
+     * Heap free in megabytes
+     */
+    heapFree: number;
 }

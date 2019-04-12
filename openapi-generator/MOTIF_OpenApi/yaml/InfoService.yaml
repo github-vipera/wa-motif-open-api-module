@@ -33,6 +33,7 @@ components:
         - os
         - startTime
         - instanceName
+        - jdkInfo
       properties:
         ip:
           type: string
@@ -41,61 +42,77 @@ components:
         motifVersion:
           type: string
           description: Server version
-          example: 2.1.0
+          example: 2.1.0-SNAPSHOT (build 20190412-0449)
         os:  
           type: string
           description: Server Operating System
-          example: Windows Server 2003
+          example: Linux|5.0.5-arch1-1-ARCH|amd64
         startTime:
-          type: integer
-          format: int64
+          type: string
+          format: 'date-time'
           description: Server start timestamp
+          example: '2016-08-30 17:12:46.542Z'
         instanceName:
           type: string
           description: Server instance name
           example: ViperaOSGi-1
+        jdkInfo:
+          type: string
+          description: Running JDK information
+          example: Oracle Corporation|OpenJDK 64-Bit Server VM|25.212-b01
     DiskInfo:
       type: object
       required:
         - name
         - total
-        - used
+        - free
       properties:
         name:
           type: string
           description: Name
           example: /opt
         total:
-          type: string
-          description: Total space
-          example: 250G
-        used:
-          type: string
-          description: Used space
-          example: 120G
+          type: integer
+          description: Total space in megabytes
+          example: 250000
+        free:
+          type: integer
+          description: Free space in megabytes
+          example: 120000
     MemoryInfo:
       type: object
       required:
+        - heapMax
         - heapTotal
-        - heapUsed
+        - heapFree
       properties:
+        heapMax:
+          type: integer
+          description: Heap max in megabytes
         heapTotal:
-          type: string
-          description: Heap total
-        heapUsed:
-          type: string
-          description: Heap used
+          type: integer
+          description: Heap total in megabytes
+        heapFree:
+          type: integer
+          description: Heap free in megabytes
     ServerStatus:
       type: object
       required:
-        - cpuUsage
+        - systemLoad
+        - processLoad
         - diskUsage
         - memoryUsage
       properties:
-        cpuUsage:
-          type: string
-          description: Cpu usage percentage
-          example: 50%
+        systemLoad:
+          type: number
+          format: double
+          description: System load
+          example: 0.50
+        processLoad:
+          type: number
+          format: double
+          description: Process load
+          example: 0.50
         diskUsage:
           type: array
           items:
@@ -183,9 +200,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ServerInfo'
+                $ref: '#/components/schemas/ServerInfo'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError' 
 

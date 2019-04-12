@@ -17,11 +17,11 @@ export interface DiskInfo {
      */
     name: string;
     /**
-     * Total space
+     * Total space in megabytes
      */
-    total: string;
+    total: number;
     /**
-     * Used space
+     * Free space in megabytes
      */
-    used: string;
+    free: number;
 }

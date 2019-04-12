@@ -27,9 +27,13 @@ export interface ServerInfo {
     /**
      * Server start timestamp
      */
-    startTime: number;
+    startTime: Date;
     /**
      * Server instance name
      */
     instanceName: string;
+    /**
+     * Running JDK information
+     */
+    jdkInfo: string;
 }

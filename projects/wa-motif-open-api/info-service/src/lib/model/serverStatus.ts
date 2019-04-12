@@ -15,9 +15,13 @@ import { MemoryInfo } from './memoryInfo';
 
 export interface ServerStatus { 
     /**
-     * Cpu usage percentage
+     * System load
      */
-    cpuUsage: string;
+    systemLoad: number;
+    /**
+     * Process load
+     */
+    processLoad: number;
     diskUsage: Array<DiskInfo>;
     memoryUsage: MemoryInfo;
 }
