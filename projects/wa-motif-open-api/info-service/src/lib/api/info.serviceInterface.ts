@@ -47,7 +47,7 @@ export interface InfoServiceInterface {
     * Retrieves information about server
     * Retrieves information about server
     */
-    getServerInfo(extraHttpRequestParams?: any): Observable<Array<ServerInfo>>;
+    getServerInfo(extraHttpRequestParams?: any): Observable<ServerInfo>;
 
     /**
     * Retrieves realtime server status

@@ -176,9 +176,9 @@ export class InfoService implements InfoServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getServerInfo(observe?: 'body', reportProgress?: boolean): Observable<Array<ServerInfo>>;
-    public getServerInfo(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServerInfo>>>;
-    public getServerInfo(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServerInfo>>>;
+    public getServerInfo(observe?: 'body', reportProgress?: boolean): Observable<ServerInfo>;
+    public getServerInfo(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ServerInfo>>;
+    public getServerInfo(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ServerInfo>>;
     public getServerInfo(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -210,7 +210,7 @@ export class InfoService implements InfoServiceInterface {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<Array<ServerInfo>>(`${this.configuration.basePath}/info/server`,
+        return this.httpClient.get<ServerInfo>(`${this.configuration.basePath}/info/server`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
