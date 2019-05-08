@@ -9,6 +9,8 @@ rm -rf output
 java -jar ./openapi-generator-cli-3.3.4.jar generate -i $1 -c options.json -g typescript-angular -o ./output/sources 
 
 echo Patching generated files
+cp output/sources/index.ts output/sources/index.ts.bak
+echo "export * from './lib/index';" > output/sources/index.ts
 sed -i.bak "s/ApiModule/$2/g" output/sources/api.module.ts
 
 for service in output/sources/api/*.service.ts

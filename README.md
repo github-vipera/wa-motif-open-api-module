@@ -50,9 +50,7 @@ So you have to run the following command at the terminal:
 java -jar ./openapi-generator/openapi-generator-cli.jar generate -i ./path_to_file/MyNewService.yaml -l typescript-angular -o ./openapi-generator/output/sources  
 ```
 
-The tool will generate all the sources in the folder `./swagger_generator/output/sources`.
-
-**Note**: before launching the above command, you must ensure that the folder `./swagger_generator/output/sources` is empty or nonexistent.
+The tool will generate all the sources in the folder `./openapi-generator/output/sources`.
 
 A set of source files like these will be generated:
 
@@ -71,25 +69,8 @@ A set of source files like these will be generated:
 `model/...`
 
 Now you have to copy all these files into the `src/lib` folder of the new library project you created earlier.
-Now change the contents of the src / public_api.ts file of your library project in this way:
-
- `export * from './lib/index';`
 
 ## Modify the sources
-
-Modify the `src/lib/api.module.ts` file of the new library project you created earlier to have a meaningful service name.
-
-Under the `src/lib/api` folder you will find all the self-generated services.
-
-Each of this services has to be modified by adding to the imports this line:
-```typescript
-import { WC_API_BASE_PATH } from 'web-console-core'
-```
-
-Also change `BASE_PATH` to `WC_API_BASE_PATH` in the constructor:
-```typescript
-constructor(protected httpClient: HttpClient, @Optional()@Inject(WC_API_BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-```
 
 If you want to test your services you have to add this property to `karma.conf.js`:
 ```javascript
@@ -162,8 +143,6 @@ Moreover you need to open the `angular.json` file in `wa-motif-open-api-module` 
 Like all the other Angular standard tests, the tests of your new services will be based on [Jasmine test Framework](https://jasmine.github.io/).
 
 To create the tests of your services you will need to create a typescrypt spec.ts file for each of them.
-
-You will need to initialize the Web Console system so that you can perform some basic operations (such as authentication):
 
 ```typescript
 describe('DomainsService', () => {
