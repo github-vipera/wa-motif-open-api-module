@@ -1,6 +1,3 @@
-export * from './actions.service';
-import { ActionsService } from './actions.service';
-export * from './actions.serviceInterface'
 export * from './groups.service';
 import { GroupsService } from './groups.service';
 export * from './groups.serviceInterface'
@@ -16,4 +13,4 @@ export * from './roles.serviceInterface'
 export * from './users.service';
 import { UsersService } from './users.service';
 export * from './users.serviceInterface'
-export const APIS = [ActionsService, GroupsService, MyselfService, PermissionsService, RolesService, UsersService];
+export const APIS = [GroupsService, MyselfService, PermissionsService, RolesService, UsersService];

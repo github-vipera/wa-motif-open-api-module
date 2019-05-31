@@ -11,8 +11,9 @@
  */
 
 
-export interface UserKey { 
-    domain: string;
-    userId: string;
+export interface CommonUserAllOf { 
+    userIdInt?: string;
+    msisdn?: string;
+    serial?: string;
 }
 

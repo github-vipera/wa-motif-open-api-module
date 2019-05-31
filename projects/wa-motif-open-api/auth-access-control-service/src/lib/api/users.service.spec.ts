@@ -2,24 +2,23 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { GroupsService } from './groups.service';
 import { RolesService } from './roles.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { Configuration } from '../configuration'
-import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core'
-import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables'
+import { Configuration } from '../configuration';
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core';
+import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
 import { Permission, RoleCreate } from '../model/models';
 import { UsersService } from './users.service';
 import { RoleAssign } from '../model/roleAssign';
-import { Action } from '../model/action';
 import { Group } from '../model/group';
 import { GroupCreate } from '../model/groupCreate';
 import { GroupAssign } from '../model/groupAssign';
 import { Role } from '../model/role';
-import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
+import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service';
 import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
-const TEST_ROLE = "testrole";
-const TEST_GROUP = "testgroup";
+const TEST_ROLE = 'testrole';
+const TEST_GROUP = 'testgroup';
 
 describe('UsersService', () => {
     let authService: AuthService;
@@ -70,7 +69,7 @@ describe('UsersService', () => {
                     }
                     rolesService.createRole(rc).subscribe(value => {
                     }, error => {
-                        failTestWithError("should prepare stuff", error);
+                        failTestWithError('should prepare stuff', error);
                     });
                 }
                 rolesService.deleteRole(TEST_ROLE).subscribe(createRole, createRole);
@@ -80,24 +79,24 @@ describe('UsersService', () => {
                         name: TEST_GROUP,
                         description: TEST_GROUP
                     }
-                    groupsService.createGroup("Default", gc).subscribe(value => {
+                    groupsService.createGroup('Default', gc).subscribe(value => {
                     }, error => {
-                        failTestWithError("should prepare stuff", error);
+                        failTestWithError('should prepare stuff', error);
                     });
                 }
-                groupsService.deleteGroup("Default", TEST_GROUP).subscribe(createGroup, createGroup);
+                groupsService.deleteGroup('Default', TEST_GROUP).subscribe(createGroup, createGroup);
             })
     );
 
     it(`should assign role to user`,
         async(
             () => {
-                let ra: RoleAssign = {
+                const ra: RoleAssign = {
                     name: TEST_ROLE
                 }
-                service.assignRoleToUser("Default", TEST_USERNAME, ra).subscribe(value => {
+                service.assignRoleToUser('Default', TEST_USERNAME, ra).subscribe(value => {
                 }, error => {
-                    failTestWithError("should assign role to user", error);
+                    failTestWithError('should assign role to user', error);
                 })
             }
         )
@@ -106,25 +105,9 @@ describe('UsersService', () => {
     it(`should remove role from user`,
         async(
             () => {
-                service.removeRoleFromUser("Default", TEST_USERNAME, TEST_ROLE).subscribe(value => {
+                service.removeRoleFromUser('Default', TEST_USERNAME, TEST_ROLE).subscribe(value => {
                 }, error => {
-                    failTestWithError("should remove role from user", error);
-                })
-            }
-        )
-    );
-
-    it(`should retrieve user actions`,
-        async(
-            () => {
-                service.getUserActions("Default", TEST_USERNAME).subscribe(value => {
-                    expect(value.length).toBeGreaterThan(0);
-                    let a: Action = _.find(value, function (o: Action) {
-                        return (o.name === "SU_ACTIONS");
-                    });
-                    expect(a).toBeDefined();
-                }, error => {
-                    failTestWithError("should retrieve user actions", error);
+                    failTestWithError('should remove role from user', error);
                 })
             }
         )
@@ -136,9 +119,9 @@ describe('UsersService', () => {
                 let ga: GroupAssign = {
                     name: TEST_GROUP
                 }
-                service.assignGroupToUser("Default", TEST_USERNAME, ga).subscribe(value => {
+                service.assignGroupToUser('Default', TEST_USERNAME, ga).subscribe(value => {
                 }, error => {
-                    failTestWithError("should assign group to user", error);
+                    failTestWithError('should assign group to user', error);
                 })
             }
         )
@@ -147,14 +130,14 @@ describe('UsersService', () => {
     it(`should retrieve user groups`,
         async(
             () => {
-                service.getUserGroups("Default", TEST_USERNAME).subscribe(value => {
+                service.getUserGroups('Default', TEST_USERNAME).subscribe(value => {
                     expect(value.length).toBeGreaterThan(0);
                     let g: Group = _.find(value, function (o: Group) {
                         return (o.name === TEST_GROUP);
                     });
                     expect(g).toBeDefined();
                 }, error => {
-                    failTestWithError("should retrieve user groups", error);
+                    failTestWithError('should retrieve user groups', error);
                 })
             }
         )
@@ -163,9 +146,9 @@ describe('UsersService', () => {
     it(`should remove group from user`,
         async(
             () => {
-                service.removeGroupFromUser("Default", TEST_USERNAME, TEST_GROUP).subscribe(value => {
+                service.removeGroupFromUser('Default', TEST_USERNAME, TEST_GROUP).subscribe(value => {
                 }, error => {
-                    failTestWithError("should remove group from user", error);
+                    failTestWithError('should remove group from user', error);
                 })
             }
         )
@@ -174,15 +157,15 @@ describe('UsersService', () => {
     it(`should retrieve user permissions`,
         async(
             () => {
-                service.getUserPermissions("Default", TEST_USERNAME).subscribe(value => {
+                service.getUserPermissions('Default', TEST_USERNAME).subscribe(value => {
                     expect(value.length).toBeGreaterThan(0);
                     let p: Permission = _.find(value, function (o: Permission) {
-                        return o.component === "com.vipera.osgi.core.platform" &&
-                            o.action === "*" && o.target === "*";
+                        return o.component === 'com.vipera.osgi.core.platform.api.rest.PlatformApi' &&
+                            o.action === '*' && o.target === '*';
                     });
                     expect(p).toBeDefined();
                 }, error => {
-                    failTestWithError("should retrieve user actions", error);
+                    failTestWithError('should retrieve user permissions', error);
                 })
             }
         )
@@ -191,26 +174,14 @@ describe('UsersService', () => {
     it(`should retrieve user roles`,
         async(
             () => {
-                service.getUserRoles("Default", TEST_USERNAME).subscribe(value => {
+                service.getUserRoles('Default', TEST_USERNAME).subscribe(value => {
                     expect(value.length).toBeGreaterThan(0);
                     let r: Role = _.find(value, function (o: Role) {
-                        return o.name === "SU";
+                        return o.name === 'SU';
                     });
                     expect(r).toBeDefined();
                 }, error => {
-                    failTestWithError("should retrieve user roles", error);
-                })
-            }
-        )
-    );
-
-    it(`should check if user is entitled to an action`,
-        async(
-            () => {
-                service.isUserActionEntitled("Default", TEST_USERNAME, "SU_ACTIONS").subscribe(value => {
-                    expect(value.entitled);
-                }, error => {
-                    failTestWithError("should check if user is entitled to an action", error);
+                    failTestWithError('should retrieve user roles', error);
                 })
             }
         )
@@ -219,10 +190,10 @@ describe('UsersService', () => {
     it(`should check if user is entitled to a permission`,
         async(
             () => {
-                service.isUserPermissionEntitled("Default", TEST_USERNAME, "com.vipera.osgi.core.platform", "*", "*").subscribe(value => {
+                service.isUserPermissionEntitled('Default', TEST_USERNAME, 'com.vipera.osgi.core.platform.api.rest.PlatformApi', '*', '*').subscribe(value => {
                     expect(value.entitled);
                 }, error => {
-                    failTestWithError("should check if user is entitled to a permission", error);
+                    failTestWithError('should check if user is entitled to a permission', error);
                 })
             }
         )
@@ -232,7 +203,7 @@ describe('UsersService', () => {
         async(
             () => {
                 rolesService.deleteRole(TEST_ROLE).subscribe(value => {}, error => {});
-                groupsService.deleteGroup("Default", TEST_GROUP).subscribe(value => {}, error => {});
+                groupsService.deleteGroup('Default', TEST_GROUP).subscribe(value => {}, error => {});
 
                 let oauthReq: OAuthRequest = {
                     clientId: '123456789',
@@ -241,7 +212,7 @@ describe('UsersService', () => {
                 }
                 oauth2Service.revoke(oauthReq).subscribe(value => {
                 }, error => {
-                    failTestWithError("should clean stuff", error);
+                    failTestWithError('should clean stuff', error);
                 })
             }
         )
