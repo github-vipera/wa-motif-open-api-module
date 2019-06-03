@@ -11,7 +11,7 @@
  */
 
 
-export interface ServiceCreate { 
+export interface ServiceOperationAllOf { 
     name: string;
 }
 
