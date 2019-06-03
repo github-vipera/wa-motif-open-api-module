@@ -11,18 +11,10 @@
  */
 
 
-export interface OAuthRequest { 
+export interface AccessTokenAllOf { 
     /**
-     * OAuth2 Token
+     * OAuth2 Refresh Token
      */
-    token: string;
-    /**
-     * Client Id
-     */
-    clientId: string;
-    /**
-     * ACCESS_TOKEN or REFRESH_TOKEN (if not set default is ACCESS_TOKEN)
-     */
-    tokenType?: string;
+    refreshToken: string;
 }
 

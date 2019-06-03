@@ -9,13 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AccessTokenAllOf } from './accessTokenAllOf';
-import { OAuthToken } from './oAuthToken';
 
 
-export interface AccessToken { 
-    domain: string;
-    userId: string;
+export interface OAuthTokenAllOf { 
     /**
      * Client ID
      */
@@ -36,9 +32,5 @@ export interface AccessToken {
      * Expiry timestamp
      */
     expiryTime?: Date;
-    /**
-     * OAuth2 Refresh Token
-     */
-    refreshToken: string;
 }
 
