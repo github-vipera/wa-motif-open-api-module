@@ -11,12 +11,14 @@
  */
 
 
-/**
- * Specific platform error from Vipera MOTIF
- */
-export interface ErrorVipera { 
-    code?: string;
-    _class?: string;
-    details?: string;
+export interface UserActivationAllOf { 
+    key: string;
+    ack?: string;
+    nick?: string;
+    engine?: string;
+    enginever?: string;
+    asset?: string;
+    assetver?: string;
+    vipserial?: string;
 }
 

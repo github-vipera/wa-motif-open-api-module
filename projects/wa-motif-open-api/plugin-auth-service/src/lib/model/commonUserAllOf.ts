@@ -11,12 +11,9 @@
  */
 
 
-/**
- * Specific platform error from Vipera MOTIF
- */
-export interface ErrorVipera { 
-    code?: string;
-    _class?: string;
-    details?: string;
+export interface CommonUserAllOf { 
+    userIdInt?: string;
+    msisdn?: string;
+    serial?: string;
 }
 

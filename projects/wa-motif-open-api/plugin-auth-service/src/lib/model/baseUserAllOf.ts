@@ -11,12 +11,12 @@
  */
 
 
-/**
- * Specific platform error from Vipera MOTIF
- */
-export interface ErrorVipera { 
-    code?: string;
-    _class?: string;
-    details?: string;
+export interface BaseUserAllOf { 
+    locale?: string;
+    state?: string;
+    prevState?: string;
+    email?: string;
+    created?: Date;
+    lastLogin?: Date;
 }
 
