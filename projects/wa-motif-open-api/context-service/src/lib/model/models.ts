@@ -9,3 +9,4 @@ export * from './serviceContextValue';
 export * from './serviceContextValueProperty';
 export * from './value';
 export * from './valueCreate';
+export * from './valueCreateAllOf';

@@ -11,9 +11,7 @@
  */
 
 
-export interface ServiceContextCreate { 
-    name: string;
-    channel: string;
-    enabled?: boolean;
+export interface ValueCreateAllOf { 
+    attribute: string;
 }
 
