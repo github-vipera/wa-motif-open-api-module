@@ -190,6 +190,12 @@
       ],
       "@wa-motif-open-api/info-service/*": [
         "dist/wa-motif-open-api/info-service/*"
+      ],
+      "@wa-motif-open-api/user-mgr-service": [
+        "dist/wa-motif-open-api/user-mgr-service"
+      ],
+      "@wa-motif-open-api/user-mgr-service/*": [
+        "dist/wa-motif-open-api/user-mgr-service/*"
       ]
     }
   }

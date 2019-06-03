@@ -1,6 +1,3 @@
-export * from './admins.service';
-import { AdminsService } from './admins.service';
-export * from './admins.serviceInterface'
 export * from './appinstances.service';
 import { AppinstancesService } from './appinstances.service';
 export * from './appinstances.serviceInterface'
@@ -22,7 +19,4 @@ export * from './locales.serviceInterface'
 export * from './system.service';
 import { SystemService } from './system.service';
 export * from './system.serviceInterface'
-export * from './users.service';
-import { UsersService } from './users.service';
-export * from './users.serviceInterface'
-export const APIS = [AdminsService, AppinstancesService, ApplicationsService, ChannelsService, ClientsService, DomainsService, LocalesService, SystemService, UsersService];
+export const APIS = [AppinstancesService, ApplicationsService, ChannelsService, ClientsService, DomainsService, LocalesService, SystemService];
