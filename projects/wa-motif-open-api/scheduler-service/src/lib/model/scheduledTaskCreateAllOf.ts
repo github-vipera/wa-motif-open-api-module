@@ -11,12 +11,14 @@
  */
 
 
-/**
- * Specific platform error from Vipera MOTIF
- */
-export interface ErrorVipera { 
-    code?: string;
-    _class?: string;
-    details?: string;
+export interface ScheduledTaskCreateAllOf { 
+    /**
+     * Task Name
+     */
+    name: string;
+    /**
+     * Overwrite existent task
+     */
+    overwrite: boolean;
 }
 

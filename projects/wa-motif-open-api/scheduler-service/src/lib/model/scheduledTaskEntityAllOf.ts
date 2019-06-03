@@ -11,12 +11,18 @@
  */
 
 
-/**
- * Specific platform error from Vipera MOTIF
- */
-export interface ErrorVipera { 
-    code?: string;
-    _class?: string;
-    details?: string;
+export interface ScheduledTaskEntityAllOf { 
+    /**
+     * Task Name
+     */
+    name: string;
+    /**
+     * Creation timestamp
+     */
+    created: Date;
+    /**
+     * Update timestamp
+     */
+    updated: Date;
 }
 
