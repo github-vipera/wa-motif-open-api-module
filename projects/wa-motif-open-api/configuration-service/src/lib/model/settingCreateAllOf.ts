@@ -9,19 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Setting } from './setting';
 
 
-export interface SettingUpdate { 
-    value?: string;
-    type?: string;
-    /**
-     * true if when changed does not requires server restart
-     */
-    dynamic: boolean;
-    /**
-     * true if contains sensitive values such as passwords
-     */
-    crypted: boolean;
+export interface SettingCreateAllOf { 
+    name: string;
 }
 
