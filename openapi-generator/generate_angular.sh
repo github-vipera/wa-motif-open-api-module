@@ -1,12 +1,15 @@
 #!/bin/bash
 
-if [ "$#" -ne 2 ]; then
-    echo "usage: $0 <yaml_file_path> <module_name>"
+if [ "$#" -ne 1 ]; then
+    echo "usage: $0 <yaml_file_path>"
 	exit 1
 fi
 
 yaml=$1
-module=$2
+module=$(basename -- $1)
+module="${module%.*}Module"
+
+echo Module: $module
 
 rm -rf output
 java -jar ./openapi-generator-cli-*.jar generate -i $yaml -c options.json -g typescript-angular -o ./output/sources 
