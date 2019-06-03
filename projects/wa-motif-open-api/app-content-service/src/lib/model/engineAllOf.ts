@@ -11,10 +11,18 @@
  */
 
 
-export interface AssetBundleUpdate { 
+export interface EngineAllOf { 
     /**
-     * Whether this bundle is publicly visible
+     * ViperaOSGi domain
      */
-    published: boolean;
+    domain: string;
+    /**
+     * Engine creation timestamp
+     */
+    created?: Date;
+    /**
+     * Last Engine check request timestamp
+     */
+    lastAppCheck?: Date;
 }
 

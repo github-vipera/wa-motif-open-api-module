@@ -9,15 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AssetBundleEntityAllOf } from './assetBundleEntityAllOf';
-import { AssetBundleUpdate } from './assetBundleUpdate';
 
 
-export interface AssetBundleEntity { 
-    /**
-     * Whether this bundle is publicly visible
-     */
-    published: boolean;
+export interface AssetBundleEntityAllOf { 
     /**
      * Asset Bundle Name
      */
