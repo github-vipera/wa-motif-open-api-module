@@ -11,12 +11,7 @@
  */
 
 
-export interface CounterEntity { 
-    name: string;
-    counter?: number;
-    previousCounter?: number;
-    lastIncrement?: number;
-    created?: Date;
-    lastCountDate?: Date;
+export interface CounterInfoEntityAllOf { 
+    created: Date;
 }
 
