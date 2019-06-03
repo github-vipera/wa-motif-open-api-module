@@ -9,11 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Datarecord } from './datarecord';
 
 
-export interface DatarecordList { 
-    headers?: Array<string>;
-    records?: Array<Datarecord>;
+export interface DatarecordAllOf { 
+    data?: Array<string>;
 }
 
