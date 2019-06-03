@@ -11,7 +11,9 @@
  */
 
 
-export interface UserUpdate { 
+export interface CommonUserAllOf { 
+    userIdInt?: string;
     msisdn?: string;
+    serial?: string;
 }
 

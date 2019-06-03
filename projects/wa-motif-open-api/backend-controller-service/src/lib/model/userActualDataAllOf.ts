@@ -11,7 +11,8 @@
  */
 
 
-export interface UserUpdate { 
-    msisdn?: string;
+export interface UserActualDataAllOf { 
+    status?: string;
+    activationKey?: string;
 }
 

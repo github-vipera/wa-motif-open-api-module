@@ -11,7 +11,12 @@
  */
 
 
-export interface UserUpdate { 
-    msisdn?: string;
+export interface BaseUserAllOf { 
+    locale?: string;
+    state?: string;
+    prevState?: string;
+    email?: string;
+    created?: Date;
+    lastLogin?: Date;
 }
 

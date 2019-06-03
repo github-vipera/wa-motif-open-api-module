@@ -11,7 +11,8 @@
  */
 
 
-export interface UserUpdate { 
-    msisdn?: string;
+export interface UserCreateAllOf { 
+    userId?: string;
+    expiry?: string;
 }
 
