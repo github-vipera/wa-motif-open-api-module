@@ -6,8 +6,9 @@ if [ "$#" -ne 1 ]; then
 fi
 
 yaml=$1
-module=$(basename -- $1)
-module="${module%.*}Module"
+service=$(basename -- $1)
+serviceFolder="${service%.*}"
+module="${serviceFolder}Module"
 
 echo Module: $module
 
@@ -27,17 +28,25 @@ done
 
 read -p 'Update apis and models of existing service? ' update
 if [ "$update" == "y" ] || [ "$update" == "Y" ]; then
-	PS3='Choose service to update: '
-	select serviceFolder in ../projects/wa-motif-open-api/*-service; do
-		rm -rf $serviceFolder/src/lib/model
-		cp -R output/sources/model $serviceFolder/src/lib/model
-		cp -R output/sources/api $serviceFolder/src/lib/apinew
-		cp $serviceFolder/src/lib/api/*.spec.ts $serviceFolder/src/lib/apinew
-		rm -rf $serviceFolder/src/lib/api
-		mv $serviceFolder/src/lib/apinew $serviceFolder/src/lib/api
-		rm -rf $serviceFolder/src/lib/api/*.bak
-		exit
-	done
+	if [[ $serviceFolder =~ [^[:alpha:]] ]]; then
+		PS3='Choose service to update: '
+		select sf in ../projects/wa-motif-open-api/*-service; do
+			serviceFolder=$sf
+			break
+		done
+	else
+		serviceFolder=$(echo $serviceFolder | sed 's/\(.\)\([A-Z]\)/\1-\2/g' | tr '[:upper:]' '[:lower:]')
+		serviceFolder="../projects/wa-motif-open-api/${serviceFolder}"
+		echo Guessed service folder: $serviceFolder
+	fi		
+
+	rm -rf $serviceFolder/src/lib/model
+	cp -R output/sources/model $serviceFolder/src/lib/model
+	cp -R output/sources/api $serviceFolder/src/lib/apinew
+	cp $serviceFolder/src/lib/api/*.spec.ts $serviceFolder/src/lib/apinew
+	rm -rf $serviceFolder/src/lib/api
+	mv $serviceFolder/src/lib/apinew $serviceFolder/src/lib/api
+	rm -rf $serviceFolder/src/lib/api/*.bak
 fi
 
 echo Done
