@@ -48,7 +48,7 @@ describe('PermissionsService', () => {
     it(`should prepare stuff`,
         async(
             () => {
-                service.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
+                service.deletePermission('testcomponent', 'READ', 'testtarget').subscribe(value => {
                 }, error => {
                 })
             }
@@ -60,14 +60,16 @@ describe('PermissionsService', () => {
             () => {
                 let p: Permission = {
                     component: 'testcomponent',
-                    action: 'VIEW',
-                    target: 'testtarget'
+                    action: 'READ',
+                    target: 'testtarget',
+                    description: 'GET:/v2/testcomponent/tests'
                 }
 
                 service.createPermission(p).subscribe(value => {
                     expect(value.component).toBe('testcomponent');
-                    expect(value.action).toBe('VIEW');
+                    expect(value.action).toBe('READ');
                     expect(value.target).toBe('testtarget');
+                    expect(value.description).toBe('GET:/v2/testcomponent/tests');
                 }, error => {
                     failTestWithError("should create a new permission", error);
                 })
@@ -78,10 +80,11 @@ describe('PermissionsService', () => {
     it(`should retrieve test permission`,
         async(
             () => {
-                service.getPermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
+                service.getPermission('testcomponent', 'READ', 'testtarget').subscribe(value => {
                     expect(value.component).toBe('testcomponent');
-                    expect(value.action).toBe('VIEW');
+                    expect(value.action).toBe('READ');
                     expect(value.target).toBe('testtarget');
+                    expect(value.description).toBe('GET:/v2/testcomponent/tests');
                 }, error => {
                     failTestWithError("should retrieve test permission", error);
                 })
@@ -96,7 +99,7 @@ describe('PermissionsService', () => {
                     expect(value.length).toBeGreaterThan(0);
                     let p: Permission = _.find(value, function (o: Permission) {
                         return (o.component === 'testcomponent' &&
-                            o.action === 'VIEW' &&
+                            o.action === 'READ' &&
                             o.target === 'testtarget');
                     });
                     expect(p).toBeDefined();
@@ -110,7 +113,7 @@ describe('PermissionsService', () => {
     it(`should clean stuff`,
         async(
             () => {
-                service.deletePermission('testcomponent', 'VIEW', 'testtarget').subscribe(value => {
+                service.deletePermission('testcomponent', 'READ', 'testtarget').subscribe(value => {
                 }, error => {
                 })
                 let oauthReq: OAuthRequest = {

@@ -3,6 +3,8 @@ export * from './errorVipera';
 export * from './service';
 export * from './setting';
 export * from './settingCreate';
+export * from './settingCreateAllOf';
 export * from './settingEntity';
+export * from './settingEntityAllOf';
 export * from './settingUpdate';
 export * from './tag';

@@ -40,7 +40,7 @@ Now you will have to remove all the files contained in the `src/lib` folder of y
 
 ### Generate Typescript API and Models
 
-To generate the source code to use in the new service, we will use the SWAGGER Codegen tool. 
+To generate the source code to use in the new service, we will use the OpenAPI Codegen tool. 
 In this project you can find the `openapi-generator` folder with the necessary tool **openapi-generator-cli.jar**.
 
 To generate the new sources of the desired service you must first get the YAML file defining the REST API.

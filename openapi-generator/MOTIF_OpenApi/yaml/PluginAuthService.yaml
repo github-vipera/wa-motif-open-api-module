@@ -128,9 +128,10 @@ components:
         type: string
         example: 'joe'
 paths:
-  /auth/domains/{domain}/users:
+  /auth/signup/register:
     post:
       operationId: registerUser
+      x-vipera-use-context-request: true
       tags:
         - auth
       description: Registers user
@@ -140,8 +141,6 @@ paths:
           - 'all:all'
         - vipera_basic: []
         - vipera_cookie: []
-      parameters:
-        - $ref: '#/components/parameters/domainParam'
       requestBody:
         content:
           application/json:
@@ -178,9 +177,10 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'  
           
-  /auth/myself/activate:
+  /auth/signup/activate:
     post:
       operationId: activateUser
+      x-vipera-use-context-request: true
       tags:
         - myself
       description: Activates an user
@@ -208,6 +208,7 @@ paths:
   /auth/myself/deactivate:
     post:
       operationId: deactivateUser
+      x-vipera-use-context-request: true
       tags:
         - myself
       description: Handles deactivation
@@ -226,6 +227,7 @@ paths:
   /auth/myself/chgpwd:
     post:
       operationId: changePasswd
+      x-vipera-use-context-request: true
       tags:
         - myself
       description: Changes passwd

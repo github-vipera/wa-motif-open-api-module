@@ -10,7 +10,7 @@ import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.ser
 import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 import { OtpCreate, Otp } from '../model/models';
-import { UsersService, UserCreate } from 'projects/wa-motif-open-api/platform-service/src/lib';
+import { UsersService, UserCreate } from 'projects/wa-motif-open-api/user-mgr-service/src/lib';
 
 describe('OtpService', () => {
     let service: OtpService;

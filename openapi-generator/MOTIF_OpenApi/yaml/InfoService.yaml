@@ -312,6 +312,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChannelInfo'
+                type: array
+                items:
+                    $ref: '#/components/schemas/ChannelInfo'      
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'

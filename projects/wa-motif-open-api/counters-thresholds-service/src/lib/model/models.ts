@@ -2,6 +2,7 @@ export * from './configurationUpload';
 export * from './counterEntity';
 export * from './counterInfo';
 export * from './counterInfoEntity';
+export * from './counterInfoEntityAllOf';
 export * from './counterInfoName';
 export * from './counterInfoUpdatableFields';
 export * from './errorVipera';
