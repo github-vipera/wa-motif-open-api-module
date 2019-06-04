@@ -27,7 +27,7 @@ import { ThresholdInfoEntity } from '../model/thresholdInfoEntity';
 import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
 import { CountersServiceInterface }                            from './counters.serviceInterface';
-
+import { COLLECTION_FORMATS } from '../variables';
 
 @Injectable({
   providedIn: 'root'
