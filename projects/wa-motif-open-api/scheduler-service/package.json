@@ -1,6 +1,6 @@
 {
     "name": "@wa-motif-open-api/scheduler-service",
-    "version": "0.2.7",
+    "version": "0.3.0",
     "scripts": {
         "compodoc": "../../../node_modules/.bin/compodoc -p ./tsconfig.lib.json"
     },
