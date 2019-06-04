@@ -1,6 +1,6 @@
 dist
 node_modules
 documentation
-swagger_generator/output/sources
 package_dist
 .angulardoc.json
+openapi-generator/output
