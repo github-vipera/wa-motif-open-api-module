@@ -7,7 +7,6 @@ import * as _ from 'lodash';
 
 import { failLogin, failTestWithError, b64toFile, blobToB64, failTestWithMessage } from '../../../../test-helper';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 import { UsersService, UserCreate } from 'projects/wa-motif-open-api/user-mgr-service/src/lib';
 import { RestContextCreate } from '../model/models';

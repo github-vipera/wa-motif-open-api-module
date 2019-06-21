@@ -15,8 +15,8 @@ import { Observable }                                        from 'rxjs';
 
 import { AccessToken } from '../model/accessToken';
 import { ErrorVipera } from '../model/errorVipera';
-import { OAuthRequest } from '../model/oAuthRequest';
 import { RefreshToken } from '../model/refreshToken';
+import { Validate } from '../model/validate';
 
 
 import { Configuration }                                     from '../configuration';
@@ -32,7 +32,7 @@ export interface Oauth2ServiceInterface {
     * Get OAuth2 Access Tokens by Refresh Token
     * @param refreshToken 
     */
-    getAccessTokenList(refreshToken: string, extraHttpRequestParams?: any): Observable<Array<AccessToken>>;
+    getAccessTokenListByRefreshToken(refreshToken: string, extraHttpRequestParams?: any): Observable<Array<AccessToken>>;
 
     /**
     * Get OAuth2 Refresh Tokens of a specific domain
@@ -45,25 +45,32 @@ export interface Oauth2ServiceInterface {
     getRefreshTokenList(domain: string, page?: number, pageSize?: number, sort?: string, extraHttpRequestParams?: any): Observable<Array<RefreshToken>>;
 
     /**
-    * Get User OAuth2 Refresh Tokens
-    * Get User OAuth2 Refresh Tokens
+    * Get OAuth2 Refresh Tokens by User
+    * Get OAuth2 Refresh Tokens by User
     * @param domain Domain Name
     * @param userId User Id
     */
-    getUserRefreshTokenList(domain: string, userId: string, extraHttpRequestParams?: any): Observable<Array<RefreshToken>>;
+    getRefreshTokenListByUser(domain: string, userId: string, extraHttpRequestParams?: any): Observable<Array<RefreshToken>>;
 
     /**
-    * Revokes OAuth2 Token
-    * Revokes OAuth2 Token
-    * @param oAuthRequest 
+    * Revokes OAuth2 Access Token
+    * Revokes OAuth2 Access Token
+    * @param accessToken 
     */
-    revoke(oAuthRequest?: OAuthRequest, extraHttpRequestParams?: any): Observable<object>;
+    revokeAccessToken(accessToken: string, extraHttpRequestParams?: any): Observable<object>;
+
+    /**
+    * Revokes OAuth2 Refresh Token
+    * Revokes OAuth2 Refresh Token
+    * @param refreshToken 
+    */
+    revokeRefreshToken(refreshToken: string, extraHttpRequestParams?: any): Observable<object>;
 
     /**
     * Validates OAuth2 Token
     * Validates OAuth2 Token
-    * @param oAuthRequest 
+    * @param validate 
     */
-    validate(oAuthRequest?: OAuthRequest, extraHttpRequestParams?: any): Observable<object>;
+    validate(validate?: Validate, extraHttpRequestParams?: any): Observable<object>;
 
 }

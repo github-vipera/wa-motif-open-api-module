@@ -11,7 +11,7 @@
  */
 
 
-export interface OAuthRequest { 
+export interface Validate { 
     /**
      * OAuth2 Token
      */
@@ -19,7 +19,7 @@ export interface OAuthRequest {
     /**
      * Client Id
      */
-    clientId: string;
+    clientId?: string;
     /**
      * ACCESS_TOKEN or REFRESH_TOKEN (if not set default is ACCESS_TOKEN)
      */

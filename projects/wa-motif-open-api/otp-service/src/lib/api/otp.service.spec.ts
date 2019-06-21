@@ -6,8 +6,7 @@ import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel,
 import * as _ from 'lodash';
 
 import { failLogin, failTestWithError, b64toFile, blobToB64 } from '../../../../test-helper';
-import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
+import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 import { OtpCreate, Otp } from '../model/models';
 import { UsersService, UserCreate } from 'projects/wa-motif-open-api/user-mgr-service/src/lib';
@@ -112,11 +111,6 @@ describe('OtpService', () => {
         async(
             () => {
                 usersService.deleteUser('Default', 'testUser').subscribe(value => {
-                    let oauthReq: OAuthRequest = {
-                        clientId: '123456789',
-                        token: authService.getRefreshToken(),
-                        tokenType: 'REFRESH_TOKEN'
-                    }
                     authService.logout().subscribe(value => {
                     }, error => {
                         failTestWithError("should clean stuff", error);

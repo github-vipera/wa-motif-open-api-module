@@ -10,7 +10,6 @@ import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } f
 import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service';
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
 describe('RolesService', () => {
     let authService: AuthService;
@@ -166,11 +165,6 @@ describe('RolesService', () => {
         async(
             () => {
                 const cleanAuth = () => {
-                    const oauthReq: OAuthRequest = {
-                        clientId: '123456789',
-                        token: authService.getRefreshToken(),
-                        tokenType: 'REFRESH_TOKEN'
-                        }
                     authService.logout().subscribe(value => {
                     }, error => {
                         failTestWithError('should clean stuff', error);

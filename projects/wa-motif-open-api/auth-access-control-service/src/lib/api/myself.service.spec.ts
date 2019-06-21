@@ -9,7 +9,6 @@ import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
 import { Permission } from '../model/models';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
 describe('MyselfService', () => {
     let authService: AuthService;

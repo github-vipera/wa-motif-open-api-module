@@ -7,7 +7,6 @@ import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } f
 import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 import { ServiceCreate } from '../model/serviceCreate';
 import { ServiceUpdate } from '../model/serviceUpdate';
 

@@ -6,7 +6,7 @@ import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel,
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 import { failTestWithError, failLogin } from '../../../../test-helper';
 import { RefreshToken } from '../model/refreshToken';
-import { OAuthRequest } from '../model/oAuthRequest';
+import { Validate } from '../model/validate';
 import { AccessToken } from '../model/accessToken';
 
 describe('OAuth2Service', () => {
@@ -45,7 +45,7 @@ describe('OAuth2Service', () => {
     it(`should issue a user refresh tokens list request`,
         async(
             () => {
-                service.getUserRefreshTokenList('Default', 'admin').subscribe(value => {
+                service.getRefreshTokenListByUser('Default', 'admin').subscribe(value => {
                     expect(value.length).toBeGreaterThan(0);
                     value.forEach(function (rt: RefreshToken) {
                         expect(rt.domain).toBe('Default');
@@ -63,7 +63,7 @@ describe('OAuth2Service', () => {
     it(`should issue a access tokens list request`,
         async(
             () => {
-                service.getAccessTokenList(authService.getRefreshToken()).subscribe(value => {
+                service.getAccessTokenListByRefreshToken(authService.getRefreshToken()).subscribe(value => {
                     expect(value.length).toBeGreaterThan(0);
                     value.forEach(function (at: AccessToken) {
                         expect(at.domain).toBe('Default');
@@ -81,12 +81,12 @@ describe('OAuth2Service', () => {
     it(`should issue a validate refresh token request`,
         async(
             () => {
-                let oauthReq: OAuthRequest = {
+                let validateReq: Validate = {
                     clientId: '123456789',
                     token: authService.getRefreshToken(),
                     tokenType: 'REFRESH_TOKEN'
                 }
-                service.validate(oauthReq).subscribe(value => {
+                service.validate(validateReq).subscribe(value => {
                 }, error => {
                     failTestWithError("should issue a validate refresh token request", error);
                 })
@@ -97,12 +97,12 @@ describe('OAuth2Service', () => {
     it(`should issue a validate access token request`,
         async(
             () => {
-                let oauthReq: OAuthRequest = {
+                let validateReq: Validate = {
                     clientId: '123456789',
                     token: authService.getAccessToken(),
                     tokenType: 'ACCESS_TOKEN'
                 }
-                service.validate(oauthReq).subscribe(value => {
+                service.validate(validateReq).subscribe(value => {
                 }, error => {
                     failTestWithError("should issue a validate access token request", error);
                 })
@@ -130,13 +130,7 @@ describe('OAuth2Service', () => {
     it(`should issue a revoke token request`,
     async(
         () => {
-            let oauthReq: OAuthRequest = {
-                clientId: '123456789',
-                token: authService.getRefreshToken(),
-                tokenType: 'REFRESH_TOKEN'
-            }
-
-            service.revoke(oauthReq).subscribe(value => {
+            service.revokeRefreshToken(authService.getRefreshToken()).subscribe(value => {
             }, error => {
                 failTestWithError("should issue a revoke token request", error);
             })

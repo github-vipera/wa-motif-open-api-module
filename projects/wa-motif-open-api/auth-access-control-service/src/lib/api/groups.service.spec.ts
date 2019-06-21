@@ -12,7 +12,6 @@ import * as _ from 'lodash';
 import { Role } from '../model/role';
 import { RoleAssign } from '../model/roleAssign';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
 describe('GroupsService', () => {
     let authService: AuthService;

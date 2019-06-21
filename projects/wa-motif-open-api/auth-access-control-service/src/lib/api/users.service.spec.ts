@@ -15,7 +15,6 @@ import { GroupCreate } from '../model/groupCreate';
 import { GroupAssign } from '../model/groupAssign';
 import { Role } from '../model/role';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service';
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 
 const TEST_ROLE = 'testrole';
 const TEST_GROUP = 'testgroup';
