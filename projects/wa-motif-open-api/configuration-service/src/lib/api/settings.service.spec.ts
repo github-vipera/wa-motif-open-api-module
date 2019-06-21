@@ -2,12 +2,11 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { SettingsService } from './settings.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core'
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel, EventBusService } from 'web-console-core';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables'
 import * as _ from 'lodash';
 import { failTestWithError, failLogin } from '../../../../test-helper';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 import { SettingCreate } from '../model/settingCreate';
 import { SettingUpdate } from '../model/settingUpdate';
 import { SettingEntity } from '../model/settingEntity';
@@ -33,7 +32,7 @@ describe('SettingsService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         const logger: NGXLogger = TestBed.get(NGXLogger);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, new EventBusService(logger), logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new SettingsService(httpClient, TEST_BASE_PATH, new Configuration());
 
@@ -154,12 +153,7 @@ describe('SettingsService', () => {
     it(`should clean stuff`,
         async(
             () => {
-                let oauthReq: OAuthRequest = {
-                    clientId: '123456789',
-                    token: authService.getRefreshToken(),
-                    tokenType: 'REFRESH_TOKEN'
-                }
-                oauth2Service.revoke(oauthReq).subscribe(value => {
+                authService.logout().subscribe(value => {
                 }, error => {
                     failTestWithError("should clean stuff", error);
                 })

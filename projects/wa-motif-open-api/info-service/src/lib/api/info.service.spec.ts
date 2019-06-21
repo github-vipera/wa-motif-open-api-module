@@ -1,12 +1,11 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration';
-import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core';
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel, EventBusService } from 'web-console-core';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service';
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 import { InfoService } from './info.service';
 import { MemoryInfo } from '../model/memoryInfo';
 
@@ -30,7 +29,7 @@ describe('OperationsService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         const logger: NGXLogger = TestBed.get(NGXLogger);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, new EventBusService(logger), logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new InfoService(httpClient, TEST_BASE_PATH, new Configuration());
 

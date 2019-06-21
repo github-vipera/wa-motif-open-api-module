@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { EnginesService } from './engines.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core'
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel, EventBusService } from 'web-console-core';
 import * as _ from 'lodash';
 import { EngineCreate } from '../model/engineCreate';
 import { EngineUpdate } from '../model/engineUpdate';
@@ -10,7 +10,6 @@ import { Engine } from '../model/engine';
 
 import { failLogin, failTestWithError, b64toFile, blobToB64 } from '../../../../test-helper';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 
 const TEST_ENGINE: string = "testengine";
@@ -33,7 +32,7 @@ describe('EnginesService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         const logger: NGXLogger = TestBed.get(NGXLogger);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, new EventBusService(logger), logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new EnginesService(httpClient, TEST_BASE_PATH, null);
 
@@ -138,12 +137,7 @@ describe('EnginesService', () => {
     it(`should clean stuff`,
         async(
             () => {
-                let oauthReq: OAuthRequest = {
-                    clientId: '123456789',
-                    token: authService.getRefreshToken(),
-                    tokenType: 'REFRESH_TOKEN'
-                }
-                oauth2Service.revoke(oauthReq).subscribe(value => {
+                authService.logout().subscribe(value => {
                 }, error => {
                     failTestWithError("should clean stuff", error);
                 })
