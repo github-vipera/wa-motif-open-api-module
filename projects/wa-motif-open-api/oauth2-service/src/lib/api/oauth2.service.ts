@@ -20,8 +20,8 @@ import { Observable }                                        from 'rxjs';
 
 import { AccessToken } from '../model/accessToken';
 import { ErrorVipera } from '../model/errorVipera';
-import { OAuthRequest } from '../model/oAuthRequest';
 import { RefreshToken } from '../model/refreshToken';
+import { Validate } from '../model/validate';
 
 import { WC_API_BASE_PATH } from 'web-console-core';
 import { Configuration }                                     from '../configuration';
@@ -70,12 +70,12 @@ export class Oauth2Service implements Oauth2ServiceInterface {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAccessTokenList(refreshToken: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AccessToken>>;
-    public getAccessTokenList(refreshToken: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AccessToken>>>;
-    public getAccessTokenList(refreshToken: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AccessToken>>>;
-    public getAccessTokenList(refreshToken: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAccessTokenListByRefreshToken(refreshToken: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AccessToken>>;
+    public getAccessTokenListByRefreshToken(refreshToken: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AccessToken>>>;
+    public getAccessTokenListByRefreshToken(refreshToken: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AccessToken>>>;
+    public getAccessTokenListByRefreshToken(refreshToken: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (refreshToken === null || refreshToken === undefined) {
-            throw new Error('Required parameter refreshToken was null or undefined when calling getAccessTokenList.');
+            throw new Error('Required parameter refreshToken was null or undefined when calling getAccessTokenListByRefreshToken.');
         }
 
         let headers = this.defaultHeaders;
@@ -185,22 +185,22 @@ export class Oauth2Service implements Oauth2ServiceInterface {
     }
 
     /**
-     * Get User OAuth2 Refresh Tokens
-     * Get User OAuth2 Refresh Tokens
+     * Get OAuth2 Refresh Tokens by User
+     * Get OAuth2 Refresh Tokens by User
      * @param domain Domain Name
      * @param userId User Id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserRefreshTokenList(domain: string, userId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RefreshToken>>;
-    public getUserRefreshTokenList(domain: string, userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RefreshToken>>>;
-    public getUserRefreshTokenList(domain: string, userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RefreshToken>>>;
-    public getUserRefreshTokenList(domain: string, userId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRefreshTokenListByUser(domain: string, userId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RefreshToken>>;
+    public getRefreshTokenListByUser(domain: string, userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RefreshToken>>>;
+    public getRefreshTokenListByUser(domain: string, userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RefreshToken>>>;
+    public getRefreshTokenListByUser(domain: string, userId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (domain === null || domain === undefined) {
-            throw new Error('Required parameter domain was null or undefined when calling getUserRefreshTokenList.');
+            throw new Error('Required parameter domain was null or undefined when calling getRefreshTokenListByUser.');
         }
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling getUserRefreshTokenList.');
+            throw new Error('Required parameter userId was null or undefined when calling getRefreshTokenListByUser.');
         }
 
         let headers = this.defaultHeaders;
@@ -242,16 +242,19 @@ export class Oauth2Service implements Oauth2ServiceInterface {
     }
 
     /**
-     * Revokes OAuth2 Token
-     * Revokes OAuth2 Token
-     * @param oAuthRequest 
+     * Revokes OAuth2 Access Token
+     * Revokes OAuth2 Access Token
+     * @param accessToken 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public revoke(oAuthRequest?: OAuthRequest, observe?: 'body', reportProgress?: boolean): Observable<object>;
-    public revoke(oAuthRequest?: OAuthRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<object>>;
-    public revoke(oAuthRequest?: OAuthRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<object>>;
-    public revoke(oAuthRequest?: OAuthRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public revokeAccessToken(accessToken: string, observe?: 'body', reportProgress?: boolean): Observable<object>;
+    public revokeAccessToken(accessToken: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<object>>;
+    public revokeAccessToken(accessToken: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<object>>;
+    public revokeAccessToken(accessToken: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (accessToken === null || accessToken === undefined) {
+            throw new Error('Required parameter accessToken was null or undefined when calling revokeAccessToken.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -279,15 +282,62 @@ export class Oauth2Service implements Oauth2ServiceInterface {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
+
+        return this.httpClient.delete<object>(`${this.configuration.basePath}/oauth2/accessTokens/${encodeURIComponent(String(accessToken))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Revokes OAuth2 Refresh Token
+     * Revokes OAuth2 Refresh Token
+     * @param refreshToken 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public revokeRefreshToken(refreshToken: string, observe?: 'body', reportProgress?: boolean): Observable<object>;
+    public revokeRefreshToken(refreshToken: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<object>>;
+    public revokeRefreshToken(refreshToken: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<object>>;
+    public revokeRefreshToken(refreshToken: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (refreshToken === null || refreshToken === undefined) {
+            throw new Error('Required parameter refreshToken was null or undefined when calling revokeRefreshToken.');
         }
 
-        return this.httpClient.post<object>(`${this.configuration.basePath}/oauth2/revoke`,
-            oAuthRequest,
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.delete<object>(`${this.configuration.basePath}/oauth2/refreshTokens/${encodeURIComponent(String(refreshToken))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -300,14 +350,14 @@ export class Oauth2Service implements Oauth2ServiceInterface {
     /**
      * Validates OAuth2 Token
      * Validates OAuth2 Token
-     * @param oAuthRequest 
+     * @param validate 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public validate(oAuthRequest?: OAuthRequest, observe?: 'body', reportProgress?: boolean): Observable<object>;
-    public validate(oAuthRequest?: OAuthRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<object>>;
-    public validate(oAuthRequest?: OAuthRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<object>>;
-    public validate(oAuthRequest?: OAuthRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public validate(validate?: Validate, observe?: 'body', reportProgress?: boolean): Observable<object>;
+    public validate(validate?: Validate, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<object>>;
+    public validate(validate?: Validate, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<object>>;
+    public validate(validate?: Validate, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -343,7 +393,7 @@ export class Oauth2Service implements Oauth2ServiceInterface {
         }
 
         return this.httpClient.post<object>(`${this.configuration.basePath}/oauth2/validate`,
-            oAuthRequest,
+            validate,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

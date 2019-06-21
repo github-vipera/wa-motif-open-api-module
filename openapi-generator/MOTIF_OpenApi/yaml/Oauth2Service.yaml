@@ -25,11 +25,10 @@ components:
     vipera_cookie:
       $ref: './Z_Globals.yaml#/components/securitySchemes/vipera_cookie'
   schemas: 
-    OAuthRequest:
+    Validate:
       type: object
       required:
         - token
-        - clientId
       properties:
         token:
           type: string
@@ -97,31 +96,15 @@ components:
       schema:
         type: string
         example: b31430cf1d9cb288b7838f91f9a40f14
+    accessTokenPathParam:
+      name: accessToken
+      in: path
+      required: true
+      schema:
+        type: string
+        example: b31430cf1d9cb288b7838f91f9a40f14
 
 paths:
-  /oauth2/revoke:
-    post:
-      operationId: revoke
-      tags:
-        - oauth2
-      description: Revokes OAuth2 Token
-      summary: Revokes OAuth2 Token
-      security:
-        - vipera_oauth2:
-          - 'all:all'
-        - vipera_basic: []
-        - vipera_cookie: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OAuthRequest'
-      responses:
-        '200':
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
-        default:
-          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
-  
   /oauth2/validate:
     post:
       operationId: validate
@@ -138,7 +121,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OAuthRequest'
+              $ref: '#/components/schemas/Validate'
       responses:
         '200':
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'   
@@ -183,9 +166,29 @@ paths:
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
 
+  /oauth2/refreshTokens/{refreshToken}:
+    delete:
+      operationId: revokeRefreshToken
+      tags:
+        - oauth2
+      description: Revokes OAuth2 Refresh Token
+      summary: Revokes OAuth2 Refresh Token
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/refreshTokenPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
   /oauth2/refreshTokens/{refreshToken}/accessTokens:
     get:
-      operationId: getAccessTokenList
+      operationId: getAccessTokenListByRefreshToken
       tags:
         - oauth2
       description: Get OAuth2 Access Tokens by Refresh Token
@@ -211,11 +214,11 @@ paths:
           
   /oauth2/domains/{domain}/users/{userId}/refreshTokens:
     get:
-      operationId: getUserRefreshTokenList
+      operationId: getRefreshTokenListByUser
       tags:
         - oauth2
-      description: Get User OAuth2 Refresh Tokens
-      summary: Get User OAuth2 Refresh Tokens
+      description: Get OAuth2 Refresh Tokens by User
+      summary: Get OAuth2 Refresh Tokens by User
       security:
         - vipera_oauth2:
           - 'all:all'
@@ -235,4 +238,25 @@ paths:
                   $ref: '#/components/schemas/RefreshToken'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+          
+  /oauth2/accessTokens/{accessToken}:
+    delete:
+      operationId: revokeAccessToken
+      tags:
+        - oauth2
+      description: Revokes OAuth2 Access Token
+      summary: Revokes OAuth2 Access Token
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      parameters:
+        - $ref: '#/components/parameters/accessTokenPathParam'
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
   

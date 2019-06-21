@@ -2,12 +2,11 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { ServicesService } from './services.service';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration'
-import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core'
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel, EventBusService } from 'web-console-core';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables'
 import { failTestWithError, failLogin } from '../../../../test-helper';
 import * as _ from 'lodash';
 import { Oauth2Service } from '../../../../oauth2-service/src/lib/api/oauth2.service'
-import { OAuthRequest } from '../../../../oauth2-service/src/lib/model/oAuthRequest';
 import { ServiceCreate } from '../model/serviceCreate';
 import { ServiceOperationProperties } from '../model/serviceOperationProperties';
 import { ServiceOperation } from '../model/serviceOperation';
@@ -35,7 +34,7 @@ describe('OperationsService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         const logger: NGXLogger = TestBed.get(NGXLogger);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, new EventBusService(logger), logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         servicesService = new ServicesService(httpClient, TEST_BASE_PATH, new Configuration());
         service = new OperationsService(httpClient, TEST_BASE_PATH, new Configuration());
@@ -149,12 +148,7 @@ describe('OperationsService', () => {
             () => {
                 service.deleteServiceOperation('REST', 'Default', 'vipera', TEST_SERVICE, TEST_OPERATION).subscribe(value => {
                     servicesService.deleteService('REST', 'Default', 'vipera', TEST_SERVICE).subscribe(value => {
-                        let oauthReq: OAuthRequest = {
-                            clientId: '123456789',
-                            token: authService.getRefreshToken(),
-                            tokenType: 'REFRESH_TOKEN'
-                        }
-                        oauth2Service.revoke(oauthReq).subscribe(value => {
+                        authService.logout().subscribe(value => {
                         }, error => {
                             failTestWithError("should clean stuff", error);
                         })
