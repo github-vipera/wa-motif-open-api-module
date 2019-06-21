@@ -4,7 +4,7 @@ import { Role } from '../model/role'
 import { RoleCreate } from '../model/roleCreate';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Configuration } from '../configuration';
-import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel } from 'web-console-core';
+import { AuthService, WebConsoleConfig, NGXLogger, LoggerModule, NgxLoggerLevel, EventBusService } from 'web-console-core';
 import { Permission } from '../model/permission';
 import { TEST_BASE_PATH, TEST_OAUTH2_BASE_PATH, TEST_USERNAME, TEST_PASSWORD } from '../../../../test.variables';
 import { failTestWithError, failLogin } from '../../../../test-helper';
@@ -29,7 +29,7 @@ describe('RolesService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         const logger: NGXLogger = TestBed.get(NGXLogger);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, new EventBusService(logger), logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new RolesService(httpClient, TEST_BASE_PATH, new Configuration());
 
@@ -171,7 +171,7 @@ describe('RolesService', () => {
                         token: authService.getRefreshToken(),
                         tokenType: 'REFRESH_TOKEN'
                         }
-                    oauth2Service.revoke(oauthReq).subscribe(value => {
+                    authService.logout().subscribe(value => {
                     }, error => {
                         failTestWithError('should clean stuff', error);
                     })

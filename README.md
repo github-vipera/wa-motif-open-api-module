@@ -163,7 +163,7 @@ describe('DomainsService', () => {
 
         const httpClient = TestBed.get(HttpClient);
         const logger: NGXLogger = TestBed.get(NGXLogger);
-        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, logger);
+        authService = new AuthService(httpClient, TEST_OAUTH2_BASE_PATH, null, null, new EventBusService(logger), logger);
         oauth2Service = new Oauth2Service(httpClient, TEST_BASE_PATH, null);
         service = new DomainsService(httpClient, TEST_BASE_PATH, new Configuration());
 
@@ -219,12 +219,7 @@ describe('DomainsService', () => {
     it(`should clean stuff`,
         async(
             () => {
-                let oauthReq: OAuthRequest = {
-                    clientId: '123456789',
-                    token: authService.getRefreshToken(),
-                    tokenType: 'REFRESH_TOKEN'
-                }
-                oauth2Service.revoke(oauthReq).subscribe(value => {
+                authService.logout().subscribe(value => {
                 }, error => {
                     failTestWithError("should clean stuff", error);
                 })
