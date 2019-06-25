@@ -3,7 +3,6 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { GroupsService } from './api/groups.service';
-import { MyselfService } from './api/myself.service';
 import { PermissionsService } from './api/permissions.service';
 import { RolesService } from './api/roles.service';
 import { UsersService } from './api/users.service';
@@ -14,7 +13,6 @@ import { UsersService } from './api/users.service';
   exports:      [],
   providers: [
     GroupsService,
-    MyselfService,
     PermissionsService,
     RolesService,
     UsersService ]

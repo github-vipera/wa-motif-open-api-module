@@ -54,6 +54,23 @@ describe('PermissionsService', () => {
         )
     );
 
+    it(`should retrieve current user permissions`,
+        async(
+            () => {
+                service.getMyselfPermissions().subscribe(value => {
+                    expect(value.length).toBeGreaterThan(0);
+                    let p: Permission = _.find(value, function (o: Permission) {
+                        return o.component === "com.vipera.osgi.core.platform.api.rest.PlatformApi" &&
+                            o.action === "*" && o.target === "*";
+                    });
+                    expect(p).toBeDefined();
+                }, error => {
+                    failTestWithError("should retrieve current user permissions", error);
+                })
+            }
+        )
+    );
+
     it(`should create a new permission`,
         async(
             () => {
