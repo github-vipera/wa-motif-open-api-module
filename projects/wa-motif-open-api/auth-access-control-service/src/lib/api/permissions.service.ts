@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { EntitlementResult } from '../model/entitlementResult';
 import { ErrorVipera } from '../model/errorVipera';
 import { Permission } from '../model/permission';
 
@@ -179,6 +180,55 @@ export class PermissionsService implements PermissionsServiceInterface {
     }
 
     /**
+     * Retrieves all current user permissions
+     * Retrieves all current user permissions
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getMyselfPermissions(observe?: 'body', reportProgress?: boolean): Observable<Array<Permission>>;
+    public getMyselfPermissions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Permission>>>;
+    public getMyselfPermissions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Permission>>>;
+    public getMyselfPermissions(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<Array<Permission>>(`${this.configuration.basePath}/acs/myself/permissions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Retrieves a Permission
      * Retrieves a Permission
      * @param permissionComponent Component Name
@@ -279,6 +329,67 @@ export class PermissionsService implements PermissionsServiceInterface {
         ];
 
         return this.httpClient.get<Array<Permission>>(`${this.configuration.basePath}/acs/permissions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Check if permission is assigned to the authenticated user
+     * Check if permission is assigned to the authenticated user
+     * @param permissionComponent Component Name
+     * @param permissionAction Action (can be CREATE, READ, UPDATE, DELETE or *)
+     * @param permissionTarget Method name or *(wildcard)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'body', reportProgress?: boolean): Observable<EntitlementResult>;
+    public isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntitlementResult>>;
+    public isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntitlementResult>>;
+    public isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (permissionComponent === null || permissionComponent === undefined) {
+            throw new Error('Required parameter permissionComponent was null or undefined when calling isMyselfPermissionEntitled.');
+        }
+        if (permissionAction === null || permissionAction === undefined) {
+            throw new Error('Required parameter permissionAction was null or undefined when calling isMyselfPermissionEntitled.');
+        }
+        if (permissionTarget === null || permissionTarget === undefined) {
+            throw new Error('Required parameter permissionTarget was null or undefined when calling isMyselfPermissionEntitled.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<EntitlementResult>(`${this.configuration.basePath}/acs/myself/permissions/${encodeURIComponent(String(permissionComponent))}/${encodeURIComponent(String(permissionAction))}/${encodeURIComponent(String(permissionTarget))}/entitled`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -664,3 +664,26 @@ paths:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
+  /usermgr/admins/myself:
+    get:
+      operationId: getCurrentAdminUser
+      tags:
+        - admins
+      description: Retrieves current admin user
+      summary: Retrieves current admin user
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: './Z_Globals.yaml#/components/schemas/AdminUser'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
+
