@@ -357,6 +357,55 @@ export class AdminsService implements AdminsServiceInterface {
     }
 
     /**
+     * Retrieves current admin user
+     * Retrieves current admin user
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCurrentAdminUser(observe?: 'body', reportProgress?: boolean): Observable<AdminUser>;
+    public getCurrentAdminUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AdminUser>>;
+    public getCurrentAdminUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AdminUser>>;
+    public getCurrentAdminUser(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (vipera_basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (vipera_cookie) required
+        // authentication (vipera_oauth2) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<AdminUser>(`${this.configuration.basePath}/usermgr/admins/myself`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Updates an admin user
      * Updates an admin user
      * @param domain Domain Name

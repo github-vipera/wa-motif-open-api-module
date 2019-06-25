@@ -22,8 +22,6 @@ tags:
     description: Permission related
   - name: users
     description: Users related
-  - name: myself
-    description: Current User related  
 components:
   securitySchemes:
     vipera_oauth2:
@@ -1077,7 +1075,7 @@ paths:
     get:
       operationId: getMyselfPermissions
       tags:
-        - myself
+        - permissions
       description: Retrieves all current user permissions
       summary: Retrieves all current user permissions
       security:
@@ -1101,7 +1099,7 @@ paths:
     get:
       operationId: isMyselfPermissionEntitled
       tags:
-        - myself
+        - permissions
       description: Check if permission is assigned to the authenticated user
       summary: Check if permission is assigned to the authenticated user
       security:

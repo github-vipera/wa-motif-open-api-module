@@ -13,6 +13,7 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
+import { EntitlementResult } from '../model/entitlementResult';
 import { ErrorVipera } from '../model/errorVipera';
 import { Permission } from '../model/permission';
 
@@ -42,6 +43,12 @@ export interface PermissionsServiceInterface {
     deletePermission(permissionComponent: string, permissionAction: string, permissionTarget: string, extraHttpRequestParams?: any): Observable<object>;
 
     /**
+    * Retrieves all current user permissions
+    * Retrieves all current user permissions
+    */
+    getMyselfPermissions(extraHttpRequestParams?: any): Observable<Array<Permission>>;
+
+    /**
     * Retrieves a Permission
     * Retrieves a Permission
     * @param permissionComponent Component Name
@@ -55,5 +62,14 @@ export interface PermissionsServiceInterface {
     * Retrieves all permissions
     */
     getPermissions(extraHttpRequestParams?: any): Observable<Array<Permission>>;
+
+    /**
+    * Check if permission is assigned to the authenticated user
+    * Check if permission is assigned to the authenticated user
+    * @param permissionComponent Component Name
+    * @param permissionAction Action (can be CREATE, READ, UPDATE, DELETE or *)
+    * @param permissionTarget Method name or *(wildcard)
+    */
+    isMyselfPermissionEntitled(permissionComponent: string, permissionAction: string, permissionTarget: string, extraHttpRequestParams?: any): Observable<EntitlementResult>;
 
 }

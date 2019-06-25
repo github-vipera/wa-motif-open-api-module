@@ -16,8 +16,6 @@ servers:
 tags:
   - name: auth
     description: Plugin Auth Service related
-  - name: myself
-    description: Plugin Auth Service current user related
 components:
   securitySchemes:
     vipera_oauth2:
@@ -157,9 +155,9 @@ paths:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'
   /auth/myself/status:
     get:
-      operationId: getUserStatus
+      operationId: getCurrentUserStatus
       tags:
-        - myself
+        - auth
       description: Gets the status of the user by its ID
       summary: Gets the status of the user by its ID
       security:
@@ -182,7 +180,7 @@ paths:
       operationId: activateUser
       x-vipera-use-context-request: true
       tags:
-        - myself
+        - auth
       description: Activates an user
       summary: Activates an user
       security:
@@ -207,10 +205,10 @@ paths:
   
   /auth/myself/deactivate:
     post:
-      operationId: deactivateUser
+      operationId: deactivateCurrentUser
       x-vipera-use-context-request: true
       tags:
-        - myself
+        - auth
       description: Handles deactivation
       summary: Handles deactivation
       security:
@@ -226,10 +224,10 @@ paths:
   
   /auth/myself/chgpwd:
     post:
-      operationId: changePasswd
+      operationId: changeCurrentUserPasswd
       x-vipera-use-context-request: true
       tags:
-        - myself
+        - auth
       description: Changes passwd
       summary: Changes passwd
       security:

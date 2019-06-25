@@ -14,6 +14,8 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { ErrorVipera } from '../model/errorVipera';
+import { UserActivation } from '../model/userActivation';
+import { UserPasswordChange } from '../model/userPasswordChange';
 import { UserRegistration } from '../model/userRegistration';
 import { UserStatus } from '../model/userStatus';
 
@@ -25,6 +27,32 @@ export interface AuthServiceInterface {
     defaultHeaders: HttpHeaders;
     configuration: Configuration;
     
+
+    /**
+    * Activates an user
+    * Activates an user
+    * @param userActivation 
+    */
+    activateUser(userActivation?: UserActivation, extraHttpRequestParams?: any): Observable<UserStatus>;
+
+    /**
+    * Changes passwd
+    * Changes passwd
+    * @param userPasswordChange 
+    */
+    changeCurrentUserPasswd(userPasswordChange?: UserPasswordChange, extraHttpRequestParams?: any): Observable<object>;
+
+    /**
+    * Handles deactivation
+    * Handles deactivation
+    */
+    deactivateCurrentUser(extraHttpRequestParams?: any): Observable<object>;
+
+    /**
+    * Gets the status of the user by its ID
+    * Gets the status of the user by its ID
+    */
+    getCurrentUserStatus(extraHttpRequestParams?: any): Observable<UserStatus>;
 
     /**
     * Registers user

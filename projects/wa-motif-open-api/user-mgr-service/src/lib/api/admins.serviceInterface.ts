@@ -70,6 +70,12 @@ export interface AdminsServiceInterface {
     getAdminUsersList(domain: string, extraHttpRequestParams?: any): Observable<Array<AdminUser>>;
 
     /**
+    * Retrieves current admin user
+    * Retrieves current admin user
+    */
+    getCurrentAdminUser(extraHttpRequestParams?: any): Observable<AdminUser>;
+
+    /**
     * Updates an admin user
     * Updates an admin user
     * @param domain Domain Name
