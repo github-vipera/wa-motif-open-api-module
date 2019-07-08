@@ -1,3 +1,6 @@
+export * from './cache.service';
+import { CacheService } from './cache.service';
+export * from './cache.serviceInterface'
 export * from './groups.service';
 import { GroupsService } from './groups.service';
 export * from './groups.serviceInterface'
@@ -10,4 +13,4 @@ export * from './roles.serviceInterface'
 export * from './users.service';
 import { UsersService } from './users.service';
 export * from './users.serviceInterface'
-export const APIS = [GroupsService, PermissionsService, RolesService, UsersService];
+export const APIS = [CacheService, GroupsService, PermissionsService, RolesService, UsersService];

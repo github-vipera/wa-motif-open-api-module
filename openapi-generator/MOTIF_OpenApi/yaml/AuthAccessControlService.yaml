@@ -22,6 +22,8 @@ tags:
     description: Permission related
   - name: users
     description: Users related
+  - name: cache
+    description: Cache related
 components:
   securitySchemes:
     vipera_oauth2:
@@ -1118,6 +1120,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EntitlementResult'
+        default:
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'                                
+          
+  /acs/cache:
+    delete:
+      operationId: invalidateCache
+      tags:
+        - cache
+      description: Invalidate entire authentication and authorization cache
+      summary: Invalidate entire authentication and authorization cache
+      security:
+        - vipera_oauth2:
+          - 'all:all'
+        - vipera_basic: []
+        - vipera_cookie: []
+      responses:
+        '204':
+          $ref: './Z_Globals.yaml#/components/responses/GeneralViperaOkResponse'
         default:
           $ref: './Z_Globals.yaml#/components/responses/GeneralViperaError'                                
           
