@@ -70,7 +70,7 @@
         "karma-coverage-istanbul-reporter": "^2.0.5",
         "karma-jasmine": "~1.1.1",
         "karma-jasmine-html-reporter": "^0.2.2",
-        "ng-packagr": "^4.7.1",
+        "ng-packagr": "^10.1.1",
         "ng2-tooltip-directive": "^2.1.9",
         "ngx-scrollbar": "^4.2.0",
         "protractor": "^5.4.2",
